@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=3 uid="uid://77dix1tmr4v7"]
+
+[ext_resource type="Script" uid="uid://bnmmnqo603val" path="res://scripts/main.gd" id="1_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://b5b60jf7citvj" path="res://scenes/level.tscn" id="2_0wfyh"]
+
+[sub_resource type="GDScript" id="GDScript_0wfyh"]
+script/source = "extends Camera2D
+
+@export var level_path: NodePath    
+@export var player_name: String = \"\"
+var player: Node2D
+
+func _ready() -> void:
+	if level_path == NodePath() or player_name == \"\":
+		return
+	var level := get_node(level_path)
+	player = level.get_node(player_name)
+	drag_horizontal_enabled = false
+
+func _process(delta: float) -> void:
+	if player:
+		global_position.y = player.global_position.y
+		global_position.x = global_position.x
+"
+
+[node name="Main" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jyhfs")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 318.0
+offset_right = 322.0
+offset_bottom = 360.0
+color = Color(0, 0, 0, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftSubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="LeftSubViewport" type="SubViewport" parent="HBoxContainer/LeftSubViewportContainer"]
+unique_name_in_owner = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(318, 360)
+render_target_update_mode = 4
+
+[node name="LeftCamera2D" type="Camera2D" parent="HBoxContainer/LeftSubViewportContainer/LeftSubViewport"]
+unique_name_in_owner = true
+limit_left = 0
+limit_top = 0
+limit_right = 318
+limit_bottom = 1000000
+script = SubResource("GDScript_0wfyh")
+level_path = NodePath("../Level")
+
+[node name="Level" parent="HBoxContainer/LeftSubViewportContainer/LeftSubViewport" instance=ExtResource("2_0wfyh")]
+unique_name_in_owner = true
+
+[node name="RightSubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="RightSubViewport" type="SubViewport" parent="HBoxContainer/RightSubViewportContainer"]
+unique_name_in_owner = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(318, 360)
+render_target_update_mode = 4
+
+[node name="RightCamera2D" type="Camera2D" parent="HBoxContainer/RightSubViewportContainer/RightSubViewport"]
+unique_name_in_owner = true
+limit_left = 322
+limit_top = 0
+limit_right = 640
+limit_bottom = 1000000
+script = SubResource("GDScript_0wfyh")
+level_path = NodePath("../../../LeftSubViewportContainer/LeftSubViewport/Level")

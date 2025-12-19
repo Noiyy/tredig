@@ -28,6 +28,9 @@ size = Vector2(3, 3)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_3vyb7")
+damage_per_hit = null
+shovel_level = null
+experience = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1.5, -11)

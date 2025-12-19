@@ -3,10 +3,8 @@ extends CharacterBody2D
 const SPEED = 200.0
 const JUMP_VELOCITY = -200.0
 
-var tile_size = 16
-var tiles_to_show = 48
-var world_left_x = 8 #0
-var world_right_x = 640 - 8 #tiles_to_show * tile_size
+var world_left_x = 0
+var world_right_x = 0
 
 @export var controls: PlayerControls = null
 @export var tilemap: TileMapLayer
@@ -14,20 +12,21 @@ var world_right_x = 640 - 8 #tiles_to_show * tile_size
 @export var damage_per_hit = 1
 @export var shovel_level = 1
 @export var experience = 0
-
-const SHOVEL_LEVEL_EXPS = [50, 100, 200, 350, 450, 600, 750, 1150, 1300, 1700, 2500]
  
+var game_manager
 @onready var shovel_highlight = $ShovelDirection/TileHighlight 
 var shovel_distance = 14
-
-var subViewportContainer
-var subViewport
 
 func _ready():
 	if controls == null:
 		set_physics_process(false)
-		
-	print("a ", self.name)
+	
+	game_manager = get_tree().root.get_node("Main/GameManager")
+	game_manager.register_player(self)
+	
+	var x_boundaries = game_manager.get_world_x_boundaries();
+	world_left_x = x_boundaries[0];
+	world_right_x = x_boundaries[1];
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -109,13 +108,13 @@ func _input(event):
 		$TileManager.damage_tile(self)
 			
 func add_exp(amount: int):
-	experience += amount
-	print("Player gained ", amount, " experience. Total: ", experience)
-	var exp_needed = SHOVEL_LEVEL_EXPS[shovel_level-1]
-	while experience >= exp_needed:
-		experience -= exp_needed
-		shovel_level += 1
-		damage_per_hit += 1
-		exp_needed = SHOVEL_LEVEL_EXPS[shovel_level-1]
-		print("Shovel level up! Nový level: %d" % shovel_level)
-		print(damage_per_hit)
+	game_manager.add_player_exp(self, amount)
+	
+func sync_stats_from_manager(data: Dictionary):
+	experience = data.experience
+	shovel_level = data.shovel_level
+	damage_per_hit = data.damage_per_hit
+
+func on_level_up():
+	print("Shovel level up! Nový level: %d" % shovel_level)
+	print(damage_per_hit)

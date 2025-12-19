@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6vdg72si0aos"]
+
+[ext_resource type="Script" uid="uid://vimqsi4od0t5" path="res://scripts/hud.gd" id="1_ahhtf"]
+[ext_resource type="PackedScene" uid="uid://cfpmja1pxt1dp" path="res://scenes/player_hud_panel.tscn" id="2_oo0fn"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_ahhtf")
+
+[node name="LeftPlayerHUD" parent="." instance=ExtResource("2_oo0fn")]
+offset_left = 50.0
+offset_top = 8.0
+offset_right = -380.0
+offset_bottom = -293.0
+
+[node name="RightPlayerHUD" parent="." instance=ExtResource("2_oo0fn")]
+offset_left = 413.0
+offset_top = 9.0
+offset_right = -20.0
+offset_bottom = -302.0

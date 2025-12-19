@@ -341,11 +341,17 @@ tile_set = SubResource("TileSet_8c41q")
 position = Vector2(160, 51)
 controls = ExtResource("5_2r41h")
 tilemap = NodePath("../TileMapLayer")
+damage_per_hit = 1
+shovel_level = 1
+experience = 0
 
 [node name="PlayerRight" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("3_ppgk2")]
 position = Vector2(480, 51)
 controls = ExtResource("4_ppgk2")
 tilemap = NodePath("../TileMapLayer")
+damage_per_hit = 1
+shovel_level = 1
+experience = 0
 
 [node name="MiddleBorder" type="StaticBody2D" parent="."]
 

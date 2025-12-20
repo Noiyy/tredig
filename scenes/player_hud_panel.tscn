@@ -1,24 +1,67 @@
-[gd_scene format=3 uid="uid://cfpmja1pxt1dp"]
+[gd_scene load_steps=6 format=3 uid="uid://cfpmja1pxt1dp"]
+
+[ext_resource type="Script" uid="uid://p3m3ft4nwobk" path="res://scripts/progress_bar.gd" id="1_8chcm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8chcm"]
+bg_color = Color(0.6, 0.6, 0.6, 0.5019608)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3lnvr"]
+bg_color = Color(0.65882355, 0.7921569, 0.34509805, 0.63529414)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpjlm"]
+bg_color = Color(0, 0, 0, 0.25882354)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3divr"]
+bg_color = Color(0.8834614, 0.48110545, 0, 0.6156863)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="PlayerHUDPanel" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -320.0
+offset_bottom = -314.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ExpProgressBar" type="ProgressBar" parent="."]
 layout_mode = 0
-offset_left = 29.0
-offset_top = 10.0
-offset_right = 182.0
-offset_bottom = 37.0
+offset_left = 36.0
+offset_top = 4.0
+offset_right = 290.0
+offset_bottom = 20.0
+theme_override_styles/background = SubResource("StyleBoxFlat_8chcm")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3lnvr")
+show_percentage = false
+script = ExtResource("1_8chcm")
 
 [node name="LevelLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 10.0
-offset_top = 11.0
-offset_right = 50.0
-offset_bottom = 34.0
+offset_top = -1.0
+offset_right = 31.0
+offset_bottom = 22.0
 text = "0"
+horizontal_alignment = 2
+
+[node name="DurabilityBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 23.0
+offset_right = 290.0
+offset_bottom = 31.0
+theme_override_styles/background = SubResource("StyleBoxFlat_gpjlm")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3divr")
+show_percentage = false
+script = ExtResource("1_8chcm")

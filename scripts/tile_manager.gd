@@ -12,14 +12,11 @@ enum TerrainType {
 @onready var dmgTilemap = get_parent().get_parent().get_node("TileMapLayerDmgOverlay") as TileMapLayer
 
 var tile_data = {} # key: Vector2 (pozícia tile), value: {"level": int, "hp": int}
+var game_manager
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	game_manager = get_tree().root.get_node("Main/GameManager")
 	
 func get_max_hp_for_tile(level: int) -> int:
 	return 3 + level
@@ -87,6 +84,8 @@ func damage_tile(player: CharacterBody2D):
 			get_max_hp_for_tile(tile_level),
 			player.damage_per_hit
 		)
+		
+		game_manager.change_durability(player, -10, false)
 		
 		if tile_data[tile_coords].hp <= 0:
 			tilemap.set_cell(tile_coords, tile_id, tile_coords, -1) # Odstráni tile

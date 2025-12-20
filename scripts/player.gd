@@ -12,6 +12,8 @@ var world_right_x = 0
 @export var damage_per_hit = 1
 @export var shovel_level = 1
 @export var experience = 0
+@export var hp = 100
+@export var durability = 1000
  
 var game_manager
 @onready var shovel_highlight = $ShovelDirection/TileHighlight 
@@ -105,6 +107,8 @@ func _process(delta: float) -> void:
 
 func _input(event):
 	if event.is_action_pressed(controls.use, true):
+		if durability <= 0: 
+			return
 		$TileManager.damage_tile(self)
 			
 func add_exp(amount: int):
@@ -114,6 +118,7 @@ func sync_stats_from_manager(data: Dictionary):
 	experience = data.experience
 	shovel_level = data.shovel_level
 	damage_per_hit = data.damage_per_hit
+	durability = data.durability
 
 func on_level_up():
 	print("Shovel level up! Nový level: %d" % shovel_level)

@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://c6vdg72si0aos"]
+[gd_scene load_steps=3 format=3 uid="uid://c6vdg72si0aos"]
 
 [ext_resource type="Script" uid="uid://vimqsi4od0t5" path="res://scripts/hud.gd" id="1_ahhtf"]
 [ext_resource type="PackedScene" uid="uid://cfpmja1pxt1dp" path="res://scenes/player_hud_panel.tscn" id="2_oo0fn"]
-[ext_resource type="PackedScene" uid="uid://b0gqgtnrdjxx" path="res://scenes/game_over_lay.tscn" id="3_5ysmq"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_ahhtf")
@@ -13,24 +12,6 @@ script = ExtResource("1_ahhtf")
 offset_left = 640.0
 offset_right = 320.0
 scale = Vector2(-1, 1)
-
-[node name="LeftGameOverOverlay" parent="." instance=ExtResource("3_5ysmq")]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -320.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="RightGameOverOverlay" parent="." instance=ExtResource("3_5ysmq")]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 320.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="TimerLabel" type="Label" parent="."]
 anchors_preset = 8

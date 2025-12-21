@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0gqgtnrdjxx"]
+
+[ext_resource type="Script" uid="uid://bo2b3fgiej8d0" path="res://scripts/game_over_lay.gd" id="1_otpf7"]
+
+[node name="GameOverOverlay" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_otpf7")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 360.0
+color = Color(0, 0, 0, 0.6745098)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 360.0
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "You died!"
+horizontal_alignment = 1
+
+[node name="SubTitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "you survived:"
+horizontal_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "00:00"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "RESTART"
+
+[connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]

@@ -65,3 +65,11 @@ theme_override_styles/background = SubResource("StyleBoxFlat_gpjlm")
 theme_override_styles/fill = SubResource("StyleBoxFlat_3divr")
 show_percentage = false
 script = ExtResource("1_8chcm")
+
+[node name="HPLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 34.0
+offset_right = 46.0
+offset_bottom = 57.0
+text = "100"

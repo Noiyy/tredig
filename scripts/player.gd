@@ -14,8 +14,11 @@ var world_right_x = 0
 @export var experience = 0
 @export var hp = 100
 @export var durability = 1000
+var is_dead = false
  
+var HUD
 var game_manager
+@onready var death_timer = $DeathTimer
 @onready var shovel_highlight = $ShovelDirection/TileHighlight 
 var shovel_distance = 14
 
@@ -29,6 +32,8 @@ func _ready():
 	var x_boundaries = game_manager.get_world_x_boundaries();
 	world_left_x = x_boundaries[0];
 	world_right_x = x_boundaries[1];
+	
+	HUD = get_tree().root.get_node("Main/HUD")
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -119,7 +124,24 @@ func sync_stats_from_manager(data: Dictionary):
 	shovel_level = data.shovel_level
 	damage_per_hit = data.damage_per_hit
 	durability = data.durability
+	hp = data.hp
 
 func on_level_up():
 	print("Shovel level up! Nový level: %d" % shovel_level)
 	print(damage_per_hit)
+	
+func on_dead():
+	set_physics_process(false)
+	set_process(false)
+	
+	is_dead = true
+	death_timer.start()
+
+func _on_death_timer_timeout() -> void:
+	var elapsed = HUD.get_elapsed_time()
+	if name == "PlayerLeft":
+		HUD.show_left_game_over(elapsed)
+	else:
+		HUD.show_right_game_over(elapsed)
+		
+	visible = false

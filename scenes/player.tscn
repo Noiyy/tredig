@@ -28,9 +28,6 @@ size = Vector2(3, 3)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_3vyb7")
-damage_per_hit = null
-shovel_level = null
-experience = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1.5, -11)
@@ -55,3 +52,9 @@ texture = ExtResource("3_qhqgy")
 
 [node name="TileManager" type="Node2D" parent="."]
 script = ExtResource("4_dqkch")
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 0.6
+one_shot = true
+
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]

@@ -11,6 +11,10 @@ var elapsed_time: float = 0.0
 @onready var timer_label: Label         = $TimerLabel
 @onready var left_dur_bar: ProgressBar  = $LeftPlayerHUD/DurabilityBar
 @onready var right_dur_bar: ProgressBar = $RightPlayerHUD/DurabilityBar
+@onready var left_hp_label: Label       = $LeftPlayerHUD/HPLabel
+@onready var right_hp_label: Label      = $RightPlayerHUD/HPLabel
+@onready var left_go                   = $LeftGameOverOverlay
+@onready var right_go                   = $RightGameOverOverlay
 
 var left_level_tween: Tween
 var right_level_tween: Tween
@@ -28,6 +32,9 @@ func _ready():
 func _process(delta: float) -> void:
 	elapsed_time += delta
 	timer_label.text = _format_time_mm_ss(elapsed_time)
+
+func stop_timer() -> void:
+	set_process(false)
 
 func _format_time_mm_ss(time_sec: float) -> String:
 	var minutes: int = int(time_sec) / 60
@@ -78,3 +85,16 @@ func update_player_durability(player: CharacterBody2D, current: int, max_value: 
 	var bar := left_dur_bar if player.name == "PlayerLeft" else right_dur_bar
 	bar.max_value = max_value
 	bar.value = current
+
+func update_player_hp(player: CharacterBody2D, current: int, max_hp: int) -> void:
+	var label := left_hp_label if player.name == "PlayerLeft" else right_hp_label
+	label.text = "%d" % current
+
+func show_left_game_over(time_sec: float) -> void:
+	left_go.show_game_over(time_sec)
+
+func show_right_game_over(time_sec: float) -> void:
+	right_go.show_game_over(time_sec)
+
+func get_elapsed_time() -> float:
+	return elapsed_time

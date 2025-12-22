@@ -46,8 +46,8 @@ func _get_exp_needed_for_level(shovel_level: int) -> int:
 	return SHOVEL_LEVEL_EXPS[index]
 
 func _bounce_label(label: Label) -> void:
-	var base_scale := Vector2.ONE
-	var big_scale := base_scale * 1.4
+	var current_scale := label.scale
+	var big_scale := current_scale * 1.4
 
 	if label == left_label and left_level_tween and left_level_tween.is_valid():
 		left_level_tween.kill()
@@ -57,7 +57,7 @@ func _bounce_label(label: Label) -> void:
 	var tween := get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.tween_property(label, "scale", big_scale, 0.22)
-	tween.tween_property(label, "scale", base_scale, 0.48)
+	tween.tween_property(label, "scale", current_scale, 0.48)
 
 	if label == left_label:
 		left_level_tween = tween

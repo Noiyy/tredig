@@ -10,6 +10,7 @@ enum TerrainType {
 
 @onready var tilemap = get_parent().get_parent().get_node("TileMapLayer") as TileMapLayer
 @onready var dmgTilemap = get_parent().get_parent().get_node("TileMapLayerDmgOverlay") as TileMapLayer
+@onready var exp_pickup_scene := preload("res://scenes/pickup.tscn")
 
 var tile_data = {} # key: Vector2 (pozícia tile), value: {"level": int, "hp": int}
 var game_manager
@@ -93,7 +94,7 @@ func damage_tile(player: CharacterBody2D):
 			tile_data.erase(tile_coords)
 			
 			destroyed_tile.emit(terrain_type, player)
-			drop_items_based_on_tile(terrain_type, player)
+			drop_items_based_on_tile(terrain_type, player, tile_coords)
 		else:
 			dmgTilemap.set_cell(tile_coords, tile_id, Vector2(damage_tile_value, 0))
 
@@ -108,7 +109,8 @@ func pick_weighted_drop(drop_table):
 	# fallback ak nič nepadne, zober prvý item
 	return drop_table[0]["exp"]
 
-func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D):
+func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D,
+	tile_coords: Vector2i):
 	const AVAILABLE_TILE_TYPES = [2, 3]
 	if !AVAILABLE_TILE_TYPES.has(terrain_type):
 		return
@@ -130,4 +132,29 @@ func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D
 		]
 	
 	var exp_value = pick_weighted_drop(drops)
-	player.add_exp(exp_value)
+	#player.add_exp(exp_value)
+	_spawn_exp_pickups(exp_value, player, tile_coords)
+
+func _spawn_exp_pickups(exp_value: int, player: CharacterBody2D,
+	tile_coords: Vector2i) -> void:
+	var per_pickup := 10               # 1 štvorec = 10 exp (prispôsob si)
+	var count = max(exp_value / per_pickup, 1)
+
+	# svetová pozícia zničenej dlaždice – použij tú, čo máš v damage_tile
+	var tile_center_local := tilemap.map_to_local(tile_coords)
+	var tile_center_global := tilemap.to_global(tile_center_local)
+	var tile_size = game_manager.get_tile_size()
+	
+	var spawn_pos := tile_center_global - Vector2(0, tile_size * 0.5)
+	var level := get_parent().get_parent() 
+
+	for i in count:
+		var pickup: RigidBody2D = exp_pickup_scene.instantiate()
+		pickup.exp_amount = per_pickup
+		pickup.target_player = player
+
+		# mierny náhodný offset, nech nepadajú všetky z jedného pixlu
+		var offset := Vector2(randf_range(-8, 8), randf_range(-8, 8))
+		pickup.global_position = spawn_pos + offset
+
+		level.add_child(pickup)

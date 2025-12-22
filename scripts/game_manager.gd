@@ -87,3 +87,6 @@ func get_shovel_level_exps():
 
 func get_max_durability():
 	return MAX_DURABILITY
+	
+func get_tile_size():
+	return tile_size

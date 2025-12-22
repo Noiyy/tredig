@@ -35,9 +35,9 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	
-	var rect_shape := col_shape.shape as RectangleShape2D
-	rect_shape.size.y = tile_size
-	lava_rect.size = rect_shape.size
+	#var rect_shape := col_shape.shape as RectangleShape2D
+	#rect_shape.size.y = tile_size
+	#lava_rect.size = rect_shape.size
 
 
 func _on_grow_timeout() -> void:
@@ -46,12 +46,12 @@ func _on_grow_timeout() -> void:
 	# posuň Area2D o celý tile dole
 	position.y += tile_size
 
-	rect_shape.size.y += tile_size
-	col_shape.shape = rect_shape
-
-	lava_rect.size = rect_shape.size
-	lava_rect.position.x = 0
-	lava_rect.position.y = -rect_shape.size.y * 0.5
+	#rect_shape.size.y += tile_size
+	#col_shape.shape = rect_shape
+#
+	#lava_rect.size = rect_shape.size
+	#lava_rect.position.x = 0
+	#lava_rect.position.y = -rect_shape.size.y * 0.5
 
 func stop_growing() -> void:
 	grow_timer.stop()

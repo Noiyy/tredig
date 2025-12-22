@@ -324,7 +324,7 @@ texture = ExtResource("2_mx8sn")
 sources/0 = SubResource("TileSetAtlasSource_b121j")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2r41h"]
-size = Vector2(640, 16)
+size = Vector2(640, 360)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ppgk2"]
 size = Vector2(4, 1785)
@@ -346,12 +346,13 @@ position = Vector2(0, -16)
 script = ExtResource("6_2r41h")
 
 [node name="ColorRect" type="ColorRect" parent="Lava"]
+offset_top = -344.0
 offset_right = 640.0
 offset_bottom = 16.0
 color = Color(0.9, 0.5412, 0.07199998, 0.8784314)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Lava"]
-position = Vector2(320, 0)
+position = Vector2(320, -164)
 shape = SubResource("RectangleShape2D_2r41h")
 
 [node name="PlayerLeft" parent="." node_paths=PackedStringArray("tilemap") instance=ExtResource("3_ppgk2")]

@@ -125,6 +125,12 @@ func sync_stats_from_manager(data: Dictionary):
 	damage_per_hit = data.damage_per_hit
 	durability = data.durability
 	hp = data.hp
+	
+func apply_stat_change(key: String, delta: float) -> void:
+	match key:
+		"damage":
+			damage_per_hit += int(delta)
+		
 
 func on_level_up():
 	print("Shovel level up! Nový level: %d" % shovel_level)

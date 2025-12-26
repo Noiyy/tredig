@@ -13,6 +13,15 @@ var lava
 var HUD
 var players := {}
 
+enum BonusType {
+	NONE,
+	SHARPNESS,
+	SSHOVEL,
+	SABOTAGE,
+	DULLNESS,
+	OVERLOAD
+}
+
 func _ready() -> void:
 	HUD = get_parent().get_node("HUD")
 	lava = get_tree().root.get_node("Main/HBoxContainer/LeftSubViewportContainer/LeftSubViewport/Level/Lava")
@@ -26,6 +35,7 @@ func register_player(player: CharacterBody2D):
 		"durability": MAX_DURABILITY,
 		"hp": MAX_HP,
 		"ref": player,
+		"active_bonus": BonusType.NONE,
 	}
 	player.sync_stats_from_manager(players[id])
 
@@ -77,6 +87,62 @@ func add_player_exp(player: CharacterBody2D, amount: int):
 		
 	var player_id := 1 if player.name == "PlayerLeft" else 2
 	HUD.update_player_hud(player_id, data.shovel_level, data.experience, leveled_up)
+
+func apply_bonus(player: CharacterBody2D, b_type: int) -> void:
+	match b_type:
+		BonusType.SHARPNESS:
+			_add_timed_stat(player, b_type, "damage", 1, 10.0)
+		BonusType.SSHOVEL:
+			_add_timed_stat(player, b_type, "damage", 1, 10.0)
+		BonusType.SABOTAGE:
+			_add_timed_stat(player, b_type, "damage", 1, 10.0)
+		BonusType.DULLNESS:
+			_add_timed_stat(player, b_type, "dullness", 1, 10.0)
+		BonusType.OVERLOAD:
+			_add_timed_stat(player, b_type, "damage", 1, 10.0)
+	
+
+func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, delta: float,
+ 	duration: float) -> void:
+	var data = players[player.name]
+	if not data.has("effects"):
+		data.effects = {}
+	if not data.effects.has(key):
+		data.effects[key] = 0.0
+	data.effects[key] += delta
+
+	# uprav stat v dátach
+	match key:
+		"damage":
+			data.damage_per_hit += int(delta)
+		"dullness":
+			data.damage_per_hit -= clamp(int(delta), 1, 99)
+
+	players[player.name].active_bonus = b_type
+	player.sync_stats_from_manager(data)
+	HUD.update_player_bonus(player, b_type)
+	HUD.start_player_bonus_timer(player, duration)
+
+	# plánuj zrušenie
+	var t := get_tree().create_timer(duration)
+	t.timeout.connect(func():
+		if not is_instance_valid(player):
+			return
+		data.effects[key] -= delta
+		
+		match key:
+			"damage":
+				data.damage_per_hit -= int(delta)
+			"dullness":
+				data.damage_per_hit += int(delta)
+				
+		players[player.name].active_bonus = BonusType.NONE
+		player.sync_stats_from_manager(data)
+		HUD.update_player_bonus(player, BonusType.NONE)
+	)
+
+func player_has_active_bonus(player: CharacterBody2D) -> bool:
+	return players[player.name].get("active_bonus", BonusType.NONE) != BonusType.NONE
 
 
 func get_world_x_boundaries():

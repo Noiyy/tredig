@@ -8,6 +8,8 @@ enum TerrainType {
 	GOLD = 3
 }
 
+var bonus_drops = []
+
 @onready var tilemap = get_parent().get_parent().get_node("TileMapLayer") as TileMapLayer
 @onready var dmgTilemap = get_parent().get_parent().get_node("TileMapLayerDmgOverlay") as TileMapLayer
 @onready var exp_pickup_scene := preload("res://scenes/pickup.tscn")
@@ -18,6 +20,15 @@ var game_manager
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	game_manager = get_tree().root.get_node("Main/GameManager")
+	
+	bonus_drops = [
+		{ "type": game_manager.BonusType.SHARPNESS },
+		{ "type": game_manager.BonusType.SSHOVEL },
+		{ "type": game_manager.BonusType.SABOTAGE},
+		{ "type": game_manager.BonusType.SABOTAGE },
+		{ "type": game_manager.BonusType.SABOTAGE },
+		{ "type": game_manager.BonusType.NONE }
+	]
 	
 func get_max_hp_for_tile(level: int) -> int:
 	return 3 + level
@@ -95,6 +106,7 @@ func damage_tile(player: CharacterBody2D):
 			
 			destroyed_tile.emit(terrain_type, player)
 			drop_items_based_on_tile(terrain_type, player, tile_coords)
+			_try_drop_bonus(terrain_type, player)
 		else:
 			dmgTilemap.set_cell(tile_coords, tile_id, Vector2(damage_tile_value, 0))
 
@@ -108,6 +120,27 @@ func pick_weighted_drop(drop_table):
 			return drop["exp"]
 	# fallback ak nič nepadne, zober prvý item
 	return drop_table[0]["exp"]
+	
+func pick_bonus(list: Array, terrain_type: TerrainType):
+	var chance := 0.0
+	match terrain_type:
+		TerrainType.IRON:
+			chance = 0.5 # 0.05 -> 95% nič
+		TerrainType.GOLD:
+			chance = 0.07 # 0.07 -> 93% nič
+		_:
+			chance = 0.0  # ostatné bloky nikdy nedajú bonus
+			
+	var r := randf()
+
+	if r >= chance:
+		return game_manager.BonusType.NONE
+
+	if list.is_empty():
+		return game_manager.BonusType.NONE
+
+	var index := randi_range(0, list.size() - 1)
+	return list[index].type
 
 func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D,
 	tile_coords: Vector2i):
@@ -134,6 +167,18 @@ func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D
 	var exp_value = pick_weighted_drop(drops)
 	#player.add_exp(exp_value)
 	_spawn_exp_pickups(exp_value, player, tile_coords)
+
+func _try_drop_bonus(terrain_type: TerrainType, player: CharacterBody2D) -> void:
+	# ak už hráč má bonus, nič nové nepadá
+	if game_manager.player_has_active_bonus(player):
+		return
+	
+	var p_type = pick_bonus(bonus_drops, terrain_type)
+	if p_type == game_manager.BonusType.NONE:
+		return
+
+	game_manager.apply_bonus(player, p_type)
+
 
 func _spawn_exp_pickups(exp_value: int, player: CharacterBody2D,
 	tile_coords: Vector2i) -> void:

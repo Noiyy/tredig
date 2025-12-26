@@ -16,6 +16,8 @@ var elapsed_time: float = 0.0
 @onready var left_go                       = $LeftGameOverOverlay
 @onready var right_go                      = $RightGameOverOverlay
 
+@onready var left_bonus: Control           = $LeftPlayerHUD/Bonus
+@onready var right_bonus: Control          = $RightPlayerHUD/Bonus
 @onready var left_bonus_icon: TextureRect  = $LeftPlayerHUD/Bonus/BonusIcon
 @onready var right_bonus_icon: TextureRect = $RightPlayerHUD/Bonus/BonusIcon
 @onready var left_bonus_timer: TextureProgressBar  = $LeftPlayerHUD/Bonus/BonusTimerBar
@@ -119,17 +121,18 @@ func update_player_hp(player: CharacterBody2D, current: int, max_hp: int) -> voi
 	label.text = "%d" % current
 
 func update_player_bonus(player: CharacterBody2D, bonus_type: int) -> void:
+	var bonus: Control =  left_bonus if (player.name == "PlayerLeft") else right_bonus
 	var icon: TextureRect = left_bonus_icon \
 		if (player.name == "PlayerLeft") \
 		else right_bonus_icon
 
 	if bonus_type == game_manager.BonusType.NONE:
-		icon.visible = false
+		bonus.visible = false
 		icon.texture = null
 		return
 
 	icon.texture = bonus_icons.get(bonus_type, null)
-	icon.visible = icon.texture != null
+	bonus.visible = icon.texture != null
 
 func _update_bonus_timer(delta: float) -> void:
 	if left_bonus_active:
@@ -138,7 +141,7 @@ func _update_bonus_timer(delta: float) -> void:
 			left_bonus_timer.value = left_bonus_time_left / left_bonus_duration
 		if left_bonus_time_left <= 0.0:
 			left_bonus_active = false
-			left_bonus_timer.visible = false
+			left_bonus.visible = false
 
 	if right_bonus_active:
 		right_bonus_time_left = max(right_bonus_time_left - delta, 0.0)
@@ -146,20 +149,20 @@ func _update_bonus_timer(delta: float) -> void:
 			right_bonus_timer.value = right_bonus_time_left / right_bonus_duration
 		if right_bonus_time_left <= 0.0:
 			right_bonus_active = false
-			right_bonus_timer.visible = false
+			right_bonus.visible = false
 
 func start_player_bonus_timer(player: CharacterBody2D, duration: float) -> void:
 	if player.name == "PlayerLeft":
 		left_bonus_duration = duration
 		left_bonus_time_left = duration
 		left_bonus_active = true
-		left_bonus_timer.visible = true
+		left_bonus.visible = true
 		left_bonus_timer.value = 1.0
 	else:
 		right_bonus_duration = duration
 		right_bonus_time_left = duration
 		right_bonus_active = true
-		right_bonus_timer.visible = true
+		right_bonus.visible = true
 		right_bonus_timer.value = 1.0
 
 

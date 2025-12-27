@@ -25,8 +25,8 @@ func _ready() -> void:
 		{ "type": game_manager.BonusType.SHARPNESS },
 		{ "type": game_manager.BonusType.SSHOVEL },
 		{ "type": game_manager.BonusType.SABOTAGE},
-		{ "type": game_manager.BonusType.SABOTAGE },
-		{ "type": game_manager.BonusType.SABOTAGE },
+		{ "type": game_manager.BonusType.DULLNESS },
+		{ "type": game_manager.BonusType.OVERLOAD },
 		{ "type": game_manager.BonusType.NONE }
 	]
 	
@@ -55,7 +55,11 @@ func calculate_tile_dmg_val(current_hp, max_hp, damage_per_hit, max_states=3) ->
 	return max_states - state_value
 
 func damage_tile(player: CharacterBody2D):
-	var area_pos = get_parent().get_node("ShovelDirection/Area2D").global_position
+	var shovel_dir_node := get_parent().get_node("ShovelDirection")
+	var area := shovel_dir_node.get_node("Area2D") as Area2D
+	
+	var area_pos = area.global_position
+	var dir_vec := (area_pos - player.global_position).normalized()
 	
 	# hranice subviewportun pre daného hráča
 	var min_x := 0.0
@@ -73,42 +77,103 @@ func damage_tile(player: CharacterBody2D):
 
 	# Skontroluj existenciu dlaždice
 	var tile_id = tilemap.get_cell_source_id(tile_coords)
-	if tile_id != -1:
-		var hasTerrainType = tileset.has_custom_data_layer_by_name("terrainType")
+	if tile_id == -1:
+		return
 		
-		# Zisti typ bloku
-		var terrain_type
-		if hasTerrainType:
-			var layer_index = tileset.get_custom_data_layer_by_name("terrainType")
-			var tile_data = tilemap.get_cell_tile_data(tile_coords)
-			terrain_type = tile_data.get_custom_data_by_layer_id(layer_index)
+	var hasTerrainType = tileset.has_custom_data_layer_by_name("terrainType")
+	
+	# Zisti typ bloku
+	var terrain_type
+	if hasTerrainType:
+		var layer_index = tileset.get_custom_data_layer_by_name("terrainType")
+		var tile_data = tilemap.get_cell_tile_data(tile_coords)
+		terrain_type = tile_data.get_custom_data_by_layer_id(layer_index)
+	
+	# inicializuj hp ak neexistuje
+	var tile_level = tile_atlas_coords.y+1
+	if tile_coords not in tile_data:
+		tile_data[tile_coords] = { "level": tile_level, "hp": get_max_hp_for_tile(tile_level) }
 		
-		# inicializuj hp ak neexistuje
-		var tile_level = tile_atlas_coords.y+1
-		if tile_coords not in tile_data:
-			tile_data[tile_coords] = { "level": tile_level, "hp": get_max_hp_for_tile(tile_level) }
-			
-		# Odober hp
-		tile_data[tile_coords].hp -= player.damage_per_hit
-		#var damage_tile_value = get_max_hp_for_tile(tile_level) - tile_data[tile_coords].hp
-		var damage_tile_value = calculate_tile_dmg_val(
-			tile_data[tile_coords].hp, 
-			get_max_hp_for_tile(tile_level),
-			player.damage_per_hit
-		)
+	# Odober hp
+	tile_data[tile_coords].hp -= player.damage_per_hit
+	#var damage_tile_value = get_max_hp_for_tile(tile_level) - tile_data[tile_coords].hp
+	var damage_tile_value = calculate_tile_dmg_val(
+		tile_data[tile_coords].hp, 
+		get_max_hp_for_tile(tile_level),
+		player.damage_per_hit
+	)
+	
+	game_manager.change_durability(player, -10, false)
+	
+	# SSHOVEL: znič druhý blok v smere kopania
+	if game_manager.player_has_bonus(player, game_manager.BonusType.SSHOVEL):
+		_damage_second_tile(tile_coords, dir_vec, player)
+	
+	if tile_data[tile_coords].hp <= 0:
+		tilemap.set_cell(tile_coords, tile_id, tile_coords, -1) # Odstráni tile
+		dmgTilemap.set_cell(tile_coords, tile_id, tile_coords, -1)
+		tile_data.erase(tile_coords)
 		
-		game_manager.change_durability(player, -10, false)
+		destroyed_tile.emit(terrain_type, player)
+		drop_items_based_on_tile(terrain_type, player, tile_coords)
+		_try_drop_bonus(terrain_type, player)
+	else:
+		dmgTilemap.set_cell(tile_coords, tile_id, Vector2(damage_tile_value, 0))
+
+func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: CharacterBody2D) -> void:
+	# smer v tile mape (−1, 0, 1) podľa dir_vec
+	var step := Vector2i(
+		int(round(dir_vec.x)),
+		int(round(dir_vec.y))
+	)
+
+	if step == Vector2i.ZERO:
+		return
+
+	var second_coords := first_coords + step
+	var tile_id := tilemap.get_cell_source_id(second_coords)
+	if tile_id == -1:
+		return
 		
-		if tile_data[tile_coords].hp <= 0:
-			tilemap.set_cell(tile_coords, tile_id, tile_coords, -1) # Odstráni tile
-			dmgTilemap.set_cell(tile_coords, tile_id, tile_coords, -1)
-			tile_data.erase(tile_coords)
-			
-			destroyed_tile.emit(terrain_type, player)
-			drop_items_based_on_tile(terrain_type, player, tile_coords)
-			_try_drop_bonus(terrain_type, player)
-		else:
-			dmgTilemap.set_cell(tile_coords, tile_id, Vector2(damage_tile_value, 0))
+	var tileset = tilemap.tile_set
+	var tile_atlas_coords := tilemap.get_cell_atlas_coords(second_coords)
+	var tile_level := tile_atlas_coords.y + 1
+	
+	var hasTerrainType = tileset.has_custom_data_layer_by_name("terrainType")
+	
+	# Zisti typ bloku
+	var terrain_type
+	if hasTerrainType:
+		var layer_index = tileset.get_custom_data_layer_by_name("terrainType")
+		var tile_data = tilemap.get_cell_tile_data(second_coords)
+		terrain_type = tile_data.get_custom_data_by_layer_id(layer_index)
+
+	if second_coords not in tile_data:
+		tile_data[second_coords] = {
+			"level": tile_level,
+			"hp": get_max_hp_for_tile(tile_level)
+		}
+
+	tile_data[second_coords].hp -= player.damage_per_hit
+
+	var damage_tile_value := calculate_tile_dmg_val(
+		tile_data[second_coords].hp,
+		get_max_hp_for_tile(tile_level),
+		player.damage_per_hit
+	)
+
+	if tile_data[second_coords].hp <= 0:
+		tilemap.set_cell(second_coords, tile_id, second_coords, -1)
+		dmgTilemap.set_cell(second_coords, tile_id, second_coords, -1)
+		tile_data.erase(second_coords)
+
+		var tdata = tilemap.get_cell_tile_data(second_coords)
+		
+		destroyed_tile.emit(terrain_type, player)
+		drop_items_based_on_tile(terrain_type, player, second_coords)
+		_try_drop_bonus(terrain_type, player)
+	else:
+		dmgTilemap.set_cell(second_coords, tile_id, Vector2(damage_tile_value, 0))
 
 func pick_weighted_drop(drop_table):
 	var rand = randf()
@@ -139,6 +204,7 @@ func pick_bonus(list: Array, terrain_type: TerrainType):
 	if list.is_empty():
 		return game_manager.BonusType.NONE
 
+	#return game_manager.BonusType.SABOTAGE
 	var index := randi_range(0, list.size() - 1)
 	return list[index].type
 

@@ -125,6 +125,18 @@ func update_player_bonus(player: CharacterBody2D, bonus_type: int) -> void:
 	var icon: TextureRect = left_bonus_icon \
 		if (player.name == "PlayerLeft") \
 		else right_bonus_icon
+	var timer_bar: TextureProgressBar = left_bonus_timer \
+		if (player.name == "PlayerLeft") \
+		else right_bonus_timer
+		
+	# Nastav farbu podľa typu bonusu
+	var tint_color = Color("#31e312be")
+	# debuffy
+	if bonus_type == game_manager.BonusType.OVERLOAD \
+		or bonus_type == game_manager.BonusType.DULLNESS:
+		tint_color = Color("#ff0000be")
+
+		timer_bar.tint_progress = tint_color
 
 	if bonus_type == game_manager.BonusType.NONE:
 		bonus.visible = false

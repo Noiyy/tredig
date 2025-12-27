@@ -93,13 +93,13 @@ func apply_bonus(player: CharacterBody2D, b_type: int) -> void:
 		BonusType.SHARPNESS:
 			_add_timed_stat(player, b_type, "damage", 1, 10.0)
 		BonusType.SSHOVEL:
-			_add_timed_stat(player, b_type, "damage", 1, 10.0)
+			_add_timed_stat(player, b_type, "sshovel", 1, 10.0)
 		BonusType.SABOTAGE:
-			_add_timed_stat(player, b_type, "damage", 1, 10.0)
+			_add_timed_stat(player, b_type, "sabotage", 1, 10.0)
 		BonusType.DULLNESS:
 			_add_timed_stat(player, b_type, "dullness", 1, 10.0)
 		BonusType.OVERLOAD:
-			_add_timed_stat(player, b_type, "damage", 1, 10.0)
+			_add_overload_debuff(player, 7.0)
 	
 
 func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, delta: float,
@@ -116,7 +116,7 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		"damage":
 			data.damage_per_hit += int(delta)
 		"dullness":
-			data.damage_per_hit -= clamp(int(delta), 1, 99)
+			data.damage_per_hit -= int(delta) if data.damage_per_hit > 1 else 0
 
 	players[player.name].active_bonus = b_type
 	player.sync_stats_from_manager(data)
@@ -141,9 +141,41 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		HUD.update_player_bonus(player, BonusType.NONE)
 	)
 
+func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
+	var data = players[player.name]
+	if not data.has("effects"):
+		data.effects = {}
+
+	# označ aktívny bonus
+	players[player.name].active_bonus = BonusType.OVERLOAD
+
+	# aplikuj debuff na hráča
+	player.set_can_dig(false)
+	player.set_speed_multiplier(0.5)  # 50 % rýchlosti
+
+	HUD.update_player_bonus(player, BonusType.OVERLOAD)
+	HUD.start_player_bonus_timer(player, duration)
+
+	var t := get_tree().create_timer(duration)
+	t.timeout.connect(func():
+		if not is_instance_valid(player):
+			return
+
+		# zrušenie efektu
+		player.set_can_dig(true)
+		player.set_speed_multiplier(1.0)
+
+		players[player.name].active_bonus = BonusType.NONE
+		player.sync_stats_from_manager(data)  # vráť ostatné staty, ak treba
+		HUD.update_player_bonus(player, BonusType.NONE)
+	)
+
+
 func player_has_active_bonus(player: CharacterBody2D) -> bool:
 	return players[player.name].get("active_bonus", BonusType.NONE) != BonusType.NONE
 
+func player_has_bonus(player: CharacterBody2D, bonus_type: int) -> bool:
+	return players[player.name].get("active_bonus", BonusType.NONE) == bonus_type
 
 func get_world_x_boundaries():
 	return [world_left_x, world_right_x]

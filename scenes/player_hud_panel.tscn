@@ -102,4 +102,4 @@ fill_mode = 5
 texture_progress = ExtResource("3_gpjlm")
 tint_under = Color(1, 1, 1, 0)
 tint_over = Color(1, 1, 1, 0)
-tint_progress = Color(0.19401994, 0.89, 0.07119998, 0.8627451)
+tint_progress = Color(0.19401994, 0.89, 0.07119998, 0.74509805)

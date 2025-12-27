@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0gqgtnrdjxx"]
+[gd_scene load_steps=4 format=3 uid="uid://b0gqgtnrdjxx"]
 
 [ext_resource type="Script" uid="uid://bo2b3fgiej8d0" path="res://scripts/game_over_lay.gd" id="1_otpf7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_otpf7"]
+font_size = 24
+font_color = Color(1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_434uq"]
+font_color = Color(0.61, 0.61, 0.61, 1)
 
 [node name="GameOverOverlay" type="Control"]
 layout_mode = 3
@@ -22,6 +29,7 @@ alignment = 1
 [node name="TitleLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "You died!"
+label_settings = SubResource("LabelSettings_otpf7")
 horizontal_alignment = 1
 
 [node name="SubTitleLabel" type="Label" parent="VBoxContainer"]
@@ -32,6 +40,7 @@ horizontal_alignment = 1
 [node name="TimeLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "00:00"
+label_settings = SubResource("LabelSettings_434uq")
 horizontal_alignment = 1
 
 [node name="RestartButton" type="Button" parent="VBoxContainer"]

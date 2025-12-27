@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const SPEED = 200.0
+var SPEED = 200.0
 const JUMP_VELOCITY = -200.0
 
 var world_left_x = 0
@@ -15,6 +15,8 @@ var world_right_x = 0
 @export var hp = 100
 @export var durability = 1000
 var is_dead = false
+var can_dig: bool = true
+var base_speed: float = SPEED
  
 var HUD
 var game_manager
@@ -112,6 +114,8 @@ func _process(delta: float) -> void:
 
 func _input(event):
 	if event.is_action_pressed(controls.use, true):
+		if not can_dig:
+			return
 		if durability <= 0: 
 			return
 		$TileManager.damage_tile(self)
@@ -151,3 +155,9 @@ func _on_death_timer_timeout() -> void:
 		HUD.show_right_game_over(elapsed)
 		
 	visible = false
+
+func set_can_dig(value: bool) -> void:
+	can_dig = value
+
+func set_speed_multiplier(mult: float) -> void:
+	SPEED = base_speed * mult

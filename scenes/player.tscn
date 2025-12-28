@@ -21,7 +21,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
-size = Vector2(11.25, 15.5)
+size = Vector2(11, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
 size = Vector2(3, 3)
@@ -34,7 +34,7 @@ position = Vector2(1.5, -11)
 sprite_frames = SubResource("SpriteFrames_u8vuu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -7.75)
+position = Vector2(1, -7)
 shape = SubResource("RectangleShape2D_qhqgy")
 
 [node name="ShovelDirection" type="Node2D" parent="."]

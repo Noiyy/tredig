@@ -20,6 +20,7 @@ var base_speed: float = SPEED
  
 var HUD
 var game_manager
+@onready var tile_manager = $TileManager
 @onready var death_timer = $DeathTimer
 @onready var shovel_highlight = $ShovelDirection/TileHighlight 
 var shovel_distance = 14
@@ -118,7 +119,7 @@ func _input(event):
 			return
 		if durability <= 0: 
 			return
-		$TileManager.damage_tile(self)
+		tile_manager.damage_tile(self)
 			
 func add_exp(amount: int):
 	game_manager.add_player_exp(self, amount)
@@ -134,7 +135,45 @@ func apply_stat_change(key: String, delta: float) -> void:
 	match key:
 		"damage":
 			damage_per_hit += int(delta)
+
+func apply_sabotage_effect() -> void:
+	var tile_size = game_manager.get_tile_size()
+	var start_x = int(0 if name == "PlayerLeft" else (320 / tile_size))
+	var start_y = int(global_position.y / tile_size) + 1  # pod hráčom
+	
+	# Zvýš HP pre 3 riadky pod hráčom
+	for y_offset in 3:
+		var target_y = start_y + y_offset
+		for x_offset in 20:  # cela šírka pre 1 hráča
+			var target_coords = Vector2i(start_x + x_offset, target_y)
+			
+			var tile_id = tile_manager.tilemap.get_cell_source_id(target_coords)
+			if tile_id == -1:
+				continue  # žiadny blok, preskoč
+			
+			var tile_atlas_coords = tile_manager.tilemap.get_cell_atlas_coords(target_coords)
+			var tile_level = tile_atlas_coords.y + 1
+			
+			# Ak nie je v tile_data, vytvor ho
+			if target_coords not in tile_manager.tile_data:
+				tile_manager.tile_data[target_coords] = {
+					"level": tile_level,
+					"hp": tile_manager.get_max_hp_for_tile(tile_level)
+				}
+			
+			var tile_data = tile_manager.tile_data[target_coords]
+			tile_data.hp += 1
+			tile_data.level += 1
 		
+			# Aktualizuj damage overlay
+			var max_hp = tile_manager.get_max_hp_for_tile(tile_data.level)
+			var damage_val = tile_manager.calculate_tile_dmg_val(
+				tile_data.hp, 
+				max_hp, 
+				damage_per_hit
+			)
+			tile_manager.dmgTilemap.set_cell(target_coords, tile_id, Vector2(damage_val, 0))
+			tile_manager.effectTilemap.set_cell(target_coords, tile_id, Vector2i(1, 0))
 
 func on_level_up():
 	print("Shovel level up! Nový level: %d" % shovel_level)

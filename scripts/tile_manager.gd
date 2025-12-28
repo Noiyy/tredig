@@ -113,6 +113,7 @@ func damage_tile(player: CharacterBody2D):
 	if tile_data[tile_coords].hp <= 0:
 		tilemap.set_cell(tile_coords, tile_id, tile_coords, -1) # Odstráni tile
 		dmgTilemap.set_cell(tile_coords, tile_id, tile_coords, -1)
+		effectTilemap.set_cell(tile_coords, 0, Vector2i(-1, -1))
 		tile_data.erase(tile_coords)
 		
 		destroyed_tile.emit(terrain_type, player)

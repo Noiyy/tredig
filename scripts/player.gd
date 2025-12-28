@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 var SPEED = 200.0
-const JUMP_VELOCITY = -200.0
+var JUMP_VELOCITY = -200.0
 
 var world_left_x = 0
 var world_right_x = 0
@@ -17,6 +17,7 @@ var world_right_x = 0
 var is_dead = false
 var can_dig: bool = true
 var base_speed: float = SPEED
+var base_jump_velocity: float = JUMP_VELOCITY
  
 var HUD
 var game_manager
@@ -200,3 +201,6 @@ func set_can_dig(value: bool) -> void:
 
 func set_speed_multiplier(mult: float) -> void:
 	SPEED = base_speed * mult
+
+func set_gravity_multiplier(mult: float) -> void:
+	JUMP_VELOCITY = base_jump_velocity * mult

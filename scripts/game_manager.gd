@@ -162,6 +162,7 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 	# aplikuj debuff na hráča
 	player.set_can_dig(false)
 	player.set_speed_multiplier(0.5)  # 50 % rýchlosti
+	player.set_gravity_multiplier(0.33) 
 
 	HUD.start_player_bonus_timer(player, duration, BonusType.OVERLOAD)
 	HUD.update_player_bonuses(player, data.active_bonuses)
@@ -175,6 +176,7 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 		data.active_bonuses.erase(BonusType.OVERLOAD)
 		player.set_can_dig(true)
 		player.set_speed_multiplier(1.0)
+		player.set_gravity_multiplier(1.0) 
 
 		player.sync_stats_from_manager(data)  # vráť ostatné staty, ak treba
 		HUD.update_player_bonuses(player, data.active_bonuses)

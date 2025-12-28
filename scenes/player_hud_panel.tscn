@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cfpmja1pxt1dp"]
+[gd_scene load_steps=11 format=3 uid="uid://cfpmja1pxt1dp"]
 
 [ext_resource type="Script" uid="uid://dixkh1f22jlx4" path="res://scripts/player_hud_panel.gd" id="1_3lnvr"]
 [ext_resource type="Script" uid="uid://p3m3ft4nwobk" path="res://scripts/progress_bar.gd" id="1_8chcm"]
 [ext_resource type="PackedScene" uid="uid://w3hm727q4u8w" path="res://scenes/bonus_hud.tscn" id="3_gpjlm"]
+[ext_resource type="Texture2D" uid="uid://wf404itj8a0v" path="res://assets/images/heart.png" id="4_3divr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8chcm"]
 bg_color = Color(0.6, 0.6, 0.6, 0.5019608)
@@ -13,6 +14,10 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3lnvr"]
 bg_color = Color(0.65882355, 0.7921569, 0.34509805, 0.63529414)
+
+[sub_resource type="LabelSettings" id="LabelSettings_3divr"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpjlm"]
 bg_color = Color(0, 0, 0, 0.25882354)
@@ -27,6 +32,10 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_r1vqg"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
 
 [node name="PlayerHUDPanel" type="Control"]
 layout_mode = 3
@@ -54,6 +63,7 @@ layout_mode = 0
 offset_right = 31.0
 offset_bottom = 23.0
 text = "1"
+label_settings = SubResource("LabelSettings_3divr")
 horizontal_alignment = 2
 
 [node name="DurabilityBar" type="ProgressBar" parent="."]
@@ -71,9 +81,10 @@ script = ExtResource("1_8chcm")
 layout_mode = 0
 offset_left = 6.0
 offset_top = 34.0
-offset_right = 46.0
+offset_right = 36.0
 offset_bottom = 57.0
 text = "100"
+label_settings = SubResource("LabelSettings_r1vqg")
 
 [node name="Bonus1" parent="." instance=ExtResource("3_gpjlm")]
 visible = false
@@ -84,3 +95,11 @@ visible = false
 layout_mode = 1
 offset_left = 61.0
 offset_right = 109.0
+
+[node name="HeartIcon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 38.0
+offset_right = 52.0
+offset_bottom = 54.0
+texture = ExtResource("4_3divr")

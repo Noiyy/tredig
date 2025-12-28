@@ -35,7 +35,7 @@ func register_player(player: CharacterBody2D):
 		"durability": MAX_DURABILITY,
 		"hp": MAX_HP,
 		"ref": player,
-		"active_bonus": BonusType.NONE,
+		"active_bonuses": [],
 	}
 	player.sync_stats_from_manager(players[id])
 
@@ -111,6 +111,9 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		data.effects[key] = 0.0
 	data.effects[key] += delta
 
+	if !can_apply_bonus(player):
+		return
+		
 	# uprav stat v dátach
 	match key:
 		"damage":
@@ -118,10 +121,10 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		"dullness":
 			data.damage_per_hit -= int(delta) if data.damage_per_hit > 1 else 0
 
-	players[player.name].active_bonus = b_type
+	data.active_bonuses.append(b_type)
 	player.sync_stats_from_manager(data)
-	HUD.update_player_bonus(player, b_type)
-	HUD.start_player_bonus_timer(player, duration)
+	HUD.start_player_bonus_timer(player, duration, b_type)
+	HUD.update_player_bonuses(player, data.active_bonuses)
 
 	# plánuj zrušenie
 	var t := get_tree().create_timer(duration)
@@ -136,9 +139,9 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 			"dullness":
 				data.damage_per_hit += int(delta)
 				
-		players[player.name].active_bonus = BonusType.NONE
+		data.active_bonuses.erase(b_type)
 		player.sync_stats_from_manager(data)
-		HUD.update_player_bonus(player, BonusType.NONE)
+		HUD.update_player_bonuses(player, data.active_bonuses)
 	)
 
 func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
@@ -146,15 +149,17 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 	if not data.has("effects"):
 		data.effects = {}
 
-	# označ aktívny bonus
-	players[player.name].active_bonus = BonusType.OVERLOAD
+	if !can_apply_bonus(player):
+		return
+		
+	data.active_bonuses.append(BonusType.OVERLOAD)
 
 	# aplikuj debuff na hráča
 	player.set_can_dig(false)
 	player.set_speed_multiplier(0.5)  # 50 % rýchlosti
 
-	HUD.update_player_bonus(player, BonusType.OVERLOAD)
-	HUD.start_player_bonus_timer(player, duration)
+	HUD.start_player_bonus_timer(player, duration, BonusType.OVERLOAD)
+	HUD.update_player_bonuses(player, data.active_bonuses)
 
 	var t := get_tree().create_timer(duration)
 	t.timeout.connect(func():
@@ -162,20 +167,23 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 			return
 
 		# zrušenie efektu
+		data.active_bonuses.erase(BonusType.OVERLOAD)
 		player.set_can_dig(true)
 		player.set_speed_multiplier(1.0)
 
-		players[player.name].active_bonus = BonusType.NONE
 		player.sync_stats_from_manager(data)  # vráť ostatné staty, ak treba
-		HUD.update_player_bonus(player, BonusType.NONE)
+		HUD.update_player_bonuses(player, data.active_bonuses)
 	)
 
 
 func player_has_active_bonus(player: CharacterBody2D) -> bool:
-	return players[player.name].get("active_bonus", BonusType.NONE) != BonusType.NONE
+	return not players[player.name].active_bonuses.is_empty()
 
 func player_has_bonus(player: CharacterBody2D, bonus_type: int) -> bool:
-	return players[player.name].get("active_bonus", BonusType.NONE) == bonus_type
+	return players[player.name].active_bonuses.has(bonus_type)
+
+func can_apply_bonus(player: CharacterBody2D) -> bool:
+	return players[player.name].active_bonuses.size() < 2  # max 2 bonusy
 
 func get_world_x_boundaries():
 	return [world_left_x, world_right_x]

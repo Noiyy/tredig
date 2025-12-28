@@ -120,6 +120,8 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 			data.damage_per_hit += int(delta)
 		"dullness":
 			data.damage_per_hit -= int(delta) if data.damage_per_hit > 1 else 0
+		"sabotage":
+			get_enemy_player(player).apply_sabotage_effect()
 
 	data.active_bonuses.append(b_type)
 	player.sync_stats_from_manager(data)
@@ -143,6 +145,9 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		player.sync_stats_from_manager(data)
 		HUD.update_player_bonuses(player, data.active_bonuses)
 	)
+
+func get_enemy_player(player: CharacterBody2D) -> CharacterBody2D:
+	return players["PlayerRight"].ref if player.name == "PlayerLeft" else players["PlayerLeft"].ref
 
 func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 	var data = players[player.name]

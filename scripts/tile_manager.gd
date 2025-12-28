@@ -12,6 +12,7 @@ var bonus_drops = []
 
 @onready var tilemap = get_parent().get_parent().get_node("TileMapLayer") as TileMapLayer
 @onready var dmgTilemap = get_parent().get_parent().get_node("TileMapLayerDmgOverlay") as TileMapLayer
+@onready var effectTilemap = get_parent().get_parent().get_node("TileMapLayerEffectOverlay") as TileMapLayer
 @onready var exp_pickup_scene := preload("res://scenes/pickup.tscn")
 
 var tile_data = {} # key: Vector2 (pozícia tile), value: {"level": int, "hp": int}
@@ -204,9 +205,8 @@ func pick_bonus(list: Array, terrain_type: TerrainType):
 	if list.is_empty():
 		return game_manager.BonusType.NONE
 
-	#return game_manager.BonusType.SABOTAGE
+	return game_manager.BonusType.SABOTAGE
 	var index := randi_range(0, list.size() - 1)
-	print("bro ako ", list[index].type)
 	return list[index].type
 
 func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D,

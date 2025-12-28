@@ -206,6 +206,7 @@ func pick_bonus(list: Array, terrain_type: TerrainType):
 
 	#return game_manager.BonusType.SABOTAGE
 	var index := randi_range(0, list.size() - 1)
+	print("bro ako ", list[index].type)
 	return list[index].type
 
 func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D,
@@ -235,12 +236,16 @@ func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D
 	_spawn_exp_pickups(exp_value, player, tile_coords)
 
 func _try_drop_bonus(terrain_type: TerrainType, player: CharacterBody2D) -> void:
-	# ak už hráč má bonus, nič nové nepadá
-	if game_manager.player_has_active_bonus(player):
+	# ak už hráč má 2 bonusy, nič nové nepadá
+	if !game_manager.can_apply_bonus(player):
 		return
 	
 	var p_type = pick_bonus(bonus_drops, terrain_type)
 	if p_type == game_manager.BonusType.NONE:
+		return
+		
+	# ak už má tento typ, nepridaj ho
+	if game_manager.player_has_bonus(player, p_type):
 		return
 
 	game_manager.apply_bonus(player, p_type)

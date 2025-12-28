@@ -16,20 +16,43 @@ var elapsed_time: float = 0.0
 @onready var left_go                       = $LeftGameOverOverlay
 @onready var right_go                      = $RightGameOverOverlay
 
-@onready var left_bonus: Control           = $LeftPlayerHUD/Bonus
-@onready var right_bonus: Control          = $RightPlayerHUD/Bonus
-@onready var left_bonus_icon: TextureRect  = $LeftPlayerHUD/Bonus/BonusIcon
-@onready var right_bonus_icon: TextureRect = $RightPlayerHUD/Bonus/BonusIcon
-@onready var left_bonus_timer: TextureProgressBar  = $LeftPlayerHUD/Bonus/BonusTimerBar
-@onready var right_bonus_timer: TextureProgressBar = $RightPlayerHUD/Bonus/BonusTimerBar
+@onready var left_bonus1: Control           = $LeftPlayerHUD/Bonus1
+@onready var right_bonus1: Control          = $RightPlayerHUD/Bonus1
+@onready var left_bonus_icon1: TextureRect  = $LeftPlayerHUD/Bonus1/BonusIcon
+@onready var right_bonus_icon1: TextureRect = $RightPlayerHUD/Bonus1/BonusIcon
+@onready var left_bonus_timer1: TextureProgressBar  = $LeftPlayerHUD/Bonus1/BonusTimerBar
+@onready var right_bonus_timer1: TextureProgressBar = $RightPlayerHUD/Bonus1/BonusTimerBar
+@onready var left_bonus2: Control           = $LeftPlayerHUD/Bonus2
+@onready var right_bonus2: Control          = $RightPlayerHUD/Bonus2
+@onready var left_bonus_icon2: TextureRect  = $LeftPlayerHUD/Bonus2/BonusIcon
+@onready var right_bonus_icon2: TextureRect = $RightPlayerHUD/Bonus2/BonusIcon
+@onready var left_bonus_timer2: TextureProgressBar  = $LeftPlayerHUD/Bonus2/BonusTimerBar
+@onready var right_bonus_timer2: TextureProgressBar = $RightPlayerHUD/Bonus2/BonusTimerBar
 
-var left_bonus_duration: float = 0.0
-var left_bonus_time_left: float = 0.0
-var left_bonus_active: bool = false
+# Left player slot 1
+var left_bonus1_active: bool = false
+var left_bonus1_duration: float = 0.0
+var left_bonus1_time_left: float = 0.0
 
-var right_bonus_duration: float = 0.0
-var right_bonus_time_left: float = 0.0
-var right_bonus_active: bool = false
+# Left player slot 2  
+var left_bonus2_active: bool = false
+var left_bonus2_duration: float = 0.0
+var left_bonus2_time_left: float = 0.0
+
+# Right player slot 1
+var right_bonus1_active: bool = false
+var right_bonus1_duration: float = 0.0
+var right_bonus1_time_left: float = 0.0
+
+# Right player slot 2
+var right_bonus2_active: bool = false
+var right_bonus2_duration: float = 0.0
+var right_bonus2_time_left: float = 0.0
+
+var left_bonus1_type: int = -1
+var left_bonus2_type: int = -1
+var right_bonus1_type: int = -1
+var right_bonus2_type: int = -1
 
 var left_level_tween: Tween
 var right_level_tween: Tween
@@ -54,8 +77,10 @@ func _ready():
 		game_manager.BonusType.OVERLOAD: preload("res://assets/images/overload.png"),
 	}
 	
-	left_bonus_timer.step = 0.01
-	right_bonus_timer.step = 0.01
+	left_bonus_timer1.step = 0.01
+	left_bonus_timer2.step = 0.01
+	right_bonus_timer1.step = 0.01
+	right_bonus_timer2.step = 0.01
 	
 func _process(delta: float) -> void:
 	elapsed_time += delta
@@ -120,63 +145,147 @@ func update_player_hp(player: CharacterBody2D, current: int, max_hp: int) -> voi
 	var label := left_hp_label if player.name == "PlayerLeft" else right_hp_label
 	label.text = "%d" % current
 
-func update_player_bonus(player: CharacterBody2D, bonus_type: int) -> void:
-	var bonus: Control =  left_bonus if (player.name == "PlayerLeft") else right_bonus
-	var icon: TextureRect = left_bonus_icon \
-		if (player.name == "PlayerLeft") \
-		else right_bonus_icon
-	var timer_bar: TextureProgressBar = left_bonus_timer \
-		if (player.name == "PlayerLeft") \
-		else right_bonus_timer
+func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
+	if player.name == "PlayerLeft":
+		var bonus1: Control = left_bonus1
+		var icon1: TextureRect = left_bonus_icon1
+		var timer_bar1: TextureProgressBar = left_bonus_timer1
+		var bonus2: Control = left_bonus2
+		var icon2: TextureRect = left_bonus_icon2
+		var timer_bar2: TextureProgressBar = left_bonus_timer2
 		
-	# Nastav farbu podľa typu bonusu
-	var tint_color = Color("#31e312be")
-	# debuffy
-	if bonus_type == game_manager.BonusType.OVERLOAD \
-		or bonus_type == game_manager.BonusType.DULLNESS:
-		tint_color = Color("#ff0000be")
-
-		timer_bar.tint_progress = tint_color
-
-	if bonus_type == game_manager.BonusType.NONE:
-		bonus.visible = false
-		icon.texture = null
-		return
-
-	icon.texture = bonus_icons.get(bonus_type, null)
-	bonus.visible = icon.texture != null
+		# Aktualizuj slot 1 - podľa typu bonusu v slot 1
+		if left_bonus1_type != -1 and bonuses.has(left_bonus1_type):
+			var tint_color1 = Color("#31e312be")
+			if left_bonus1_type == game_manager.BonusType.OVERLOAD or left_bonus1_type == game_manager.BonusType.DULLNESS:
+				tint_color1 = Color("#ff0000be")
+			
+			icon1.texture = bonus_icons.get(left_bonus1_type, null)
+			timer_bar1.tint_progress = tint_color1
+			bonus1.visible = true
+		else:
+			bonus1.visible = false
+			icon1.texture = null
+			timer_bar1.tint_progress = Color("#31e312be")
+		
+		# Aktualizuj slot 2 - podľa typu bonusu v slot 2
+		if left_bonus2_type != -1 and bonuses.has(left_bonus2_type):
+			var tint_color2 = Color("#31e312be")
+			if left_bonus2_type == game_manager.BonusType.OVERLOAD or left_bonus2_type == game_manager.BonusType.DULLNESS:
+				tint_color2 = Color("#ff0000be")
+			
+			icon2.texture = bonus_icons.get(left_bonus2_type, null)
+			timer_bar2.tint_progress = tint_color2
+			bonus2.visible = true
+		else:
+			bonus2.visible = false
+			icon2.texture = null
+			timer_bar2.tint_progress = Color("#31e312be")
+	
+	else:  # Right player
+		var bonus1: Control = right_bonus1
+		var icon1: TextureRect = right_bonus_icon1
+		var timer_bar1: TextureProgressBar = right_bonus_timer1
+		var bonus2: Control = right_bonus2
+		var icon2: TextureRect = right_bonus_icon2
+		var timer_bar2: TextureProgressBar = right_bonus_timer2
+		
+		# Aktualizuj slot 1
+		if right_bonus1_type != -1 and bonuses.has(right_bonus1_type):
+			var tint_color1 = Color("#31e312be")
+			if right_bonus1_type == game_manager.BonusType.OVERLOAD or right_bonus1_type == game_manager.BonusType.DULLNESS:
+				tint_color1 = Color("#ff0000be")
+			
+			icon1.texture = bonus_icons.get(right_bonus1_type, null)
+			timer_bar1.tint_progress = tint_color1
+			bonus1.visible = true
+		else:
+			bonus1.visible = false
+			icon1.texture = null
+			timer_bar1.tint_progress = Color("#31e312be")
+		
+		# Aktualizuj slot 2
+		if right_bonus2_type != -1 and bonuses.has(right_bonus2_type):
+			var tint_color2 = Color("#31e312be")
+			if right_bonus2_type == game_manager.BonusType.OVERLOAD or right_bonus2_type == game_manager.BonusType.DULLNESS:
+				tint_color2 = Color("#ff0000be")
+			
+			icon2.texture = bonus_icons.get(right_bonus2_type, null)
+			timer_bar2.tint_progress = tint_color2
+			bonus2.visible = true
+		else:
+			bonus2.visible = false
+			icon2.texture = null
+			timer_bar2.tint_progress = Color("#31e312be")
 
 func _update_bonus_timer(delta: float) -> void:
-	if left_bonus_active:
-		left_bonus_time_left = max(left_bonus_time_left - delta, 0.0)
-		if left_bonus_duration > 0.0:
-			left_bonus_timer.value = left_bonus_time_left / left_bonus_duration
-		if left_bonus_time_left <= 0.0:
-			left_bonus_active = false
-			left_bonus.visible = false
+	# Left player slot 1
+	if left_bonus1_active:
+		left_bonus1_time_left = max(left_bonus1_time_left - delta, 0.0)
+		if left_bonus1_duration > 0.0:
+			left_bonus_timer1.value = left_bonus1_time_left / left_bonus1_duration
+		if left_bonus1_time_left <= 0.0:
+			left_bonus1_active = false
+			left_bonus1_type = -1
 
-	if right_bonus_active:
-		right_bonus_time_left = max(right_bonus_time_left - delta, 0.0)
-		if right_bonus_duration > 0.0:
-			right_bonus_timer.value = right_bonus_time_left / right_bonus_duration
-		if right_bonus_time_left <= 0.0:
-			right_bonus_active = false
-			right_bonus.visible = false
+	# Left player slot 2
+	if left_bonus2_active:
+		left_bonus2_time_left = max(left_bonus2_time_left - delta, 0.0)
+		if left_bonus2_duration > 0.0:
+			left_bonus_timer2.value = left_bonus2_time_left / left_bonus2_duration
+		if left_bonus2_time_left <= 0.0:
+			left_bonus2_active = false
+			left_bonus2_type = -1
 
-func start_player_bonus_timer(player: CharacterBody2D, duration: float) -> void:
+	# Right player slot 1
+	if right_bonus1_active:
+		right_bonus1_time_left = max(right_bonus1_time_left - delta, 0.0)
+		if right_bonus1_duration > 0.0:
+			right_bonus_timer1.value = right_bonus1_time_left / right_bonus1_duration
+		if right_bonus1_time_left <= 0.0:
+			right_bonus1_active = false
+			right_bonus1_type = -1
+
+	# Right player slot 2
+	if right_bonus2_active:
+		right_bonus2_time_left = max(right_bonus2_time_left - delta, 0.0)
+		if right_bonus2_duration > 0.0:
+			right_bonus_timer2.value = right_bonus2_time_left / right_bonus2_duration
+		if right_bonus2_time_left <= 0.0:
+			right_bonus2_active = false
+			right_bonus2_type = -1
+
+func start_player_bonus_timer(player: CharacterBody2D, duration: float, bonus_type: int) -> void:
 	if player.name == "PlayerLeft":
-		left_bonus_duration = duration
-		left_bonus_time_left = duration
-		left_bonus_active = true
-		left_bonus.visible = true
-		left_bonus_timer.value = 1.0
+		if not left_bonus1_active:
+			left_bonus1_duration = duration
+			left_bonus1_time_left = duration
+			left_bonus1_active = true
+			left_bonus1_type = bonus_type
+			left_bonus1.visible = true
+			left_bonus_timer1.value = 1.0
+		elif not left_bonus2_active:
+			left_bonus2_duration = duration
+			left_bonus2_time_left = duration
+			left_bonus2_active = true
+			left_bonus2_type = bonus_type
+			left_bonus2.visible = true
+			left_bonus_timer2.value = 1.0
 	else:
-		right_bonus_duration = duration
-		right_bonus_time_left = duration
-		right_bonus_active = true
-		right_bonus.visible = true
-		right_bonus_timer.value = 1.0
-
+		if not right_bonus1_active:
+			right_bonus1_duration = duration
+			right_bonus1_time_left = duration
+			right_bonus1_active = true
+			right_bonus1_type = bonus_type
+			right_bonus1.visible = true
+			right_bonus_timer1.value = 1.0
+		elif not right_bonus2_active:
+			right_bonus2_duration = duration
+			right_bonus2_time_left = duration
+			right_bonus2_active = true
+			right_bonus2_type = bonus_type
+			right_bonus2.visible = true
+			right_bonus_timer2.value = 1.0
 
 func show_left_game_over(time_sec: float) -> void:
 	left_go.show_game_over(time_sec)

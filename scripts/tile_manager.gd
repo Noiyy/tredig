@@ -5,7 +5,10 @@ signal destroyed_tile
 enum TerrainType {
 	NORMAL = 1,
 	IRON = 2,
-	GOLD = 3
+	GOLD = 3,
+	EMERALD = 4,
+	RUBY = 5,
+	DIAMOND = 6
 }
 
 var bonus_drops = []
@@ -167,6 +170,7 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 	if tile_data[second_coords].hp <= 0:
 		tilemap.set_cell(second_coords, tile_id, second_coords, -1)
 		dmgTilemap.set_cell(second_coords, tile_id, second_coords, -1)
+		effectTilemap.set_cell(second_coords, 0, Vector2i(-1, -1))
 		tile_data.erase(second_coords)
 
 		var tdata = tilemap.get_cell_tile_data(second_coords)
@@ -192,9 +196,15 @@ func pick_bonus(list: Array, terrain_type: TerrainType):
 	var chance := 0.0
 	match terrain_type:
 		TerrainType.IRON:
-			chance = 0.5 # 0.05 -> 95% nič
+			chance = 0.05 # 0.05 -> 95% nič
 		TerrainType.GOLD:
-			chance = 0.07 # 0.07 -> 93% nič
+			chance = 0.07
+		TerrainType.EMERALD:
+			chance = 0.09
+		TerrainType.RUBY:
+			chance = 0.12
+		TerrainType.DIAMOND:
+			chance = 0.15
 		_:
 			chance = 0.0  # ostatné bloky nikdy nedajú bonus
 			
@@ -206,25 +216,39 @@ func pick_bonus(list: Array, terrain_type: TerrainType):
 	if list.is_empty():
 		return game_manager.BonusType.NONE
 
-	return game_manager.BonusType.SABOTAGE
 	var index := randi_range(0, list.size() - 1)
 	return list[index].type
 
 func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D,
 	tile_coords: Vector2i):
-	const AVAILABLE_TILE_TYPES = [2, 3]
+	const AVAILABLE_TILE_TYPES = [TerrainType.IRON, TerrainType.GOLD]
 	if !AVAILABLE_TILE_TYPES.has(terrain_type):
 		return
 	
 	var drops
-	if terrain_type == 2:
+	if terrain_type == TerrainType.IRON:
 		drops = [
 			{"exp": 5, "chance": 0.3}, # 30%
 			{"exp": 10, "chance": 0.2},
 			{"exp": 30, "chance": 0.15},
 			{"exp": 50, "chance": 0.1} 
 		]
-	elif terrain_type == 3:
+	elif terrain_type == TerrainType.GOLD \
+		or terrain_type == TerrainType.EMERALD:
+		drops = [
+			{"exp": 15, "chance": 0.3},
+			{"exp": 25, "chance": 0.2},
+			{"exp": 50, "chance": 0.15},
+			{"exp": 75, "chance": 0.1} 
+		]
+	elif terrain_type == TerrainType.RUBY:
+		drops = [
+			{"exp": 15, "chance": 0.3},
+			{"exp": 25, "chance": 0.2},
+			{"exp": 50, "chance": 0.15},
+			{"exp": 75, "chance": 0.1} 
+		]
+	elif terrain_type == TerrainType.DIAMOND:
 		drops = [
 			{"exp": 15, "chance": 0.3},
 			{"exp": 25, "chance": 0.2},
@@ -234,7 +258,7 @@ func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D
 	
 	var exp_value = pick_weighted_drop(drops)
 	#player.add_exp(exp_value)
-	_spawn_exp_pickups(exp_value, player, tile_coords)
+	_spawn_exp_pickups(exp_value, player, tile_coords, terrain_type)
 
 func _try_drop_bonus(terrain_type: TerrainType, player: CharacterBody2D) -> void:
 	# ak už hráč má 2 bonusy, nič nové nepadá
@@ -253,7 +277,7 @@ func _try_drop_bonus(terrain_type: TerrainType, player: CharacterBody2D) -> void
 
 
 func _spawn_exp_pickups(exp_value: int, player: CharacterBody2D,
-	tile_coords: Vector2i) -> void:
+	tile_coords: Vector2i, terrain_type: TerrainType) -> void:
 	var per_pickup := 10               # 1 štvorec = 10 exp (prispôsob si)
 	var count = max(exp_value / per_pickup, 1)
 
@@ -269,6 +293,7 @@ func _spawn_exp_pickups(exp_value: int, player: CharacterBody2D,
 		var pickup: RigidBody2D = exp_pickup_scene.instantiate()
 		pickup.exp_amount = per_pickup
 		pickup.target_player = player
+		pickup.terrain_type = terrain_type
 
 		# mierny náhodný offset, nech nepadajú všetky z jedného pixlu
 		var offset := Vector2(randf_range(-8, 8), randf_range(-8, 8))

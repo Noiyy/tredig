@@ -1,10 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://b0gqgtnrdjxx"]
+[gd_scene load_steps=5 format=3 uid="uid://b0gqgtnrdjxx"]
 
 [ext_resource type="Script" uid="uid://bo2b3fgiej8d0" path="res://scripts/game_over_lay.gd" id="1_otpf7"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_otpf7"]
 font_size = 24
 font_color = Color(1, 0, 0, 1)
+outline_size = 6
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_l7nfm"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_434uq"]
 font_color = Color(0.61, 0.61, 0.61, 1)
@@ -35,6 +41,7 @@ horizontal_alignment = 1
 [node name="SubTitleLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "you survived:"
+label_settings = SubResource("LabelSettings_l7nfm")
 horizontal_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="VBoxContainer"]

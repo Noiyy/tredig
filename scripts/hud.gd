@@ -144,6 +144,12 @@ func update_player_durability(player: CharacterBody2D, current: int, max_value: 
 func update_player_hp(player: CharacterBody2D, current: int, max_hp: int) -> void:
 	var label := left_hp_label if player.name == "PlayerLeft" else right_hp_label
 	label.text = "%d" % current
+	
+	# Zmeň farbu na červenú ak HP <= 30
+	if current <= 30:
+		label.modulate = Color("#752438")
+	else:
+		label.modulate = Color.WHITE
 
 func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 	if player.name == "PlayerLeft":

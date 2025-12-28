@@ -15,7 +15,7 @@ script = ExtResource("1_pg2rt")
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_right = 6.0
 offset_bottom = 6.0
-color = Color(1, 0.8333334, 0, 1)
+color = Color(0.87, 0.87, 0.87, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(3, 3)

@@ -24,9 +24,23 @@ var game_manager
 @onready var tile_manager = $TileManager
 @onready var death_timer = $DeathTimer
 @onready var shovel_highlight = $ShovelDirection/TileHighlight 
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+
 var shovel_distance = 14
+var last_dir := Vector2.DOWN
+
+var facing_left: bool = false
+var is_digging: bool = false
+var dig_anim_time: float = 0.0
+const DIG_ANIM_DURATION := 0.25
+
 
 func _ready():
+	if name == "PlayerLeft":
+		animated_sprite.sprite_frames = preload("res://resources/playerL_sprites.tres")
+	elif name == "PlayerRight":
+		animated_sprite.sprite_frames = preload("res://resources/playerR_sprites.tres")
+	
 	if controls == null:
 		set_physics_process(false)
 	
@@ -55,6 +69,21 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
+	# update dig stavu
+	if is_digging:
+		dig_anim_time -= delta
+		if dig_anim_time <= 0.0:
+			is_digging = false
+
+	# animácie podľa stavu
+	if is_digging:
+		# nechaj bežať aktuálnu dig animáciu, nič neprepínaj
+		pass
+	elif velocity.x != 0:
+		animated_sprite.play("walk")
+	else:
+		animated_sprite.play("idle")
+
 	move_and_slide()
 	global_position.x = clamp(global_position.x, world_left_x, world_right_x)
 
@@ -66,7 +95,9 @@ func _process(delta: float) -> void:
 	
 	if direction != Vector2.ZERO:
 		direction = direction.normalized()
+		last_dir = direction
 		var distance = shovel_distance
+		print("wtf ", direction)
 		
 		#$"ShovelDirection/Area2D".position = direction * distance
 		$ShovelDirection.rotation = direction.angle()
@@ -76,9 +107,15 @@ func _process(delta: float) -> void:
 		if self.name == "PlayerRight":
 			min_x = 322.0
 			max_x = 640.0
-	 	# Snap shovel highlight to the nearest tile, show highlight if colliding with tile
+	 
 		var area_pos = $ShovelDirection/Area2D.global_position
-		#area_pos.x = clamp(area_pos.x, min_x, max_x)
+		if area_pos.x < global_position.x:
+			facing_left = true
+		else:
+			facing_left = false
+		animated_sprite.flip_h = facing_left
+
+		# Snap shovel highlight to the nearest tile, show highlight if colliding with tile
 		if area_pos.x < min_x or area_pos.x > max_x:
 			shovel_highlight.visible = false
 			return
@@ -120,6 +157,18 @@ func _input(event):
 			return
 		if durability <= 0: 
 			return
+			
+		var anim := "dig_down"
+		if abs(last_dir.y) > abs(last_dir.x):
+			anim = "dig_up" if last_dir.y < 0 else "dig_down"
+		else:
+			anim = "dig_horizontal"
+
+		is_digging = true
+		dig_anim_time = DIG_ANIM_DURATION
+		animated_sprite.flip_h = facing_left
+		print("! ", anim, " is ", facing_left)
+		animated_sprite.play(anim)
 		tile_manager.damage_tile(self)
 			
 func add_exp(amount: int):

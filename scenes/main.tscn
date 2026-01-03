@@ -73,6 +73,7 @@ limit_left = 0
 limit_top = 0
 limit_right = 318
 limit_bottom = 1000000
+position_smoothing_enabled = true
 script = SubResource("GDScript_0wfyh")
 level_path = NodePath("../Level")
 
@@ -98,6 +99,7 @@ limit_left = 322
 limit_top = 0
 limit_right = 640
 limit_bottom = 1000000
+position_smoothing_enabled = true
 script = SubResource("GDScript_0wfyh")
 level_path = NodePath("../../../LeftSubViewportContainer/LeftSubViewport/Level")
 

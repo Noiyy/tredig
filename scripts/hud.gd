@@ -293,11 +293,11 @@ func start_player_bonus_timer(player: CharacterBody2D, duration: float, bonus_ty
 			right_bonus2.visible = true
 			right_bonus_timer2.value = 1.0
 
-func show_left_game_over(time_sec: float) -> void:
-	left_go.show_game_over(time_sec)
+func show_left_game_over(time_sec: float, type: String = "gameover") -> void:
+	left_go.show_game_over(time_sec, type)
 
-func show_right_game_over(time_sec: float) -> void:
-	right_go.show_game_over(time_sec)
+func show_right_game_over(time_sec: float, type: String = "gameover") -> void:
+	right_go.show_game_over(time_sec, type)
 
 func get_elapsed_time() -> float:
 	return elapsed_time

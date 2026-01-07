@@ -97,7 +97,6 @@ func _process(delta: float) -> void:
 		direction = direction.normalized()
 		last_dir = direction
 		var distance = shovel_distance
-		print("wtf ", direction)
 		
 		#$"ShovelDirection/Area2D".position = direction * distance
 		$ShovelDirection.rotation = direction.angle()
@@ -111,8 +110,10 @@ func _process(delta: float) -> void:
 		var area_pos = $ShovelDirection/Area2D.global_position
 		if area_pos.x < global_position.x:
 			facing_left = true
+			animated_sprite.position.x = -6
 		else:
 			facing_left = false
+			animated_sprite.position.x = 6
 		animated_sprite.flip_h = facing_left
 
 		# Snap shovel highlight to the nearest tile, show highlight if colliding with tile
@@ -167,7 +168,7 @@ func _input(event):
 		is_digging = true
 		dig_anim_time = DIG_ANIM_DURATION
 		animated_sprite.flip_h = facing_left
-		print("! ", anim, " is ", facing_left)
+		#print("! ", anim, " is ", facing_left)
 		animated_sprite.play(anim)
 		tile_manager.damage_tile(self)
 			

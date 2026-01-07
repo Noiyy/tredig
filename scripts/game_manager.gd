@@ -182,6 +182,15 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 		HUD.update_player_bonuses(player, data.active_bonuses)
 	)
 
+func on_game_won(player_name: String):
+	print("vyhral ", player_name)
+	_on_both_players_dead()
+	
+	var elapsed = HUD.get_elapsed_time()
+	if player_name == "PlayerLeft":
+		HUD.show_left_game_over(elapsed, "win")
+	if player_name == "PlayerRight":
+		HUD.show_right_game_over(elapsed, "win")
 
 func player_has_active_bonus(player: CharacterBody2D) -> bool:
 	return not players[player.name].active_bonuses.is_empty()

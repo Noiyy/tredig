@@ -33,9 +33,6 @@ func _ready() -> void:
 		{ "type": game_manager.BonusType.OVERLOAD },
 		{ "type": game_manager.BonusType.NONE }
 	]
-	
-func get_max_hp_for_tile(level: int) -> int:
-	return 3 + level
 
 func calculate_tile_dmg_val(current_hp, max_hp, damage_per_hit, max_states=3) -> int:
 	 # Ak je damage per hit väčšie alebo rovné max HP, tak sa stav mení o väčšiu hodnotu, ináč štandardne
@@ -93,17 +90,21 @@ func damage_tile(player: CharacterBody2D):
 		var tile_data = tilemap.get_cell_tile_data(tile_coords)
 		terrain_type = tile_data.get_custom_data_by_layer_id(layer_index)
 	
-	# inicializuj hp ak neexistuje
-	var tile_level = tile_atlas_coords.y+1
+	var tile_level = 4
+	var has_hardness = tileset.has_custom_data_layer_by_name("level")
+	if has_hardness:
+		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
+		tile_level += int(tile_data.get_custom_data_by_layer_id(hardness_layer))
+		
 	if tile_coords not in tile_data:
-		tile_data[tile_coords] = { "level": tile_level, "hp": get_max_hp_for_tile(tile_level) }
+		tile_data[tile_coords] = { "level": tile_level, "hp": tile_level }
 		
 	# Odober hp
 	tile_data[tile_coords].hp -= player.damage_per_hit
 	#var damage_tile_value = get_max_hp_for_tile(tile_level) - tile_data[tile_coords].hp
 	var damage_tile_value = calculate_tile_dmg_val(
 		tile_data[tile_coords].hp, 
-		get_max_hp_for_tile(tile_level),
+		tile_level,
 		player.damage_per_hit
 	)
 	
@@ -114,7 +115,9 @@ func damage_tile(player: CharacterBody2D):
 		_damage_second_tile(tile_coords, dir_vec, player)
 	
 	if tile_data[tile_coords].hp <= 0:
-		tilemap.set_cell(tile_coords, tile_id, tile_coords, -1) # Odstráni tile
+		#tilemap.set_cell(tile_coords, tile_id, tile_coords, -1) # Odstráni tile
+		
+		tilemap.set_cells_terrain_connect([tile_coords], 0, -1, true)
 		dmgTilemap.set_cell(tile_coords, tile_id, tile_coords, -1)
 		effectTilemap.set_cell(tile_coords, 0, Vector2i(-1, -1))
 		tile_data.erase(tile_coords)
@@ -142,7 +145,12 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 		
 	var tileset = tilemap.tile_set
 	var tile_atlas_coords := tilemap.get_cell_atlas_coords(second_coords)
-	var tile_level := tile_atlas_coords.y + 1
+	
+	var tile_level = 4
+	var has_hardness = tileset.has_custom_data_layer_by_name("level")
+	if has_hardness:
+		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
+		tile_level += int(tile_data.get_custom_data_by_layer_id(hardness_layer))
 	
 	var hasTerrainType = tileset.has_custom_data_layer_by_name("terrainType")
 	
@@ -156,19 +164,20 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 	if second_coords not in tile_data:
 		tile_data[second_coords] = {
 			"level": tile_level,
-			"hp": get_max_hp_for_tile(tile_level)
+			"hp": tile_level
 		}
 
 	tile_data[second_coords].hp -= player.damage_per_hit
 
 	var damage_tile_value := calculate_tile_dmg_val(
 		tile_data[second_coords].hp,
-		get_max_hp_for_tile(tile_level),
+		tile_level,
 		player.damage_per_hit
 	)
 
 	if tile_data[second_coords].hp <= 0:
-		tilemap.set_cell(second_coords, tile_id, second_coords, -1)
+		#tilemap.set_cell(second_coords, tile_id, second_coords, -1)
+		tilemap.set_cells_terrain_connect([second_coords], 0, -1, true)
 		dmgTilemap.set_cell(second_coords, tile_id, second_coords, -1)
 		effectTilemap.set_cell(second_coords, 0, Vector2i(-1, -1))
 		tile_data.erase(second_coords)

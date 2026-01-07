@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjfffc8w66dd6"]
+
+[ext_resource type="AudioStream" uid="uid://b54o0nf6mgtek" path="res://assets/music/Mining Town (Loop).wav" id="1_05ggv"]
+
+[node name="Music" type="AudioStreamPlayer"]
+stream = ExtResource("1_05ggv")
+autoplay = true
+bus = &"Music"

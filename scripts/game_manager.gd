@@ -45,6 +45,9 @@ func damage_player(player: CharacterBody2D, amount: int) -> void:
 	player.sync_stats_from_manager(data)
 	HUD.update_player_hp(player, data.hp, MAX_HP)
 	
+	if not player.is_dead:
+		AudioManager.play("res://assets/sounds/hp_loss.wav")
+	
 	if data.hp == 0 and not player.is_dead:
 		player.on_dead()
 		_check_game_over()
@@ -83,6 +86,7 @@ func add_player_exp(player: CharacterBody2D, amount: int):
 	
 	if leveled_up:
 		player.on_level_up()
+		AudioManager.play("res://assets/sounds/levelup.wav")
 		change_durability(player, 0, true)
 		
 	var player_id := 1 if player.name == "PlayerLeft" else 2
@@ -114,6 +118,7 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 	if !can_apply_bonus(player):
 		return
 		
+	AudioManager.play("res://assets/sounds/bonus2.wav")
 	# uprav stat v dátach
 	match key:
 		"damage":
@@ -157,12 +162,13 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 	if !can_apply_bonus(player):
 		return
 		
+	AudioManager.play("res://assets/sounds/bonus2.wav")
 	data.active_bonuses.append(BonusType.OVERLOAD)
 
 	# aplikuj debuff na hráča
 	player.set_can_dig(false)
 	player.set_speed_multiplier(0.5)  # 50 % rýchlosti
-	player.set_gravity_multiplier(0.33) 
+	player.set_gravity_multiplier(0.9) 
 
 	HUD.start_player_bonus_timer(player, duration, BonusType.OVERLOAD)
 	HUD.update_player_bonuses(player, data.active_bonuses)
@@ -185,6 +191,8 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 func on_game_won(player_name: String):
 	print("vyhral ", player_name)
 	_on_both_players_dead()
+	
+	AudioManager.play("res://assets/sounds/win.wav")
 	
 	var elapsed = HUD.get_elapsed_time()
 	if player_name == "PlayerLeft":

@@ -15,6 +15,11 @@ run/main_scene="uid://77dix1tmr4v7"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Music="*res://scenes/music.tscn"
+AudioManager="*res://scenes/audio_manager.tscn"
+
 [display]
 
 window/size/viewport_width=640

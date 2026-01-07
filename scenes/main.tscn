@@ -8,21 +8,53 @@
 [sub_resource type="GDScript" id="GDScript_0wfyh"]
 script/source = "extends Camera2D
 
-@export var level_path: NodePath    
-@export var player_name: String = \"\"
-var player: Node2D
+var shake_intensity: float = 0.0
+var active_shake_time: float = 0.0
 
-func _ready() -> void:
-	if level_path == NodePath() or player_name == \"\":
-		return
-	var level := get_node(level_path)
-	player = level.get_node(player_name)
-	drag_horizontal_enabled = false
+var shake_decay: float = 5.0
+
+var shake_time: float = 0.0
+var shake_time_speed: float = 20.0
+
+var noise = FastNoiseLite.new()
+
+#@export var level_path: NodePath    
+#@export var player_name: String = \"\"
+#var player: Node2D
+
+#func _ready() -> void:
+	#if level_path == NodePath() or player_name == \"\":
+		#return
+	#var level := get_node(level_path)
+	#player = level.get_node(player_name)
+	#drag_horizontal_enabled = false
 
 func _process(delta: float) -> void:
-	if player:
-		global_position.y = player.global_position.y
-		global_position.x = global_position.x
+	if active_shake_time > 0: # shake sa ešte nedokončil
+		shake_time += delta * shake_time_speed
+		active_shake_time -= delta
+		
+		offset = Vector2(
+			noise.get_noise_2d(shake_time, 0) * shake_intensity,
+			noise.get_noise_2d(0, shake_time) * shake_intensity
+		)
+		
+		shake_intensity = max(shake_intensity - shake_decay * delta, 0)
+	else: # dokonči shake
+		offset = lerp(offset, Vector2.ZERO, 10.5 * delta)
+	#if player:
+		#global_position.y = player.global_position.y
+		#global_position.x = global_position.x
+
+func screen_shake(intensity: int, time: float):
+	randomize()
+	noise.seed = randi()
+	noise.frequency = 2.0
+	
+	shake_intensity = intensity
+	active_shake_time = time
+	shake_time = 0.0
+	
 "
 
 [node name="Main" type="Control"]
@@ -75,7 +107,6 @@ limit_right = 318
 limit_bottom = 1000000
 position_smoothing_enabled = true
 script = SubResource("GDScript_0wfyh")
-level_path = NodePath("../Level")
 
 [node name="Level" parent="HBoxContainer/LeftSubViewportContainer/LeftSubViewport" instance=ExtResource("2_0wfyh")]
 unique_name_in_owner = true
@@ -101,6 +132,5 @@ limit_right = 640
 limit_bottom = 1000000
 position_smoothing_enabled = true
 script = SubResource("GDScript_0wfyh")
-level_path = NodePath("../../../LeftSubViewportContainer/LeftSubViewport/Level")
 
 [node name="HUD" parent="." instance=ExtResource("4_jyhfs")]

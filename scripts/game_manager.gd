@@ -49,6 +49,11 @@ func damage_player(player: CharacterBody2D, amount: int) -> void:
 	
 	if not player.is_dead:
 		AudioManager.play("res://assets/sounds/hp_loss.wav")
+		if player.name == "PlayerLeft":
+			%LeftCamera2D.screen_shake(7, 0.35)
+		else:
+			%RightCamera2D.screen_shake(7, 0.35)
+			
 		var t := get_tree().create_timer(0.35)
 		t.timeout.connect(func():
 			player.modulate = Color("fff")

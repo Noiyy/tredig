@@ -24,7 +24,6 @@ func update_type(type: String) -> void:
 
 func show_game_over(time_sec: float, type: String) -> void:
 	update_type(type)
-	print("watefak", type, " a ? ", overlay_type)
 	visible = true
 	time_label.text = _format_time_mm_ss(time_sec)
 

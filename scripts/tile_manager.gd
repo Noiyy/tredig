@@ -75,6 +75,7 @@ func damage_tile(player: CharacterBody2D):
 	var tile_coords = tilemap.local_to_map(tilemap.to_local(area_pos))
 	var tile_atlas_coords = tilemap.get_cell_atlas_coords(tile_coords)
 	var tileset = tilemap.tile_set
+	var tile_data_res: TileData = tilemap.get_cell_tile_data(tile_coords)
 
 	# Skontroluj existenciu dlaždice
 	var tile_id = tilemap.get_cell_source_id(tile_coords)
@@ -85,16 +86,19 @@ func damage_tile(player: CharacterBody2D):
 	
 	# Zisti typ bloku
 	var terrain_type
-	if hasTerrainType:
-		var layer_index = tileset.get_custom_data_layer_by_name("terrainType")
-		var tile_data = tilemap.get_cell_tile_data(tile_coords)
-		terrain_type = tile_data.get_custom_data_by_layer_id(layer_index)
-	
-	var tile_level = 4
-	var has_hardness = tileset.has_custom_data_layer_by_name("level")
-	if has_hardness:
+	if tileset.has_custom_data_layer_by_name("terrainType") and tile_data_res:
+		var terrain_layer = tileset.get_custom_data_layer_by_name("terrainType")
+		terrain_type = tile_data_res.get_custom_data_by_layer_id(terrain_layer)
+
+	# Level / hardness
+	var tile_level := 4
+	if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
 		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
-		tile_level += int(tile_data.get_custom_data_by_layer_id(hardness_layer))
+		tile_level += int(tile_data_res.get_custom_data_by_layer_id(hardness_layer))
+		
+	print("buddy ", player.shovel_level, " a ", tile_level)
+	if player.shovel_level + 6 < tile_level:
+		return
 		
 	if tile_coords not in tile_data:
 		tile_data[tile_coords] = { "level": tile_level, "hp": tile_level }
@@ -151,9 +155,9 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 	if has_hardness:
 		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
 		tile_level += int(tile_data.get_custom_data_by_layer_id(hardness_layer))
-	
+
 	var hasTerrainType = tileset.has_custom_data_layer_by_name("terrainType")
-	
+
 	# Zisti typ bloku
 	var terrain_type
 	if hasTerrainType:

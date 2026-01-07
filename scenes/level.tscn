@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://b5b60jf7citvj"]
+[gd_scene load_steps=20 format=4 uid="uid://b5b60jf7citvj"]
 
 [ext_resource type="Texture2D" uid="uid://33qyh1oplt0i" path="res://assets/images/tileset.png" id="1_w8frs"]
 [ext_resource type="Texture2D" uid="uid://cdi6bsajetjns" path="res://assets/images/tileset2.png" id="2_b121j"]
@@ -8,7 +8,6 @@
 [ext_resource type="Resource" uid="uid://dm7ruxtunyn6i" path="res://resources/playerR_controls.tres" id="4_ppgk2"]
 [ext_resource type="Resource" uid="uid://yijshowpi6hf" path="res://resources/playerL_controls.tres" id="5_2r41h"]
 [ext_resource type="Script" uid="uid://cdsjbdg72xhn1" path="res://scripts/lava.gd" id="6_2r41h"]
-[ext_resource type="PackedScene" uid="uid://bhqvjjqmt3rdv" path="res://scenes/chest.tscn" id="9_8c41q"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_olg7q"]
 texture = ExtResource("2_b121j")
@@ -987,6 +986,3 @@ tilemap = NodePath("../TileMapLayer")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MiddleBorder"]
 position = Vector2(320, 870.5)
 shape = SubResource("RectangleShape2D_ppgk2")
-
-[node name="Chest" parent="." instance=ExtResource("9_8c41q")]
-position = Vector2(273, 119)

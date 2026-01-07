@@ -61,6 +61,7 @@ func _physics_process(delta: float) -> void:
 	# Handle jump.
 	if Input.is_action_just_pressed(controls.move_up) and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		AudioManager.play("res://assets/sounds/jump.wav", "SFXLower")
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction := Input.get_axis(controls.move_left, controls.move_right)
@@ -129,10 +130,8 @@ func _process(delta: float) -> void:
 		var tile_data_res = tilemap.get_cell_tile_data(tile_coords)
 		if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
 			var level_layer = tileset.get_custom_data_layer_by_name("hardness")
-			print("broo ", level_layer)
 			tile_level += int(tile_data_res.get_custom_data_by_layer_id(level_layer))
 
-		print("huh ", shovel_level, " a ", tile_level)
 		# SKRY Highlight ak hráč je slabší ako blok
 		if tile_id != -1 and shovel_level + 6 >= tile_level:
 			shovel_highlight.visible = true
@@ -171,8 +170,10 @@ func _process(delta: float) -> void:
 func _input(event):
 	if event.is_action_pressed(controls.use, true):
 		if not can_dig:
+			AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
 			return
-		if durability <= 0: 
+		if durability <= 0:
+			AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
 			return
 			
 		var anim := "dig_down"
@@ -205,6 +206,8 @@ func apply_stat_change(key: String, delta: float) -> void:
 
 func apply_sabotage_effect() -> void:
 	var tile_size = game_manager.get_tile_size()
+	var tileset = tile_manager.tilemap.tile_set
+	
 	var start_x = int(0 if name == "PlayerLeft" else (320 / tile_size))
 	var start_y = int(global_position.y / tile_size) + 1  # pod hráčom
 	
@@ -213,19 +216,24 @@ func apply_sabotage_effect() -> void:
 		var target_y = start_y + y_offset
 		for x_offset in 20:  # cela šírka pre 1 hráča
 			var target_coords = Vector2i(start_x + x_offset, target_y)
+			var tile_data_res: TileData = tile_manager.tilemap.get_cell_tile_data(target_coords)
 			
 			var tile_id = tile_manager.tilemap.get_cell_source_id(target_coords)
 			if tile_id == -1:
 				continue  # žiadny blok, preskoč
 			
 			var tile_atlas_coords = tile_manager.tilemap.get_cell_atlas_coords(target_coords)
-			var tile_level = tile_atlas_coords.y + 1
+			# Level / hardness
+			var tile_level := 4
+			if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
+				var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
+				tile_level += int(tile_data_res.get_custom_data_by_layer_id(hardness_layer))
 			
 			# Ak nie je v tile_data, vytvor ho
 			if target_coords not in tile_manager.tile_data:
 				tile_manager.tile_data[target_coords] = {
 					"level": tile_level,
-					"hp": tile_manager.get_max_hp_for_tile(tile_level)
+					"hp": tile_level
 				}
 			
 			var tile_data = tile_manager.tile_data[target_coords]
@@ -233,10 +241,9 @@ func apply_sabotage_effect() -> void:
 			tile_data.level += 1
 		
 			# Aktualizuj damage overlay
-			var max_hp = tile_manager.get_max_hp_for_tile(tile_data.level)
 			var damage_val = tile_manager.calculate_tile_dmg_val(
 				tile_data.hp, 
-				max_hp, 
+				tile_level, 
 				damage_per_hit
 			)
 			tile_manager.dmgTilemap.set_cell(target_coords, tile_id, Vector2(damage_val, 0))
@@ -259,6 +266,8 @@ func _on_death_timer_timeout() -> void:
 		HUD.show_left_game_over(elapsed)
 	else:
 		HUD.show_right_game_over(elapsed)
+		
+	AudioManager.play("res://assets/sounds/death2.wav")
 		
 	visible = false
 

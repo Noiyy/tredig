@@ -70,6 +70,7 @@ func damage_tile(player: CharacterBody2D):
 		max_x = 640.0
 	
 	if area_pos.x < min_x or area_pos.x > max_x:
+		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
 		return  # mimo svojho pásma, nič nenič
 	
 	var tile_coords = tilemap.local_to_map(tilemap.to_local(area_pos))
@@ -96,8 +97,8 @@ func damage_tile(player: CharacterBody2D):
 		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
 		tile_level += int(tile_data_res.get_custom_data_by_layer_id(hardness_layer))
 		
-	print("buddy ", player.shovel_level, " a ", tile_level)
 	if player.shovel_level + 6 < tile_level:
+		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
 		return
 		
 	if tile_coords not in tile_data:
@@ -105,6 +106,8 @@ func damage_tile(player: CharacterBody2D):
 		
 	# Odober hp
 	tile_data[tile_coords].hp -= player.damage_per_hit
+	AudioManager.play("res://assets/sounds/hit2.wav", "SFXLower")
+	
 	#var damage_tile_value = get_max_hp_for_tile(tile_level) - tile_data[tile_coords].hp
 	var damage_tile_value = calculate_tile_dmg_val(
 		tile_data[tile_coords].hp, 
@@ -143,6 +146,19 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 		return
 
 	var second_coords := first_coords + step
+	var second_global_pos := tilemap.to_global(tilemap.map_to_local(second_coords))
+	
+	var min_x := 0.0
+	var max_x := 318.0
+	if player.name == "PlayerRight":
+		min_x = 322.0
+		max_x = 640.0
+	
+	# kontrola či nejde poza čiaru
+	if second_global_pos.x < min_x or second_global_pos.x > max_x:
+		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
+		return
+	
 	var tile_id := tilemap.get_cell_source_id(second_coords)
 	if tile_id == -1:
 		return
@@ -172,6 +188,7 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 		}
 
 	tile_data[second_coords].hp -= player.damage_per_hit
+	AudioManager.play("res://assets/sounds/hit2.wav", "SFXLower")
 
 	var damage_tile_value := calculate_tile_dmg_val(
 		tile_data[second_coords].hp,
@@ -208,29 +225,36 @@ func pick_weighted_drop(drop_table):
 func pick_bonus(list: Array, terrain_type: TerrainType):
 	var chance := 0.0
 	match terrain_type:
-		TerrainType.IRON:
-			chance = 0.05 # 0.05 -> 95% nič
-		TerrainType.GOLD:
-			chance = 0.07
-		TerrainType.EMERALD:
-			chance = 0.09
-		TerrainType.RUBY:
-			chance = 0.12
-		TerrainType.DIAMOND:
-			chance = 0.15
-		_:
-			chance = 0.0  # ostatné bloky nikdy nedajú bonus
-			
-	var r := randf()
+		TerrainType.IRON: chance = 0.05 # 0.05 -> 95% nič
+		TerrainType.GOLD: chance = 0.07
+		TerrainType.EMERALD: chance = 0.09
+		TerrainType.RUBY: chance = 0.12
+		TerrainType.DIAMOND: chance = 0.15
+		_: chance = 0.0  # ostatné bloky nikdy nedajú bonus
 
+	var r := randf()
 	if r >= chance:
 		return game_manager.BonusType.NONE
 
 	if list.is_empty():
 		return game_manager.BonusType.NONE
 
-	var index := randi_range(0, list.size() - 1)
-	return list[index].type
+	var buffs: Array = [ game_manager.BonusType.SHARPNESS, game_manager.BonusType.SSHOVEL,
+		game_manager.BonusType.SABOTAGE ]
+	var debuffs: Array = [ game_manager.BonusType.DULLNESS, 
+		game_manager.BonusType.OVERLOAD ]
+	
+   # 67% buff, 33% debuff
+	var roll := randf()
+	if roll < 0.67 and not buffs.is_empty():
+		var index := randi_range(0, buffs.size() - 1)
+		return buffs[index]
+	elif not debuffs.is_empty():
+		var index := randi_range(0, debuffs.size() - 1)
+		return debuffs[index]
+	
+	#var index := randi_range(0, list.size() - 1)
+	#return list[index].type
 
 func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D,
 	tile_coords: Vector2i):

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://vimqsi4od0t5" path="res://scripts/hud.gd" id="1_ahhtf"]
 [ext_resource type="PackedScene" uid="uid://cfpmja1pxt1dp" path="res://scenes/player_hud_panel.tscn" id="2_oo0fn"]
-[ext_resource type="PackedScene" uid="uid://b0gqgtnrdjxx" path="res://scenes/game_over_lay.tscn" id="3_5ysmq"]
+[ext_resource type="PackedScene" uid="uid://b0gqgtnrdjxx" path="res://scenes/game_overlay.tscn" id="3_5ysmq"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5ysmq"]
 outline_size = 4

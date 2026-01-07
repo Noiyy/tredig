@@ -1,10 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://b0gqgtnrdjxx"]
 
-[ext_resource type="Script" uid="uid://bo2b3fgiej8d0" path="res://scripts/game_over_lay.gd" id="1_otpf7"]
+[ext_resource type="Script" uid="uid://bo2b3fgiej8d0" path="res://scripts/game_overlay.gd" id="1_7i0yb"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_otpf7"]
 font_size = 24
-font_color = Color(1, 0, 0, 1)
 outline_size = 6
 outline_color = Color(0, 0, 0, 1)
 
@@ -18,7 +17,7 @@ font_color = Color(0.61, 0.61, 0.61, 1)
 [node name="GameOverOverlay" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_otpf7")
+script = ExtResource("1_7i0yb")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 0
@@ -33,6 +32,7 @@ offset_bottom = 360.0
 alignment = 1
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer"]
+modulate = Color(1, 0, 0, 1)
 layout_mode = 2
 text = "You died!"
 label_settings = SubResource("LabelSettings_otpf7")
@@ -50,8 +50,8 @@ text = "00:00"
 label_settings = SubResource("LabelSettings_434uq")
 horizontal_alignment = 1
 
-[node name="RestartButton" type="Button" parent="VBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "RESTART"
 
-[connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_restart_button_pressed"]

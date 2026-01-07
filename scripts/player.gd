@@ -123,6 +123,22 @@ func _process(delta: float) -> void:
 		
 		var tile_coords = tilemap.local_to_map(tilemap.to_local(area_pos))
 		var tile_id = tilemap.get_cell_source_id(tile_coords)
+		
+		var tile_level = 4
+		var tileset = tilemap.tile_set
+		var tile_data_res = tilemap.get_cell_tile_data(tile_coords)
+		if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
+			var level_layer = tileset.get_custom_data_layer_by_name("hardness")
+			print("broo ", level_layer)
+			tile_level += int(tile_data_res.get_custom_data_by_layer_id(level_layer))
+
+		print("huh ", shovel_level, " a ", tile_level)
+		# SKRY Highlight ak hráč je slabší ako blok
+		if tile_id != -1 and shovel_level + 6 >= tile_level:
+			shovel_highlight.visible = true
+		else:
+			shovel_highlight.visible = false
+			return
 
 		# Calculate tile center in world space
 		#var tile_center = tilemap.map_to_local(tile_coords) + Vector2.ZERO / 2

@@ -3,8 +3,8 @@ var num_players = 8
 var available = []
 var queue = []
 var cooldowns: Dictionary = {}  # {sound_path: last_time}
-var cooldown_time: float = 0.33  # Sekundy medzi play rovnakého zvuku
-var max_instances: int = 3  # Max súčasných pre rovnaký zvuk
+var cooldown_time: float = 0.1  # Sekundy medzi play rovnakého zvuku
+var max_instances: int = 5  # Max súčasných pre rovnaký zvuk
 var playing_sounds: Dictionary = {}  # {sound_path: počet hrajúcich}
 
 func _ready():

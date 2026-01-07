@@ -131,11 +131,22 @@ func _process(delta: float) -> void:
 		if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
 			var level_layer = tileset.get_custom_data_layer_by_name("hardness")
 			tile_level += int(tile_data_res.get_custom_data_by_layer_id(level_layer))
-
-		# SKRY Highlight ak hráč je slabší ako blok
-		if tile_id != -1 and shovel_level + 6 >= tile_level:
-			shovel_highlight.visible = true
+			
+		var easy_max = shovel_level + 2
+		var medium_max = shovel_level + 4
+		var hard_max = shovel_level + 6
+		print("huh, ", shovel_level, " a ", tile_level)
+		if tile_level <= easy_max:
+			shovel_highlight.modulate = Color.WHITE
+		elif tile_level <= medium_max:
+			shovel_highlight.modulate = Color.YELLOW
+		elif tile_level <= hard_max:
+			shovel_highlight.modulate = Color.ORANGE
 		else:
+			shovel_highlight.modulate = Color.RED
+		shovel_highlight.modulate.a = 128.0 / 255.0 # alfa
+
+		if tile_id == -1:
 			shovel_highlight.visible = false
 			return
 

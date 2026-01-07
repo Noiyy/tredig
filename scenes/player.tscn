@@ -48,6 +48,7 @@ position = Vector2(12, -9.536743e-07)
 shape = SubResource("RectangleShape2D_g2els")
 
 [node name="TileHighlight" type="Sprite2D" parent="ShovelDirection"]
+modulate = Color(1, 1, 1, 0.76862746)
 texture = ExtResource("3_qhqgy")
 
 [node name="TileManager" type="Node2D" parent="."]

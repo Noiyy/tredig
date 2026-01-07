@@ -45,8 +45,14 @@ func damage_player(player: CharacterBody2D, amount: int) -> void:
 	player.sync_stats_from_manager(data)
 	HUD.update_player_hp(player, data.hp, MAX_HP)
 	
+	player.modulate = Color("ff8a8a");
+	
 	if not player.is_dead:
 		AudioManager.play("res://assets/sounds/hp_loss.wav")
+		var t := get_tree().create_timer(0.35)
+		t.timeout.connect(func():
+			player.modulate = Color("fff")
+		)
 	
 	if data.hp == 0 and not player.is_dead:
 		player.on_dead()

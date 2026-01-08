@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://w3hm727q4u8w"]
+[gd_scene load_steps=3 format=3 uid="uid://w3hm727q4u8w"]
 
 [ext_resource type="Texture2D" uid="uid://kmtp2tw7egxw" path="res://assets/images/circular-bar.png" id="1_dqg0h"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_dqg0h"]
+font_size = 7
 
 [node name="Bonus" type="Control"]
 layout_mode = 3
@@ -8,9 +11,9 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 9.0
-offset_top = -57.0
+offset_top = -59.0
 offset_right = 57.0
-offset_bottom = -9.0
+offset_bottom = -2.0
 grow_vertical = 0
 
 [node name="BonusIcon" type="TextureRect" parent="."]
@@ -23,10 +26,8 @@ scale = Vector2(0.5, 0.5)
 
 [node name="BonusTimerBar" type="TextureProgressBar" parent="."]
 layout_mode = 0
-offset_left = -2.0
-offset_top = 2.0
-offset_right = 148.0
-offset_bottom = 152.0
+offset_right = 150.0
+offset_bottom = 150.0
 scale = Vector2(0.32, 0.32)
 max_value = 1.0
 value = 1.0
@@ -35,3 +36,14 @@ texture_progress = ExtResource("1_dqg0h")
 tint_under = Color(1, 1, 1, 0)
 tint_over = Color(1, 1, 1, 0)
 tint_progress = Color(0.19401994, 0.89, 0.07119998, 0.74509805)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 46.0
+offset_right = 47.0
+offset_bottom = 57.0
+text = "SHARPNESS"
+label_settings = SubResource("LabelSettings_dqg0h")
+horizontal_alignment = 1
+vertical_alignment = 1

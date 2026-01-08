@@ -22,12 +22,16 @@ var elapsed_time: float = 0.0
 @onready var right_bonus_icon1: TextureRect = $RightPlayerHUD/Bonus1/BonusIcon
 @onready var left_bonus_timer1: TextureProgressBar  = $LeftPlayerHUD/Bonus1/BonusTimerBar
 @onready var right_bonus_timer1: TextureProgressBar = $RightPlayerHUD/Bonus1/BonusTimerBar
+@onready var left_bonus_label1: Label       = $LeftPlayerHUD/Bonus1/Label
+@onready var left_bonus_label2: Label       = $LeftPlayerHUD/Bonus2/Label
 @onready var left_bonus2: Control           = $LeftPlayerHUD/Bonus2
 @onready var right_bonus2: Control          = $RightPlayerHUD/Bonus2
 @onready var left_bonus_icon2: TextureRect  = $LeftPlayerHUD/Bonus2/BonusIcon
 @onready var right_bonus_icon2: TextureRect = $RightPlayerHUD/Bonus2/BonusIcon
 @onready var left_bonus_timer2: TextureProgressBar  = $LeftPlayerHUD/Bonus2/BonusTimerBar
 @onready var right_bonus_timer2: TextureProgressBar = $RightPlayerHUD/Bonus2/BonusTimerBar
+@onready var right_bonus_label1: Label       = $RightPlayerHUD/Bonus1/Label
+@onready var right_bonus_label2: Label       = $RightPlayerHUD/Bonus2/Label
 
 # Left player slot 1
 var left_bonus1_active: bool = false
@@ -156,9 +160,11 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 		var bonus1: Control = left_bonus1
 		var icon1: TextureRect = left_bonus_icon1
 		var timer_bar1: TextureProgressBar = left_bonus_timer1
+		var label1: Label = left_bonus_label1
 		var bonus2: Control = left_bonus2
 		var icon2: TextureRect = left_bonus_icon2
 		var timer_bar2: TextureProgressBar = left_bonus_timer2
+		var label2: Label = left_bonus_label2
 		
 		# Aktualizuj slot 1 - podľa typu bonusu v slot 1
 		if left_bonus1_type != -1 and bonuses.has(left_bonus1_type):
@@ -168,10 +174,12 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 			
 			icon1.texture = bonus_icons.get(left_bonus1_type, null)
 			timer_bar1.tint_progress = tint_color1
+			label1.text = game_manager.BonusType.keys()[left_bonus1_type]
 			bonus1.visible = true
 		else:
 			bonus1.visible = false
 			icon1.texture = null
+			label1.text = ""
 			timer_bar1.tint_progress = Color("#31e312be")
 		
 		# Aktualizuj slot 2 - podľa typu bonusu v slot 2
@@ -182,19 +190,23 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 			
 			icon2.texture = bonus_icons.get(left_bonus2_type, null)
 			timer_bar2.tint_progress = tint_color2
+			label2.text = game_manager.BonusType.keys()[left_bonus2_type]
 			bonus2.visible = true
 		else:
 			bonus2.visible = false
 			icon2.texture = null
+			label2.text = ""
 			timer_bar2.tint_progress = Color("#31e312be")
 	
 	else:  # Right player
 		var bonus1: Control = right_bonus1
 		var icon1: TextureRect = right_bonus_icon1
 		var timer_bar1: TextureProgressBar = right_bonus_timer1
+		var label1: Label = right_bonus_label1
 		var bonus2: Control = right_bonus2
 		var icon2: TextureRect = right_bonus_icon2
 		var timer_bar2: TextureProgressBar = right_bonus_timer2
+		var label2: Label = right_bonus_label2
 		
 		# Aktualizuj slot 1
 		if right_bonus1_type != -1 and bonuses.has(right_bonus1_type):
@@ -204,10 +216,12 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 			
 			icon1.texture = bonus_icons.get(right_bonus1_type, null)
 			timer_bar1.tint_progress = tint_color1
+			label1.text = game_manager.BonusType.keys()[right_bonus1_type]
 			bonus1.visible = true
 		else:
 			bonus1.visible = false
 			icon1.texture = null
+			label1.text = ""
 			timer_bar1.tint_progress = Color("#31e312be")
 		
 		# Aktualizuj slot 2
@@ -218,10 +232,12 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 			
 			icon2.texture = bonus_icons.get(right_bonus2_type, null)
 			timer_bar2.tint_progress = tint_color2
+			label2.text = game_manager.BonusType.keys()[right_bonus2_type]
 			bonus2.visible = true
 		else:
 			bonus2.visible = false
 			icon2.texture = null
+			label2.text = ""
 			timer_bar2.tint_progress = Color("#31e312be")
 
 func _update_bonus_timer(delta: float) -> void:

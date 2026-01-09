@@ -22,7 +22,7 @@ func _apply_flip() -> void:
 	if flipped:
 		level_label.scale.x = -1
 		hp_label.scale.x = -1
-		level_label.position.x += level_label.size.x
+		#level_label.position.x += level_label.size.x
 		hp_label.position.x += hp_label.size.x
 		modifier_label.scale.x = -1
 		modifier_label.position.x += modifier_label.size.x
@@ -36,12 +36,12 @@ func _apply_flip() -> void:
 		bonus2.scale.x = -1
 		bonus2.position.x += bonus2.size.x
 		
-		vignette_rect.scale.x = -1
-		vignette_rect.position.x += vignette_rect.size.x
-		
 func show_damage_vignette():
 	red_vignette.visible = true
-	vignette_material.set_shader_parameter("intensity", 0.8)
+	vignette_material.set_shader_parameter("intensity", 0.0)  # Start na 0
+
+	var tween = create_tween()
+	tween.tween_property(vignette_material, "shader_parameter/intensity", 0.8, 0.3)
 	#vignette_material.set_shader_parameter("vignette_color", Color(0.8, 0.1, 0.1, 0.3))
 
 func hide_damage_vignette():

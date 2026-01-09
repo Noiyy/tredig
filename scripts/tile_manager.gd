@@ -123,8 +123,9 @@ func damage_tile(player: CharacterBody2D):
 	
 	if tile_data[tile_coords].hp <= 0:
 		#tilemap.set_cell(tile_coords, tile_id, tile_coords, -1) # Odstráni tile
+		var terrain_set_id = tile_data_res.get_terrain_set() if tile_data_res else 0
 		
-		tilemap.set_cells_terrain_connect([tile_coords], 0, -1, true)
+		tilemap.set_cells_terrain_connect([tile_coords], terrain_set_id, -1, true)
 		dmgTilemap.set_cell(tile_coords, tile_id, tile_coords, -1)
 		effectTilemap.set_cell(tile_coords, 0, Vector2i(-1, -1))
 		tile_data.erase(tile_coords)
@@ -165,6 +166,7 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 		
 	var tileset = tilemap.tile_set
 	var tile_atlas_coords := tilemap.get_cell_atlas_coords(second_coords)
+	var tile_data_res: TileData = tilemap.get_cell_tile_data(second_coords)
 	
 	var tile_level = 4
 	var has_hardness = tileset.has_custom_data_layer_by_name("level")
@@ -198,7 +200,9 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 
 	if tile_data[second_coords].hp <= 0:
 		#tilemap.set_cell(second_coords, tile_id, second_coords, -1)
-		tilemap.set_cells_terrain_connect([second_coords], 0, -1, true)
+		var terrain_set_id = tile_data_res.get_terrain_set() if tile_data_res else 0
+		
+		tilemap.set_cells_terrain_connect([second_coords], terrain_set_id, -1, true)
 		dmgTilemap.set_cell(second_coords, tile_id, second_coords, -1)
 		effectTilemap.set_cell(second_coords, 0, Vector2i(-1, -1))
 		tile_data.erase(second_coords)
@@ -232,7 +236,6 @@ func pick_bonus(list: Array, terrain_type: TerrainType):
 		TerrainType.DIAMOND: chance = 0.15
 		_: chance = 0.0  # ostatné bloky nikdy nedajú bonus
 
-	return game_manager.BonusType.SABOTAGE
 	var r := randf()
 	if r >= chance:
 		return game_manager.BonusType.NONE

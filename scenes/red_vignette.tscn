@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://d35r6nnmcbsec"]
+
+[ext_resource type="Shader" uid="uid://bk1txaxpy1bsr" path="res://scripts/red_vignette.gdshader" id="1_bto86"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bto86"]
+shader = ExtResource("1_bto86")
+shader_parameter/intensity = 0.0
+shader_parameter/edge_color = Color(0.9, 0.1, 0.1, 0.6)
+
+[node name="RedVignette" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 319.0
+offset_bottom = 360.0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_bto86")
+layout_mode = 0
+offset_right = 319.0
+offset_bottom = 360.0
+color = Color(0, 0, 0, 0.09803922)

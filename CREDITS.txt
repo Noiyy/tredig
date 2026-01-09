@@ -1,8 +1,4 @@
-# Tredig
-
-A pixel-art 2D mining split-screen game for 2 players
-
-# CREDITS
+=== CREDITS ===
 
 All assets (sprites, sounds, effects) created by Benjamín Muľár.
 Copyright (c) 2026 Benjamín Muľár. All rights reserved.

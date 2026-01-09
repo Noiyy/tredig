@@ -43,4 +43,5 @@ func _on_timeout() -> void:
 	
 func _on_area_body_entered(body: Node) -> void:
 	if body is CharacterBody2D and body == target_player:
+		AudioManager.play("res://assets/sounds/pickup.wav", "SFXLower")
 		_on_timeout()

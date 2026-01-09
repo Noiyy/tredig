@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://4w7oi1w84jni"
-path="res://.godot/imported/levelup.wav-d237e83a811af597e71500872be438db.sample"
+uid="uid://dhasytatxgu3s"
+path="res://.godot/imported/sabotage.wav-4ff320a6a7dd7e3fb7897f3698a28963.sample"
 
 [deps]
 
-source_file="res://assets/sounds/levelup.wav"
-dest_files=["res://.godot/imported/levelup.wav-d237e83a811af597e71500872be438db.sample"]
+source_file="res://assets/sounds/sabotage.wav"
+dest_files=["res://.godot/imported/sabotage.wav-4ff320a6a7dd7e3fb7897f3698a28963.sample"]
 
 [params]
 

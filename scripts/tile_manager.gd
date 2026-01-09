@@ -232,6 +232,7 @@ func pick_bonus(list: Array, terrain_type: TerrainType):
 		TerrainType.DIAMOND: chance = 0.15
 		_: chance = 0.0  # ostatné bloky nikdy nedajú bonus
 
+	return game_manager.BonusType.SABOTAGE
 	var r := randf()
 	if r >= chance:
 		return game_manager.BonusType.NONE

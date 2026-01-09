@@ -36,11 +36,17 @@ func register_player(player: CharacterBody2D):
 		"hp": MAX_HP,
 		"ref": player,
 		"active_bonuses": [],
+		"damage_count": 0
 	}
 	player.sync_stats_from_manager(players[id])
 
-func damage_player(player: CharacterBody2D, amount: int) -> void:
+func damage_player(player: CharacterBody2D, base_amount: int = 10) -> void:
 	var data = players[player.name]
+	
+	# Striedanie 5/10 podľa damage_count tohto hráča
+	data.damage_count += 1
+	var amount = 5 if (data.damage_count % 2 == 1) else 10
+	
 	data.hp = max(data.hp - amount, 0)
 	player.sync_stats_from_manager(data)
 	HUD.update_player_hp(player, data.hp, MAX_HP)

@@ -1,7 +1,9 @@
 extends Area2D
 
+const DEFAULT_GROW_INTERVAL := 1.8
+
 @export var tile_size := 16
-@export var grow_interval_sec := 3.0
+@export var grow_interval_sec := DEFAULT_GROW_INTERVAL
 @export var damage_interval_sec := 1.0
 @export var damage_per_tick := 10
 
@@ -12,6 +14,8 @@ var game_manager
 var grow_timer: Timer
 var damage_timer: Timer
 var bodies_in_lava: Array = []   # hráči, ktorí sú aktuálne v láve
+
+var last_interval_was_short: bool = false
 
 func _ready() -> void:
 	game_manager = get_tree().root.get_node("Main/GameManager")
@@ -34,10 +38,6 @@ func _ready() -> void:
 
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
-	
-	#var rect_shape := col_shape.shape as RectangleShape2D
-	#rect_shape.size.y = tile_size
-	#lava_rect.size = rect_shape.size
 
 
 func _on_grow_timeout() -> void:
@@ -45,13 +45,28 @@ func _on_grow_timeout() -> void:
 
 	# posuň Area2D o celý tile dole
 	position.y += tile_size
+	
+	_set_next_grow_interval()
 
-	#rect_shape.size.y += tile_size
-	#col_shape.shape = rect_shape
-#
-	#lava_rect.size = rect_shape.size
-	#lava_rect.position.x = 0
-	#lava_rect.position.y = -rect_shape.size.y * 0.5
+func _set_next_grow_interval() -> void:
+	if last_interval_was_short:
+		grow_timer.wait_time = DEFAULT_GROW_INTERVAL
+		last_interval_was_short = false
+	else:
+		# 25% = normal, 45% = fast, 30% = fastest
+		var rand := randf()
+		if rand < 0.3:
+			grow_timer.wait_time = 0.8
+			last_interval_was_short = true
+		elif rand < 0.25 + 0.45:
+			grow_timer.wait_time = 1.25
+			last_interval_was_short = false
+		else:
+			grow_timer.wait_time = DEFAULT_GROW_INTERVAL
+			last_interval_was_short = false
+
+	# Restart timer s novým wait_time (pre ďalšie timeouty)
+	grow_timer.start()
 
 func stop_growing() -> void:
 	grow_timer.stop()

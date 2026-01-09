@@ -135,7 +135,7 @@ func _process(delta: float) -> void:
 		var easy_max = shovel_level + 2
 		var medium_max = shovel_level + 4
 		var hard_max = shovel_level + 6
-		print("huh, ", shovel_level, " a ", tile_level)
+
 		if tile_level <= easy_max:
 			shovel_highlight.modulate = Color.WHITE
 		elif tile_level <= medium_max:
@@ -216,49 +216,47 @@ func apply_stat_change(key: String, delta: float) -> void:
 			damage_per_hit += int(delta)
 
 func apply_sabotage_effect() -> void:
+	AudioManager.play("res://assets/sounds/sabotage.wav")
+	var t := get_tree().create_timer(1.0)
+	t.timeout.connect(func():
+		AudioManager.play("res://assets/sounds/laugh.ogg", "SFX", true, true)
+	)
+	
 	var tile_size = game_manager.get_tile_size()
 	var tileset = tile_manager.tilemap.tile_set
 	
 	var start_x = int(0 if name == "PlayerLeft" else (320 / tile_size))
-	var start_y = int(global_position.y / tile_size) + 1  # pod hráčom
+	var start_y = int(global_position.y / tile_size) + 1
 	
-	# Zvýš HP pre 3 riadky pod hráčom
 	for y_offset in 3:
 		var target_y = start_y + y_offset
-		for x_offset in 20:  # cela šírka pre 1 hráča
-			var target_coords = Vector2i(start_x + x_offset, target_y)
-			var tile_data_res: TileData = tile_manager.tilemap.get_cell_tile_data(target_coords)
-			
-			var tile_id = tile_manager.tilemap.get_cell_source_id(target_coords)
-			if tile_id == -1:
-				continue  # žiadny blok, preskoč
-			
-			var tile_atlas_coords = tile_manager.tilemap.get_cell_atlas_coords(target_coords)
-			# Level / hardness
-			var tile_level := 4
-			if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
-				var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
-				tile_level += int(tile_data_res.get_custom_data_by_layer_id(hardness_layer))
-			
-			# Ak nie je v tile_data, vytvor ho
-			if target_coords not in tile_manager.tile_data:
-				tile_manager.tile_data[target_coords] = {
-					"level": tile_level,
-					"hp": tile_level
-				}
-			
-			var tile_data = tile_manager.tile_data[target_coords]
-			tile_data.hp += 1
-			tile_data.level += 1
-		
-			# Aktualizuj damage overlay
-			var damage_val = tile_manager.calculate_tile_dmg_val(
-				tile_data.hp, 
-				tile_level, 
-				damage_per_hit
-			)
-			tile_manager.dmgTilemap.set_cell(target_coords, tile_id, Vector2(damage_val, 0))
-			tile_manager.effectTilemap.set_cell(target_coords, tile_id, Vector2i(1, 0))
+		# Sekvenčne spracuj bloky s oneskorenim
+		for x_offset in 20:
+			await _apply_sabotage_to_tile(Vector2i(start_x + x_offset, target_y), tileset)
+			await get_tree().create_timer(0.0075).timeout
+
+func _apply_sabotage_to_tile(target_coords: Vector2i, tileset: TileSet) -> void:
+	var tile_data_res: TileData = tile_manager.tilemap.get_cell_tile_data(target_coords)
+	var tile_id = tile_manager.tilemap.get_cell_source_id(target_coords)
+	if tile_id == -1:
+		return
+	
+	var tile_level := 4
+	if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
+		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
+		tile_level += int(tile_data_res.get_custom_data_by_layer_id(hardness_layer))
+	
+	if target_coords not in tile_manager.tile_data:
+		tile_manager.tile_data[target_coords] = {"level": tile_level, "hp": tile_level}
+	
+	var tile_data = tile_manager.tile_data[target_coords]
+	tile_data.hp += 1
+	tile_data.level += 1
+	
+	var damage_val = tile_manager.calculate_tile_dmg_val(tile_data.hp, tile_level, damage_per_hit)
+	tile_manager.dmgTilemap.set_cell(target_coords, tile_id, Vector2(damage_val, 0))
+	tile_manager.effectTilemap.set_cell(target_coords, tile_id, Vector2i(1, 0))
+
 
 func on_level_up():
 	print("Shovel level up! Nový level: %d" % shovel_level)

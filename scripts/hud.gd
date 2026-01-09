@@ -4,10 +4,15 @@ var game_manager
 var SHOVEL_LEVEL_EXPS
 var elapsed_time: float = 0.0
 
+@onready var left_p_hud: Control            = $LeftPlayerHUD
+@onready var right_p_hud: Control           = $RightPlayerHUD
+
 @onready var left_bar: ProgressBar         = $LeftPlayerHUD/ExpProgressBar
 @onready var left_label: Label             = $LeftPlayerHUD/LevelLabel
+@onready var left_modifier_label: Label    = $LeftPlayerHUD/ModifierLabel
 @onready var right_bar: ProgressBar        = $RightPlayerHUD/ExpProgressBar
 @onready var right_label: Label            = $RightPlayerHUD/LevelLabel
+@onready var right_modifier_label: Label   = $RightPlayerHUD/ModifierLabel
 @onready var timer_label: Label            = $TimerLabel
 @onready var left_dur_bar: ProgressBar     = $LeftPlayerHUD/DurabilityBar
 @onready var right_dur_bar: ProgressBar    = $RightPlayerHUD/DurabilityBar
@@ -86,6 +91,9 @@ func _ready():
 	right_bonus_timer1.step = 0.01
 	right_bonus_timer2.step = 0.01
 	
+	left_label.pivot_offset = left_label.size / 2
+	right_label.pivot_offset = right_label.size / 2
+	
 func _process(delta: float) -> void:
 	elapsed_time += delta
 	timer_label.text = _format_time_mm_ss(elapsed_time)
@@ -112,6 +120,8 @@ func _bounce_label(label: Label) -> void:
 		left_level_tween.kill()
 	if label == right_label and right_level_tween and right_level_tween.is_valid():
 		right_level_tween.kill()
+
+	label.pivot_offset = label.size / 2
 
 	var tween := get_tree().create_tween()
 	tween.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -140,18 +150,48 @@ func update_player_hud(player_id: int, shovel_level: int, experience: int,
 		if leveled_up:
 			_bounce_label(right_label)
 
+func update_player_modifier(player_id: int, value: int):
+	if player_id == 1:
+		if value > 0:
+			left_modifier_label.text = "+%d" % value
+			left_modifier_label.modulate = Color(0, 1, 0)
+			left_modifier_label.visible = true
+		elif value < 0:
+			left_modifier_label.text = "%d" % value
+			left_modifier_label.modulate = Color(1, 0, 0)
+			left_modifier_label.visible = true
+		else:
+			left_modifier_label.visible = false
+			left_modifier_label.text = ""
+	elif player_id == 2:
+		if value > 0:
+			right_modifier_label.text = "+%d" % value
+			right_modifier_label.modulate = Color(0, 1, 0)
+			right_modifier_label.visible = true
+		elif value < 0:
+			right_modifier_label.text = "-%d" % value
+			right_modifier_label.modulate = Color(1, 0, 0)
+			right_modifier_label.visible = true
+		else:
+			right_modifier_label.visible = false
+			right_modifier_label.text = ""
+
 func update_player_durability(player: CharacterBody2D, current: int, max_value: int) -> void:
 	var bar := left_dur_bar if player.name == "PlayerLeft" else right_dur_bar
 	bar.max_value = max_value
 	bar.value = current
 
 func update_player_hp(player: CharacterBody2D, current: int, max_hp: int) -> void:
+	var player_id = 1 if player.name == "PlayerLeft" else 2
 	var label := left_hp_label if player.name == "PlayerLeft" else right_hp_label
 	label.text = "%d" % current
 	
 	# Zmeň farbu na červenú ak HP <= 30
 	if current <= 30:
 		label.modulate = Color("#752438")
+		
+		var hud_panel = left_p_hud if player.name == "PlayerLeft" else right_p_hud
+		hud_panel.show_damage_vignette()
 	else:
 		label.modulate = Color.WHITE
 

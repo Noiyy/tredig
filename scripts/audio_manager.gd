@@ -17,7 +17,9 @@ func _ready():
 		available.append(player)
 		player.finished.connect(_on_stream_finished.bind(player))
 
-func play(sound_path: String, bus_name: String = "SFX", allow_overlap: bool = true):
+func play(sound_path: String, bus_name: String = "SFX", allow_overlap: bool = true, 
+	same_pitch: bool = false
+	):
 	var now = Time.get_unix_time_from_system()
 	if not allow_overlap and playing_sounds.has(sound_path) and playing_sounds[sound_path] >= max_instances:
 		return  # Blokuj spam
@@ -25,7 +27,7 @@ func play(sound_path: String, bus_name: String = "SFX", allow_overlap: bool = tr
 		return  # Cooldown
 		
 	cooldowns[sound_path] = now
-	queue.append([sound_path, bus_name])
+	queue.append([sound_path, bus_name, same_pitch])
 	_process(0)  # Spusti hneď
 
 func _process(_delta):
@@ -35,6 +37,8 @@ func _process(_delta):
 		player.stream = load(sound_data[0])
 		if sound_data.size() > 1:
 			player.set_bus(sound_data[1])
+			if (sound_data[2]):
+				player.set_pitch_scale(1)
 			
 		playing_sounds[sound_data[0]] = playing_sounds.get(sound_data[0], 0) + 1
 		

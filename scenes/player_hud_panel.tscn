@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cfpmja1pxt1dp"]
+[gd_scene load_steps=15 format=3 uid="uid://cfpmja1pxt1dp"]
 
 [ext_resource type="Script" uid="uid://dixkh1f22jlx4" path="res://scripts/player_hud_panel.gd" id="1_3lnvr"]
 [ext_resource type="Script" uid="uid://p3m3ft4nwobk" path="res://scripts/progress_bar.gd" id="1_8chcm"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://wf404itj8a0v" path="res://assets/images/heart.png" id="4_3divr"]
 [ext_resource type="Texture2D" uid="uid://cm3kevhi38x1i" path="res://assets/images/shovel-icon.png" id="5_2fdoe"]
 [ext_resource type="Texture2D" uid="uid://bvyidcwy4b7yq" path="res://assets/images/durability-icon.png" id="6_yhkk5"]
+[ext_resource type="PackedScene" uid="uid://d35r6nnmcbsec" path="res://scenes/red_vignette.tscn" id="7_yhkk5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8chcm"]
 bg_color = Color(0.6, 0.6, 0.6, 0.5019608)
@@ -16,6 +17,11 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3lnvr"]
 bg_color = Color(0.65882355, 0.7921569, 0.34509805, 0.63529414)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2fdoe"]
+font_size = 14
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_3divr"]
 font_size = 20
@@ -30,7 +36,7 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3divr"]
-bg_color = Color(0, 0.5573334, 0.88, 0.5019608)
+bg_color = Color(0, 0.5573334, 0.88, 0.3764706)
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -51,6 +57,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3lnvr")
 
+[node name="RedVignette" parent="." instance=ExtResource("7_yhkk5")]
+visible = false
+layout_mode = 0
+
 [node name="ExpProgressBar" type="ProgressBar" parent="."]
 layout_mode = 0
 offset_left = 36.0
@@ -61,6 +71,16 @@ theme_override_styles/background = SubResource("StyleBoxFlat_8chcm")
 theme_override_styles/fill = SubResource("StyleBoxFlat_3lnvr")
 show_percentage = false
 script = ExtResource("1_8chcm")
+
+[node name="ModifierLabel" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 22.0
+offset_top = 15.0
+offset_right = 42.0
+offset_bottom = 35.0
+text = "+1"
+label_settings = SubResource("LabelSettings_2fdoe")
 
 [node name="LevelLabel" type="Label" parent="."]
 layout_mode = 0

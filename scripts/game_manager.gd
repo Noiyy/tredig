@@ -112,7 +112,7 @@ func apply_bonus(player: CharacterBody2D, b_type: int) -> void:
 		BonusType.SABOTAGE:
 			_add_timed_stat(player, b_type, "sabotage", 1, 10.0)
 		BonusType.DULLNESS:
-			_add_timed_stat(player, b_type, "dullness", 1, 10.0)
+			_add_timed_stat(player, b_type, "dullness", 2, 10.0)
 		BonusType.OVERLOAD:
 			_add_overload_debuff(player, 7.0)
 	
@@ -131,11 +131,25 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		
 	AudioManager.play("res://assets/sounds/bonus2.wav")
 	# uprav stat v dátach
+	var original_damage = data.damage_per_hit
+	
+	if not data.has("temp_original"):
+		data.temp_original = {}
+	
+	var player_id := 1 if player.name == "PlayerLeft" else 2
+	
 	match key:
 		"damage":
 			data.damage_per_hit += int(delta)
+			HUD.update_player_modifier(player_id, delta)
 		"dullness":
-			data.damage_per_hit -= int(delta) if data.damage_per_hit > 1 else 0
+			var val = clamp(max(original_damage+1 - int(delta), 1), 1, 2)
+			if original_damage < 2: val = 0
+			
+			data.damage_per_hit -= val
+			data.temp_original[key] = val
+			print("wtf ", original_damage, " , ", val)
+			HUD.update_player_modifier(player_id, -val)
 		"sabotage":
 			get_enemy_player(player).apply_sabotage_effect()
 
@@ -154,8 +168,12 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		match key:
 			"damage":
 				data.damage_per_hit -= int(delta)
+				HUD.update_player_modifier(player_id, 0)
 			"dullness":
-				data.damage_per_hit += int(delta)
+				data.damage_per_hit += data.temp_original.get(key, 0)  # Obnov z data
+				print("kolko ", data.damage_per_hit)
+				data.temp_original.erase(key)
+				HUD.update_player_modifier(player_id, 0)
 				
 		data.active_bonuses.erase(b_type)
 		player.sync_stats_from_manager(data)

@@ -269,9 +269,9 @@ func drop_items_based_on_tile(terrain_type: TerrainType, player: CharacterBody2D
 	var drops
 	if terrain_type == TerrainType.IRON:
 		drops = [
-			{"exp": 5, "chance": 0.3}, # 30%
-			{"exp": 10, "chance": 0.2},
-			{"exp": 30, "chance": 0.15},
+			{"exp": 10, "chance": 0.3}, # 30%
+			{"exp": 20, "chance": 0.2},
+			{"exp": 35, "chance": 0.15},
 			{"exp": 50, "chance": 0.1} 
 		]
 	elif terrain_type == TerrainType.GOLD \

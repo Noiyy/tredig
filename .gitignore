@@ -16,4 +16,5 @@ export_credentials.cfg
 data_*/
 mono_crash.*.json
 
-_Documents
+_Documents/
+export/

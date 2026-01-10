@@ -5,9 +5,18 @@ var tiles_to_show = 48
 var world_left_x = 8 #0
 var world_right_x = 640 - 8 #tiles_to_show * tile_size
 
-const SHOVEL_LEVEL_EXPS = [50, 100, 200, 350, 450, 600, 750, 1150, 1300, 1700, 2500]
+#const SHOVEL_LEVEL_EXPS = [
+	#120, 270, 390, 540, 660, 810, 930, 1080, 1200, 1350,
+	#1470, 1620, 1740, 1890, 2040, 2160, 2310, 2430, 2580,
+	#2700, 2850, 3000
+#]
+const SHOVEL_LEVEL_EXPS = [
+	120, 220, 320, 440, 540, 640, 770, 870, 970, 1070,
+	1190, 1290, 1390, 1490, 1620, 1720, 1820, 1950, 2050,
+	2150, 2270, 2370, 2500, 2620, 2800
+]
 const MAX_HP := 100
-const MAX_DURABILITY := 1000
+const MAX_DURABILITY := 1700
 
 var lava
 var HUD
@@ -120,7 +129,7 @@ func apply_bonus(player: CharacterBody2D, b_type: int) -> void:
 		BonusType.DULLNESS:
 			_add_timed_stat(player, b_type, "dullness", 2, 10.0)
 		BonusType.OVERLOAD:
-			_add_overload_debuff(player, 7.0)
+			_add_overload_debuff(player, 5.5)
 	
 
 func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, delta: float,

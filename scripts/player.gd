@@ -18,6 +18,7 @@ var is_dead = false
 var can_dig: bool = true
 var base_speed: float = SPEED
 var base_jump_velocity: float = JUMP_VELOCITY
+var dur_damage_debuff = 0
  
 var HUD
 var game_manager
@@ -183,9 +184,22 @@ func _input(event):
 		if not can_dig:
 			AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
 			return
-		if durability <= 0:
-			AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
-			return
+		# debuffni hrača automaticky keď mu dojde durability
+		# obnovenie je v levelup-e
+		if durability <= 0 and dur_damage_debuff == 0:
+			set_speed_multiplier(0.5)  # 50 % rýchlosti
+			set_gravity_multiplier(0.9)
+			
+			var took = clamp(damage_per_hit - 1, 1, 3)
+			if damage_per_hit == 1 && took == 1:
+				took = 0
+			dur_damage_debuff = took
+			damage_per_hit -= took
+			game_manager.sync_stat_from_player(name, "damage_per_hit", damage_per_hit)
+		
+		#if durability <= 0:
+			#AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
+			#return
 			
 		var anim := "dig_down"
 		if abs(last_dir.y) > abs(last_dir.x):
@@ -261,6 +275,13 @@ func _apply_sabotage_to_tile(target_coords: Vector2i, tileset: TileSet) -> void:
 func on_level_up():
 	print("Shovel level up! Nový level: %d" % shovel_level)
 	print(damage_per_hit)
+	if durability <= 0 and dur_damage_debuff > 0:
+		set_speed_multiplier(1)
+		set_gravity_multiplier(1)
+		
+		damage_per_hit += dur_damage_debuff
+		dur_damage_debuff = 0 
+		game_manager.sync_stat_from_player(name, "damage_per_hit", damage_per_hit)
 	
 func on_dead():
 	set_physics_process(false)

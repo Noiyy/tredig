@@ -16,7 +16,7 @@ const SHOVEL_LEVEL_EXPS = [
 	2150, 2270, 2370, 2500, 2620, 2800
 ]
 const MAX_HP := 100
-const MAX_DURABILITY := 1700
+const MAX_DURABILITY := 100 #1000
 
 var lava
 var HUD
@@ -129,8 +129,11 @@ func apply_bonus(player: CharacterBody2D, b_type: int) -> void:
 		BonusType.DULLNESS:
 			_add_timed_stat(player, b_type, "dullness", 2, 10.0)
 		BonusType.OVERLOAD:
-			_add_overload_debuff(player, 5.5)
+			_add_overload_debuff(player, 3.5)
 	
+func sync_stat_from_player(player_name: String, key: String, new_value: Variant) -> void:
+	var data = players[player_name]
+	data[key] = new_value
 
 func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, delta: float,
  	duration: float) -> void:

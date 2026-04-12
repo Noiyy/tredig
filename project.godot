@@ -11,9 +11,11 @@ config_version=5
 [application]
 
 config/name="Tredig"
-run/main_scene="uid://77dix1tmr4v7"
+run/main_scene="uid://sxummovykd5b"
 config/features=PackedStringArray("4.5", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="uid://deywui7gry816"
+config/macos_native_icon="res://assets/images/logo-icon.icns"
+config/windows_native_icon="res://assets/images/logo-icon.ico"
 
 [autoload]
 
@@ -32,6 +34,10 @@ window/stretch/mode="canvas_items"
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
 [input]
 

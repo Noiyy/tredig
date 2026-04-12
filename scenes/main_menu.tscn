@@ -1,0 +1,148 @@
+[gd_scene load_steps=4 format=3 uid="uid://sxummovykd5b"]
+
+[ext_resource type="Script" uid="uid://cenws71hslm0g" path="res://scripts/main_menu.gd" id="1_bqqt6"]
+[ext_resource type="Texture2D" uid="uid://cp5mmxnmsac28" path="res://assets/images/menu-bg2.png" id="1_ekxnf"]
+[ext_resource type="Texture2D" uid="uid://e2pcwppf1xtk" path="res://assets/images/logo-font5.png" id="2_ekxnf"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_bqqt6")
+
+[node name="Bg" type="TextureRect" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+texture = ExtResource("1_ekxnf")
+expand_mode = 1
+
+[node name="Logo" type="TextureRect" parent="."]
+offset_left = 27.0
+offset_top = 51.0
+offset_right = 242.0
+offset_bottom = 109.0
+mouse_filter = 2
+texture = ExtResource("2_ekxnf")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="MainButtons" type="VBoxContainer" parent="."]
+offset_left = 32.0
+offset_top = 123.0
+offset_right = 227.0
+offset_bottom = 294.0
+
+[node name="PlayButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+text = "Play"
+alignment = 0
+
+[node name="SettingsButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+text = "Settings"
+alignment = 0
+
+[node name="CreditsButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+text = "Credits"
+alignment = 0
+
+[node name="HowToButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+text = "How to play"
+alignment = 0
+
+[node name="QuitButton" type="Button" parent="MainButtons"]
+layout_mode = 2
+text = "Quit"
+alignment = 0
+
+[node name="SettingsMenu" type="VBoxContainer" parent="."]
+visible = false
+offset_left = 32.0
+offset_top = 123.0
+offset_right = 227.0
+offset_bottom = 154.0
+
+[node name="BackButton" type="Button" parent="SettingsMenu"]
+layout_mode = 2
+text = "Back"
+alignment = 0
+
+[node name="FullscreenCheckBox" type="CheckBox" parent="SettingsMenu"]
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="MainVolHSlider" type="HSlider" parent="SettingsMenu"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+
+[node name="Label" type="Label" parent="SettingsMenu/MainVolHSlider"]
+layout_mode = 0
+offset_top = -9.0
+offset_right = 101.0
+offset_bottom = 7.0
+theme_override_font_sizes/font_size = 10
+text = "Main volume"
+horizontal_alignment = 1
+
+[node name="MusicVolHSlider" type="HSlider" parent="SettingsMenu"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+
+[node name="Label" type="Label" parent="SettingsMenu/MusicVolHSlider"]
+layout_mode = 0
+offset_top = -9.0
+offset_right = 101.0
+offset_bottom = 7.0
+theme_override_font_sizes/font_size = 10
+text = "Music volume"
+horizontal_alignment = 1
+
+[node name="SFXVolHSlider" type="HSlider" parent="SettingsMenu"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+
+[node name="Label" type="Label" parent="SettingsMenu/SFXVolHSlider"]
+layout_mode = 0
+offset_top = -9.0
+offset_right = 101.0
+offset_bottom = 7.0
+theme_override_font_sizes/font_size = 10
+text = "SFX volume"
+horizontal_alignment = 1
+
+[node name="CreditsMenu" type="VBoxContainer" parent="."]
+visible = false
+offset_left = 32.0
+offset_top = 123.0
+offset_right = 227.0
+offset_bottom = 181.0
+
+[node name="Label" type="Label" parent="CreditsMenu"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+text = "Game by Noiyy"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BackButton" type="Button" parent="CreditsMenu"]
+layout_mode = 2
+text = "Back"
+alignment = 0
+
+[connection signal="pressed" from="MainButtons/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="MainButtons/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="MainButtons/CreditsButton" to="." method="_on_credits_button_pressed"]
+[connection signal="pressed" from="MainButtons/HowToButton" to="." method="_on_how_to_button_pressed"]
+[connection signal="pressed" from="MainButtons/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="SettingsMenu/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="toggled" from="SettingsMenu/FullscreenCheckBox" to="." method="_on_fullscreen_check_box_toggled"]
+[connection signal="value_changed" from="SettingsMenu/MainVolHSlider" to="." method="_on_main_vol_h_slider_value_changed"]
+[connection signal="value_changed" from="SettingsMenu/MusicVolHSlider" to="." method="_on_music_vol_h_slider_value_changed"]
+[connection signal="value_changed" from="SettingsMenu/SFXVolHSlider" to="." method="_on_sfx_vol_h_slider_3_value_changed"]
+[connection signal="pressed" from="CreditsMenu/BackButton" to="." method="_on_back_button_pressed"]

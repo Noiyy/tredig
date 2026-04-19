@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://77dix1tmr4v7"]
+[gd_scene load_steps=7 format=3 uid="uid://77dix1tmr4v7"]
 
 [ext_resource type="Script" uid="uid://bnmmnqo603val" path="res://scripts/main.gd" id="1_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://b5b60jf7citvj" path="res://scenes/level.tscn" id="2_0wfyh"]
 [ext_resource type="Script" uid="uid://cdopicaxfyfku" path="res://scripts/game_manager.gd" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://c6vdg72si0aos" path="res://scenes/hud.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://dbdk5xlafhiv1" path="res://scenes/pause_menu.tscn" id="5_tbgi4"]
 
 [sub_resource type="GDScript" id="GDScript_0wfyh"]
 script/source = "extends Camera2D
@@ -120,3 +121,5 @@ position_smoothing_enabled = true
 script = SubResource("GDScript_0wfyh")
 
 [node name="HUD" parent="." instance=ExtResource("4_jyhfs")]
+
+[node name="pause_menu" parent="." instance=ExtResource("5_tbgi4")]

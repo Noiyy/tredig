@@ -49,7 +49,9 @@ func register_player(player: CharacterBody2D):
 	}
 	player.sync_stats_from_manager(players[id])
 
-func damage_player(player: CharacterBody2D, base_amount: int = 10) -> void:
+func damage_player(player: CharacterBody2D, base_amount: int = 10, from_lava: bool = false) -> void:
+	if player.is_dead:
+		return
 	var data = players[player.name]
 	
 	# Striedanie 5/10 podľa damage_count tohto hráča
@@ -58,7 +60,7 @@ func damage_player(player: CharacterBody2D, base_amount: int = 10) -> void:
 	
 	data.hp = max(data.hp - amount, 0)
 	player.sync_stats_from_manager(data)
-	HUD.update_player_hp(player, data.hp, MAX_HP)
+	HUD.update_player_hp(player, data.hp, MAX_HP, from_lava)
 	
 	player.modulate = Color("ff8a8a");
 	

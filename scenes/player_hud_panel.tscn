@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cfpmja1pxt1dp"]
+[gd_scene format=3 uid="uid://cfpmja1pxt1dp"]
 
 [ext_resource type="Script" uid="uid://dixkh1f22jlx4" path="res://scripts/player_hud_panel.gd" id="1_3lnvr"]
 [ext_resource type="Script" uid="uid://p3m3ft4nwobk" path="res://scripts/progress_bar.gd" id="1_8chcm"]
@@ -47,7 +47,7 @@ font_size = 12
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
-[node name="PlayerHUDPanel" type="Control"]
+[node name="PlayerHUDPanel" type="Control" unique_id=1414023953]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,11 +57,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_3lnvr")
 
-[node name="RedVignette" parent="." instance=ExtResource("7_yhkk5")]
+[node name="RedVignette" parent="." unique_id=279260029 instance=ExtResource("7_yhkk5")]
 visible = false
 layout_mode = 0
 
-[node name="ExpProgressBar" type="ProgressBar" parent="."]
+[node name="ExpProgressBar" type="ProgressBar" parent="." unique_id=332155106]
 layout_mode = 0
 offset_left = 36.0
 offset_top = 4.0
@@ -72,7 +72,7 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_3lnvr")
 show_percentage = false
 script = ExtResource("1_8chcm")
 
-[node name="ModifierLabel" type="Label" parent="."]
+[node name="ModifierLabel" type="Label" parent="." unique_id=534748236]
 visible = false
 layout_mode = 0
 offset_left = 22.0
@@ -82,7 +82,7 @@ offset_bottom = 35.0
 text = "+1"
 label_settings = SubResource("LabelSettings_2fdoe")
 
-[node name="LevelLabel" type="Label" parent="."]
+[node name="LevelLabel" type="Label" parent="." unique_id=103761948]
 layout_mode = 0
 offset_top = -3.0
 offset_right = 31.0
@@ -91,7 +91,7 @@ text = "1"
 label_settings = SubResource("LabelSettings_3divr")
 horizontal_alignment = 2
 
-[node name="DurabilityBar" type="ProgressBar" parent="."]
+[node name="DurabilityBar" type="ProgressBar" parent="." unique_id=1426120112]
 layout_mode = 0
 offset_left = 175.0
 offset_top = 23.0
@@ -102,35 +102,41 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_3divr")
 show_percentage = false
 script = ExtResource("1_8chcm")
 
-[node name="HPLabel" type="Label" parent="."]
-layout_mode = 0
+[node name="HPLabelPulse" type="Control" parent="." unique_id=278918596]
+anchors_preset = 0
 offset_left = 9.0
 offset_top = 35.0
-offset_right = 35.0
+offset_right = 51.0
 offset_bottom = 52.0
+mouse_filter = 2
+
+[node name="HPLabel" type="Label" parent="HPLabelPulse" unique_id=984776373]
+layout_mode = 0
+offset_right = 26.0
+offset_bottom = 17.0
 text = "100"
 label_settings = SubResource("LabelSettings_r1vqg")
 
-[node name="Bonus1" parent="." instance=ExtResource("3_gpjlm")]
+[node name="HeartIcon" type="TextureRect" parent="HPLabelPulse" unique_id=21378002]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 3.0
+offset_right = 43.0
+offset_bottom = 19.0
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("4_3divr")
+
+[node name="Bonus1" parent="." unique_id=2050667851 instance=ExtResource("3_gpjlm")]
 visible = false
 layout_mode = 1
 
-[node name="Bonus2" parent="." instance=ExtResource("3_gpjlm")]
+[node name="Bonus2" parent="." unique_id=1005736714 instance=ExtResource("3_gpjlm")]
 visible = false
 layout_mode = 1
 offset_left = 61.0
 offset_right = 109.0
 
-[node name="HeartIcon" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = 36.0
-offset_top = 38.0
-offset_right = 52.0
-offset_bottom = 54.0
-scale = Vector2(0.75, 0.75)
-texture = ExtResource("4_3divr")
-
-[node name="ShovelIcon" type="TextureRect" parent="."]
+[node name="ShovelIcon" type="TextureRect" parent="." unique_id=1676304791]
 layout_mode = 0
 offset_left = 292.0
 offset_top = 3.0
@@ -139,7 +145,7 @@ offset_bottom = 43.0
 scale = Vector2(0.45, 0.45)
 texture = ExtResource("5_2fdoe")
 
-[node name="DurabilityIcon" type="TextureRect" parent="."]
+[node name="DurabilityIcon" type="TextureRect" parent="." unique_id=1793519871]
 layout_mode = 0
 offset_left = 160.00002
 offset_top = 22.0

@@ -1,0 +1,58 @@
+[gd_scene load_steps=4 format=3 uid="uid://dbdk5xlafhiv1"]
+
+[ext_resource type="Script" uid="uid://df0vd7t65jcmd" path="res://scripts/pause_menu.gd" id="1_myx47"]
+[ext_resource type="Texture2D" uid="uid://e2pcwppf1xtk" path="res://assets/images/logo-font5.png" id="1_n87rw"]
+[ext_resource type="PackedScene" uid="uid://3rutvgci8l17" path="res://scenes/settings_menu.tscn" id="3_kukqi"]
+
+[node name="pause_menu" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_myx47")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0, 0, 0, 0.6745098)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(50, 50)
+offset_left = 215.0
+offset_top = 35.0
+offset_right = 433.0
+offset_bottom = 101.0
+pivot_offset = Vector2(236, 96)
+texture = ExtResource("1_n87rw")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="PauseOptions" type="VBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="CenterContainer/PauseOptions"]
+layout_mode = 2
+text = "Resume"
+
+[node name="SettingsButton" type="Button" parent="CenterContainer/PauseOptions"]
+layout_mode = 2
+text = "Settings"
+
+[node name="MenuButton" type="Button" parent="CenterContainer/PauseOptions"]
+layout_mode = 2
+text = "Main menu"
+
+[node name="QuitButton" type="Button" parent="CenterContainer/PauseOptions"]
+layout_mode = 2
+text = "Quit"
+
+[node name="SettingsMenu" parent="CenterContainer" instance=ExtResource("3_kukqi")]
+visible = false
+layout_mode = 2
+
+[connection signal="pressed" from="CenterContainer/PauseOptions/ContinueButton" to="." method="_on_continue_button_pressed"]
+[connection signal="pressed" from="CenterContainer/PauseOptions/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="CenterContainer/PauseOptions/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="CenterContainer/PauseOptions/QuitButton" to="." method="_on_quit_button_pressed"]

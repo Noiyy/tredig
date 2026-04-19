@@ -82,5 +82,5 @@ func _on_body_exited(body: Node) -> void:
 
 func _on_damage_timeout() -> void:
 	for body in bodies_in_lava:
-		if is_instance_valid(body):
-			game_manager.damage_player(body, damage_per_tick)
+		if is_instance_valid(body) and body is CharacterBody2D and not body.is_dead:
+			game_manager.damage_player(body, damage_per_tick, true)

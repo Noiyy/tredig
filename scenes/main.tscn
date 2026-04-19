@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://77dix1tmr4v7"]
+[gd_scene format=3 uid="uid://77dix1tmr4v7"]
 
 [ext_resource type="Script" uid="uid://bnmmnqo603val" path="res://scripts/main.gd" id="1_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://b5b60jf7citvj" path="res://scenes/level.tscn" id="2_0wfyh"]
@@ -44,7 +44,7 @@ func screen_shake(intensity: int, time: float):
 	
 "
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=10223889]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
@@ -54,17 +54,17 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jyhfs")
 
-[node name="GameManager" type="Node" parent="."]
+[node name="GameManager" type="Node" parent="." unique_id=738626819]
 script = ExtResource("2_sugp2")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1970395295]
 layout_mode = 0
 offset_left = 318.0
 offset_right = 322.0
 offset_bottom = 360.0
 color = Color(0, 0, 0, 1)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=677158810]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -73,20 +73,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LeftSubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
+[node name="LeftSubViewportContainer" type="SubViewportContainer" parent="HBoxContainer" unique_id=2093677495]
 texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 stretch = true
 
-[node name="LeftSubViewport" type="SubViewport" parent="HBoxContainer/LeftSubViewportContainer"]
+[node name="LeftSubViewport" type="SubViewport" parent="HBoxContainer/LeftSubViewportContainer" unique_id=1752270881]
 unique_name_in_owner = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(318, 360)
 render_target_update_mode = 4
 
-[node name="LeftCamera2D" type="Camera2D" parent="HBoxContainer/LeftSubViewportContainer/LeftSubViewport"]
+[node name="LeftCamera2D" type="Camera2D" parent="HBoxContainer/LeftSubViewportContainer/LeftSubViewport" unique_id=1023023608]
 unique_name_in_owner = true
 limit_left = 0
 limit_top = 0
@@ -95,23 +95,23 @@ limit_bottom = 1000000
 position_smoothing_enabled = true
 script = SubResource("GDScript_0wfyh")
 
-[node name="Level" parent="HBoxContainer/LeftSubViewportContainer/LeftSubViewport" instance=ExtResource("2_0wfyh")]
+[node name="Level" parent="HBoxContainer/LeftSubViewportContainer/LeftSubViewport" unique_id=552840795 instance=ExtResource("2_0wfyh")]
 unique_name_in_owner = true
 
-[node name="RightSubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
+[node name="RightSubViewportContainer" type="SubViewportContainer" parent="HBoxContainer" unique_id=1681423980]
 texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 stretch = true
 
-[node name="RightSubViewport" type="SubViewport" parent="HBoxContainer/RightSubViewportContainer"]
+[node name="RightSubViewport" type="SubViewport" parent="HBoxContainer/RightSubViewportContainer" unique_id=1092668963]
 unique_name_in_owner = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(318, 360)
 render_target_update_mode = 4
 
-[node name="RightCamera2D" type="Camera2D" parent="HBoxContainer/RightSubViewportContainer/RightSubViewport"]
+[node name="RightCamera2D" type="Camera2D" parent="HBoxContainer/RightSubViewportContainer/RightSubViewport" unique_id=662766830]
 unique_name_in_owner = true
 limit_left = 322
 limit_top = 0
@@ -120,6 +120,7 @@ limit_bottom = 1000000
 position_smoothing_enabled = true
 script = SubResource("GDScript_0wfyh")
 
-[node name="HUD" parent="." instance=ExtResource("4_jyhfs")]
+[node name="HUD" parent="." unique_id=1706967670 instance=ExtResource("4_jyhfs")]
 
-[node name="pause_menu" parent="." instance=ExtResource("5_tbgi4")]
+[node name="pause_menu" parent="." unique_id=1615560518 instance=ExtResource("5_tbgi4")]
+visible = false

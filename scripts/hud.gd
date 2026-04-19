@@ -20,6 +20,7 @@ var elapsed_time: float = 0.0
 @onready var right_hp_label: Label         = $RightPlayerHUD/HPLabelPulse/HPLabel
 @onready var left_go                       = $LeftGameOverOverlay
 @onready var right_go                      = $RightGameOverOverlay
+@onready var main_menu_button: Button      = $MainMenuButton
 
 @onready var left_bonus1: Control           = $LeftPlayerHUD/Bonus1
 @onready var right_bonus1: Control          = $RightPlayerHUD/Bonus1
@@ -67,6 +68,9 @@ var left_level_tween: Tween
 var right_level_tween: Tween
 
 var bonus_icons = {}
+var _left_overlay_revealed: bool = false
+var _right_overlay_revealed: bool = false
+var _main_menu_btn_tween: Tween
 
 func _ready():	
 	game_manager = get_tree().root.get_node("Main/GameManager")
@@ -93,6 +97,10 @@ func _ready():
 	
 	left_label.pivot_offset = left_label.size / 2
 	right_label.pivot_offset = right_label.size / 2
+	main_menu_button.visible = false
+	main_menu_button.modulate.a = 0.0
+	left_go.reveal_finished.connect(_on_left_overlay_reveal_finished)
+	right_go.reveal_finished.connect(_on_right_overlay_reveal_finished)
 	
 func _process(delta: float) -> void:
 	elapsed_time += delta
@@ -104,7 +112,7 @@ func stop_timer() -> void:
 	set_process(false)
 
 func _format_time_mm_ss(time_sec: float) -> String:
-	var minutes: int = int(time_sec) / 60
+	var minutes: int = int(time_sec / 60.0)
 	var seconds: int = int(time_sec) % 60
 	return "%02d:%02d" % [minutes, seconds]
 
@@ -196,7 +204,7 @@ func pulse_durability_empty_shake(player: CharacterBody2D) -> void:
 	var p_hud := left_p_hud if player.name == "PlayerLeft" else right_p_hud
 	p_hud.pulse_durability_empty_shake()
 
-func update_player_hp(player: CharacterBody2D, current: int, max_hp: int, from_lava: bool = false) -> void:
+func update_player_hp(player: CharacterBody2D, current: int, _max_hp: int, from_lava: bool = false) -> void:
 	var label := left_hp_label if player.name == "PlayerLeft" else right_hp_label
 	label.text = "%d" % current
 
@@ -381,13 +389,63 @@ func _clear_right_player_damage_fx() -> void:
 
 
 func show_left_game_over(time_sec: float, type: String = "gameover") -> void:
+	_left_overlay_revealed = false
+	_update_main_menu_button_visibility()
 	_clear_left_player_damage_fx()
-	left_go.show_game_over(time_sec, type)
+	if left_go.visible:
+		left_go.show_game_over_instant(time_sec, type)
+	else:
+		left_go.show_game_over(time_sec, type)
 
 
 func show_right_game_over(time_sec: float, type: String = "gameover") -> void:
+	_right_overlay_revealed = false
+	_update_main_menu_button_visibility()
 	_clear_right_player_damage_fx()
-	right_go.show_game_over(time_sec, type)
+	if right_go.visible:
+		right_go.show_game_over_instant(time_sec, type)
+	else:
+		right_go.show_game_over(time_sec, type)
 
 func get_elapsed_time() -> float:
 	return elapsed_time
+
+
+func _on_left_overlay_reveal_finished() -> void:
+	_left_overlay_revealed = true
+	_update_main_menu_button_visibility()
+
+
+func _on_right_overlay_reveal_finished() -> void:
+	_right_overlay_revealed = true
+	_update_main_menu_button_visibility()
+
+
+func _update_main_menu_button_visibility() -> void:
+	var should_show := _left_overlay_revealed and _right_overlay_revealed
+	if should_show:
+		_show_main_menu_button_fade_in()
+	else:
+		_hide_main_menu_button_immediate()
+
+
+func _show_main_menu_button_fade_in() -> void:
+	if _main_menu_btn_tween and _main_menu_btn_tween.is_valid():
+		_main_menu_btn_tween.kill()
+	main_menu_button.visible = true
+	main_menu_button.modulate.a = 0.0
+	_main_menu_btn_tween = create_tween()
+	_main_menu_btn_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_main_menu_btn_tween.tween_property(main_menu_button, "modulate:a", 1.0, 0.38)
+
+
+func _hide_main_menu_button_immediate() -> void:
+	if _main_menu_btn_tween and _main_menu_btn_tween.is_valid():
+		_main_menu_btn_tween.kill()
+	_main_menu_btn_tween = null
+	main_menu_button.visible = false
+	main_menu_button.modulate.a = 0.0
+
+
+func _on_main_menu_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

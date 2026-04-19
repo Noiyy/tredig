@@ -30,6 +30,7 @@ var bodies_in_lava: Array = []   # hráči, ktorí sú aktuálne v láve
 var last_interval_was_short: bool = false
 
 var _bubble_particles: GPUParticles2D = null
+var _bubble_particles_bottom: GPUParticles2D = null
 var _hitbox_debug: Node2D = null
 
 ## Oblasť lávy v súradniciach Area2D (zhodná s pôvodným RectangleShape2D)
@@ -98,13 +99,21 @@ func get_debug_collision_rects() -> Array:
 
 
 func _setup_bubble_particles() -> void:
-	_bubble_particles = GPUParticles2D.new()
-	_bubble_particles.name = "BubbleParticles"
-
-	var pm := ParticleProcessMaterial.new()
-	# emitter: tenký horizontálny pruh pozdĺž hornej hrany rectu
-	pm.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
 	var rect_w: float = lava_rect.size.x if lava_rect.size.x > 0.0 else 640.0
+	_bubble_particles = _create_bubble_particles("BubbleParticlesTop", rect_w)
+	add_child(_bubble_particles)
+
+	_bubble_particles_bottom = _create_bubble_particles("BubbleParticlesBottom", rect_w)
+	add_child(_bubble_particles_bottom)
+	_sync_bubble_particle_positions(_lava_time * flow_speed)
+
+
+func _create_bubble_particles(particles_name: String, rect_w: float) -> GPUParticles2D:
+	var particles := GPUParticles2D.new()
+	particles.name = particles_name
+	var pm := ParticleProcessMaterial.new()
+	# emitter: tenký horizontálny pruh pozdĺž hrany rectu
+	pm.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
 	pm.emission_box_extents = Vector3(rect_w * 0.5, 1.0, 0.0)
 
 	# smer: nahor s malým rozptylom
@@ -128,17 +137,13 @@ func _setup_bubble_particles() -> void:
 
 	pm.lifetime_randomness = 0.4
 
-	_bubble_particles.process_material = pm
-	_bubble_particles.amount = 28
-	_bubble_particles.lifetime = 0.9
-	_bubble_particles.explosiveness = 0.0
-	_bubble_particles.randomness = 0.6
-	_bubble_particles.fixed_fps = 0
-
-	# poloha: na hornom okraji ColorRectu
-	_bubble_particles.position = Vector2(lava_rect.size.x * 0.5, lava_rect.position.y)
-
-	add_child(_bubble_particles)
+	particles.process_material = pm
+	particles.amount = 28
+	particles.lifetime = 0.9
+	particles.explosiveness = 0.0
+	particles.randomness = 0.6
+	particles.fixed_fps = 0
+	return particles
 
 
 func _make_lava_material(for_rect: ColorRect, use_cpu_edge_lut: bool) -> ShaderMaterial:
@@ -231,11 +236,27 @@ func _set_lava_sync_on_materials(sync_t: float) -> void:
 				mat.set_shader_parameter("lava_sync_time", sync_t)
 
 
-func _process(delta: float) -> void:
-	_lava_time += delta
+func _sync_bubble_particle_positions(sync_t: float) -> void:
+	if _bubble_particles == null and _bubble_particles_bottom == null:
+		return
+	var rect_h: float = lava_rect.size.y if lava_rect.size.y > 0.0 else 64.0
+	var rect_w: float = lava_rect.size.x if lava_rect.size.x > 0.0 else 640.0
+	var local_x: float = lava_rect.position.x + rect_w * 0.5
+	var tb: Vector2 = LavaEdgeMath.column_top_bottom_uv(0.5, sync_t, edge_height)
+	var top_y: float = lava_rect.position.y + tb.x * rect_h
+	var bot_y: float = lava_rect.position.y + tb.y * rect_h
+	if _bubble_particles != null:
+		_bubble_particles.position = Vector2(local_x, top_y)
+	if _bubble_particles_bottom != null:
+		_bubble_particles_bottom.position = Vector2(local_x, bot_y)
+
+
+func _process(_delta: float) -> void:
+	_lava_time += _delta
 	var sync_t: float = _lava_time * flow_speed
 	_sync_edge_lut_and_collision(sync_t)
 	_set_lava_sync_on_materials(sync_t)
+	_sync_bubble_particle_positions(sync_t)
 
 
 func _ready() -> void:

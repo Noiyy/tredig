@@ -92,7 +92,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	global_position.x = clamp(global_position.x, world_left_x, world_right_x)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var direction = Vector2.ZERO
 		
 	direction.x = Input.get_action_strength(controls.move_right) - Input.get_action_strength(controls.move_left)
@@ -101,9 +101,7 @@ func _process(delta: float) -> void:
 	if direction != Vector2.ZERO:
 		direction = direction.normalized()
 		last_dir = direction
-		var distance = shovel_distance
-		
-		#$"ShovelDirection/Area2D".position = direction * distance
+		#$"ShovelDirection/Area2D".position = direction * shovel_distance
 		$ShovelDirection.rotation = direction.angle()
 		
 		var min_x := 0.0
@@ -259,14 +257,14 @@ func apply_sabotage_effect() -> void:
 	var tile_size = game_manager.get_tile_size()
 	var tileset = tile_manager.tilemap.tile_set
 	
-	var start_x = int(0 if name == "PlayerLeft" else (320 / tile_size))
-	var start_y = int(global_position.y / tile_size) + 1
+	var start_x := 0 if name == "PlayerLeft" else int(320.0 / float(tile_size))
+	var start_y = int(global_position.y / float(tile_size)) + 1
 	
 	for y_offset in 3:
 		var target_y = start_y + y_offset
 		# Sekvenčne spracuj bloky s oneskorenim
 		for x_offset in 20:
-			await _apply_sabotage_to_tile(Vector2i(start_x + x_offset, target_y), tileset)
+			_apply_sabotage_to_tile(Vector2i(start_x + x_offset, target_y), tileset)
 			await get_tree().create_timer(0.0075).timeout
 
 func _apply_sabotage_to_tile(target_coords: Vector2i, tileset: TileSet) -> void:
@@ -283,11 +281,11 @@ func _apply_sabotage_to_tile(target_coords: Vector2i, tileset: TileSet) -> void:
 	if target_coords not in tile_manager.tile_data:
 		tile_manager.tile_data[target_coords] = {"level": tile_level, "hp": tile_level}
 	
-	var tile_data = tile_manager.tile_data[target_coords]
-	tile_data.hp += 1
-	tile_data.level += 1
+	var td: Dictionary = tile_manager.tile_data[target_coords]
+	td.hp += 1
+	td.level += 1
 	
-	var damage_val = tile_manager.calculate_tile_dmg_val(tile_data.hp, tile_level, damage_per_hit)
+	var damage_val = tile_manager.calculate_tile_dmg_val(td.hp, tile_level, damage_per_hit)
 	tile_manager.dmgTilemap.set_cell(target_coords, tile_id, Vector2(damage_val, 0))
 	tile_manager.effectTilemap.set_cell(target_coords, tile_id, Vector2i(1, 0))
 

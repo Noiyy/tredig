@@ -74,7 +74,6 @@ func damage_tile(player: CharacterBody2D):
 		return  # mimo svojho pásma, nič nenič
 	
 	var tile_coords = tilemap.local_to_map(tilemap.to_local(area_pos))
-	var tile_atlas_coords = tilemap.get_cell_atlas_coords(tile_coords)
 	var tileset = tilemap.tile_set
 	var tile_data_res: TileData = tilemap.get_cell_tile_data(tile_coords)
 
@@ -82,9 +81,7 @@ func damage_tile(player: CharacterBody2D):
 	var tile_id = tilemap.get_cell_source_id(tile_coords)
 	if tile_id == -1:
 		return
-		
-	var hasTerrainType = tileset.has_custom_data_layer_by_name("terrainType")
-	
+
 	# Zisti typ bloku
 	var terrain_type
 	if tileset.has_custom_data_layer_by_name("terrainType") and tile_data_res:
@@ -166,25 +163,23 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 	var tile_id := tilemap.get_cell_source_id(second_coords)
 	if tile_id == -1:
 		return
-		
-	var tileset = tilemap.tile_set
-	var tile_atlas_coords := tilemap.get_cell_atlas_coords(second_coords)
-	var tile_data_res: TileData = tilemap.get_cell_tile_data(second_coords)
-	
-	var tile_level = 4
-	var has_hardness = tileset.has_custom_data_layer_by_name("level")
-	if has_hardness:
-		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
-		tile_level += int(tile_data.get_custom_data_by_layer_id(hardness_layer))
 
-	var hasTerrainType = tileset.has_custom_data_layer_by_name("terrainType")
+	var tileset = tilemap.tile_set
+	var tile_data_res: TileData = tilemap.get_cell_tile_data(second_coords)
+
+	var tile_level = 4
+	var has_hardness: bool = tileset.has_custom_data_layer_by_name("hardness")
+	if has_hardness and tile_data_res:
+		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
+		tile_level += int(tile_data_res.get_custom_data_by_layer_id(hardness_layer))
+
+	var has_terrain_type: bool = tileset.has_custom_data_layer_by_name("terrainType")
 
 	# Zisti typ bloku
 	var terrain_type
-	if hasTerrainType:
+	if has_terrain_type and tile_data_res:
 		var layer_index = tileset.get_custom_data_layer_by_name("terrainType")
-		var tile_data = tilemap.get_cell_tile_data(second_coords)
-		terrain_type = tile_data.get_custom_data_by_layer_id(layer_index)
+		terrain_type = tile_data_res.get_custom_data_by_layer_id(layer_index)
 
 	if second_coords not in tile_data:
 		tile_data[second_coords] = {
@@ -213,8 +208,6 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 		effectTilemap.set_cell(second_coords, 0, Vector2i(-1, -1))
 		tile_data.erase(second_coords)
 
-		var tdata = tilemap.get_cell_tile_data(second_coords)
-		
 		destroyed_tile.emit(terrain_type, player)
 		drop_items_based_on_tile(terrain_type, player, second_coords)
 		_try_drop_bonus(terrain_type, player)
@@ -326,7 +319,7 @@ func _try_drop_bonus(terrain_type: TerrainType, player: CharacterBody2D) -> void
 func _spawn_exp_pickups(exp_value: int, player: CharacterBody2D,
 	tile_coords: Vector2i, terrain_type: TerrainType) -> void:
 	var per_pickup := 10               # 1 štvorec = 10 exp (prispôsob si)
-	var count = max(exp_value / per_pickup, 1)
+	var count: int = maxi(int(float(exp_value) / float(per_pickup)), 1)
 
 	# svetová pozícia zničenej dlaždice – použij tú, čo máš v damage_tile
 	var tile_center_local := tilemap.map_to_local(tile_coords)

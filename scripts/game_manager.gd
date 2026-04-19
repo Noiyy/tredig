@@ -49,7 +49,7 @@ func register_player(player: CharacterBody2D):
 	}
 	player.sync_stats_from_manager(players[id])
 
-func damage_player(player: CharacterBody2D, base_amount: int = 10, from_lava: bool = false) -> void:
+func damage_player(player: CharacterBody2D, _base_amount: int = 10, from_lava: bool = false) -> void:
 	if player.is_dead:
 		return
 	var data = players[player.name]

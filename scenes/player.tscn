@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://p3x88pwr2781" path="res://assets/images/debuff.png" id="5_fjrip"]
 [ext_resource type="Texture2D" uid="uid://cwcj876bbqwi1" path="res://assets/images/buff.png" id="5_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://dvfpdc7mwxwg2" path="res://assets/images/shovel-broken.png" id="6_fjrip"]
-[ext_resource type="Shader" uid="uid://cvlfpqyj25yug" path="res://scripts/icon_drop_shadow.gdshader" id="7_indshadow"]
+[ext_resource type="Shader" path="res://scripts/icon_drop_shadow.gdshader" id="7_indshadow"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qlg0r"]
 atlas = ExtResource("2_dqkch")

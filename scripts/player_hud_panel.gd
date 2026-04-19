@@ -228,7 +228,7 @@ func play_exp_level_up_sequence(new_max: int, new_exp: int) -> void:
 		_apply_exp_bar_after_level_up(new_max, new_exp)
 		return
 
-	await get_tree().process_frame
+	await get_tree().create_timer(0.0).timeout
 	if seq_id != _exp_level_up_seq_id:
 		return
 

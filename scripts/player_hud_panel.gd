@@ -16,13 +16,32 @@ extends Control
 @onready var vignette_rect: ColorRect = $RedVignette/ColorRect
 @onready var vignette_material = vignette_rect.material as ShaderMaterial
 
+@onready var black_vignette: Control = $BlackVignette
+@onready var black_vignette_rect: ColorRect = $BlackVignette/ColorRect
+@onready var black_vignette_material = black_vignette_rect.material as ShaderMaterial
+
 var vignette_tween: Tween
+var durability_vignette_tween: Tween
 var hp_pulse_tween: Tween
+
+var _dur_bar_bg_template: StyleBoxFlat
+var _dur_bar_base_pos: Vector2
+var _dur_empty_active: bool = false
+var _dur_shake_tween: Tween
+var _dur_shake_running: bool = false
+
+const DUR_EMPTY_BG := Color("#660000E1")
+const DUR_SHAKE_AMP_PX := 3.5
+const DUR_SHAKE_HALF_SEC := 0.055
 
 var _exp_shine_host: Control
 var _exp_shine_rect: ColorRect
 var _exp_level_up_seq_id: int = 0
 var _exp_shine_tween: Tween
+var _exp_level_up_ui_busy: bool = false
+var _pending_after_shine: bool = false
+var _pending_exp_max: int = 0
+var _pending_exp_val: int = 0
 
 const EXP_LEVEL_UP_HOLD_SEC := 0.22
 const EXP_LEVEL_UP_SHINE_SEC := 0.4
@@ -51,11 +70,96 @@ func stop_hp_pulse_immediate() -> void:
 func clear_damage_fx_immediate() -> void:
 	stop_hp_pulse_immediate()
 	clear_damage_vignette_immediate()
+	clear_durability_vignette_immediate()
 
 
 func _ready() -> void:
+	# Dva HUD panely (ľavý/pravý) zdieľajú inak rovnaký ShaderMaterial z vnorených scén — duplikácia oddelí intenzitu vignety.
+	if vignette_rect.material:
+		vignette_rect.material = vignette_rect.material.duplicate()
+		vignette_material = vignette_rect.material as ShaderMaterial
+	if black_vignette_rect.material:
+		black_vignette_rect.material = black_vignette_rect.material.duplicate()
+		black_vignette_material = black_vignette_rect.material as ShaderMaterial
 	_apply_flip()
+	_cache_durability_bar_style()
+	_dur_bar_base_pos = dur_bar.position
 	call_deferred("_setup_exp_level_up_shine")
+
+
+func _cache_durability_bar_style() -> void:
+	var sb: StyleBox = dur_bar.get_theme_stylebox("background", "ProgressBar")
+	if sb is StyleBoxFlat:
+		_dur_bar_bg_template = sb.duplicate() as StyleBoxFlat
+
+
+func set_durability_bar(current: int, max_value: int) -> void:
+	dur_bar.max_value = max_value
+	dur_bar.value = current
+	var empty := current <= 0
+	if empty == _dur_empty_active:
+		return
+	_dur_empty_active = empty
+	if empty:
+		_apply_durability_empty_visual()
+		_start_durability_shake_sequence()
+		show_durability_empty_vignette()
+	else:
+		_restore_durability_visual()
+		_stop_durability_shake()
+		hide_durability_empty_vignette()
+
+
+## Pri prázdnej lopate — spustí shake (úder do bloku pri 0 durability), ak už nebeží.
+func pulse_durability_empty_shake() -> void:
+	if not _dur_empty_active:
+		return
+	_start_durability_shake_sequence()
+
+
+func _apply_durability_empty_visual() -> void:
+	if _dur_bar_bg_template:
+		var s := _dur_bar_bg_template.duplicate() as StyleBoxFlat
+		s.bg_color = DUR_EMPTY_BG
+		dur_bar.add_theme_stylebox_override("background", s)
+
+
+func _restore_durability_visual() -> void:
+	if _dur_bar_bg_template:
+		dur_bar.add_theme_stylebox_override("background", _dur_bar_bg_template.duplicate() as StyleBoxFlat)
+
+
+func _start_durability_shake_sequence() -> void:
+	if _dur_shake_running:
+		return
+	_dur_shake_running = true
+	if _dur_shake_tween and _dur_shake_tween.is_valid():
+		_dur_shake_tween.kill()
+	dur_bar.position = _dur_bar_base_pos
+	var a := DUR_SHAKE_AMP_PX
+	var t := DUR_SHAKE_HALF_SEC
+	_dur_shake_tween = create_tween()
+	_dur_shake_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	# 3× doprava → doľava, potom návrat na základnú pozíciu
+	for _i in 3:
+		_dur_shake_tween.tween_property(dur_bar, "position", _dur_bar_base_pos + Vector2(a, 0), t)
+		_dur_shake_tween.tween_property(dur_bar, "position", _dur_bar_base_pos + Vector2(-a, 0), t)
+	_dur_shake_tween.tween_property(dur_bar, "position", _dur_bar_base_pos, t)
+	_dur_shake_tween.finished.connect(_on_durability_shake_finished, CONNECT_ONE_SHOT)
+
+
+func _on_durability_shake_finished() -> void:
+	_dur_shake_tween = null
+	_dur_shake_running = false
+	dur_bar.position = _dur_bar_base_pos
+
+
+func _stop_durability_shake() -> void:
+	if _dur_shake_tween and _dur_shake_tween.is_valid():
+		_dur_shake_tween.kill()
+	_dur_shake_tween = null
+	_dur_shake_running = false
+	dur_bar.position = _dur_bar_base_pos
 
 
 func _setup_exp_level_up_shine() -> void:
@@ -81,6 +185,8 @@ func _setup_exp_level_up_shine() -> void:
 
 func invalidate_exp_level_up_sequence() -> void:
 	_exp_level_up_seq_id += 1
+	_pending_after_shine = false
+	_exp_level_up_ui_busy = false
 	if _exp_shine_tween and _exp_shine_tween.is_valid():
 		_exp_shine_tween.kill()
 	_exp_shine_tween = null
@@ -89,13 +195,27 @@ func invalidate_exp_level_up_sequence() -> void:
 	exp_bar.cancel_value_tween()
 
 
+func is_exp_level_up_sequence_active() -> bool:
+	return _exp_level_up_ui_busy
+
+
+## Odlož bežnú zmenu XP baru, kým dobehne shine (inak by invalidate prerušil animáciu).
+func queue_deferred_exp_update(exp_needed: int, experience: int) -> void:
+	_pending_after_shine = true
+	_pending_exp_max = exp_needed
+	_pending_exp_val = experience
+
+
 ## Pri level up nechaj starý max na bare, kým neprebehne sekvencia (volá hud pred zmenou max).
 func play_exp_level_up_sequence(new_max: int, new_exp: int) -> void:
+	# Nový level-up = nový zdroj pravdy; starý pending XP by bol z predošlého levelu.
+	_pending_after_shine = false
 	if _exp_shine_tween and _exp_shine_tween.is_valid():
 		_exp_shine_tween.kill()
 	_exp_shine_tween = null
 	_exp_level_up_seq_id += 1
 	var seq_id := _exp_level_up_seq_id
+	_exp_level_up_ui_busy = true
 
 	exp_bar.cancel_value_tween()
 	exp_bar.value = exp_bar.max_value
@@ -148,9 +268,14 @@ func play_exp_level_up_sequence(new_max: int, new_exp: int) -> void:
 
 
 func _apply_exp_bar_after_level_up(new_max: int, new_exp: int) -> void:
+	if _pending_after_shine:
+		new_max = _pending_exp_max
+		new_exp = _pending_exp_val
+		_pending_after_shine = false
 	exp_bar.max_value = float(new_max)
 	exp_bar.value = 0.0
 	exp_bar.set_value_animated(float(new_exp))
+	_exp_level_up_ui_busy = false
 
 
 func _apply_flip() -> void:
@@ -201,3 +326,38 @@ func clear_damage_vignette_immediate() -> void:
 	red_vignette.visible = false
 	vignette_rect.visible = false
 	vignette_material.set_shader_parameter("intensity", 0.0)
+
+
+func show_durability_empty_vignette() -> void:
+	if durability_vignette_tween and durability_vignette_tween.is_valid():
+		durability_vignette_tween.kill()
+	black_vignette.visible = true
+	black_vignette_rect.visible = true
+	black_vignette_material.set_shader_parameter("intensity", 0.0)
+	durability_vignette_tween = create_tween()
+	durability_vignette_tween.tween_property(black_vignette_material, "shader_parameter/intensity", 0.9, 0.3)
+
+
+func hide_durability_empty_vignette() -> void:
+	if durability_vignette_tween and durability_vignette_tween.is_valid():
+		durability_vignette_tween.kill()
+	black_vignette.visible = true
+	black_vignette_rect.visible = true
+	durability_vignette_tween = create_tween()
+	durability_vignette_tween.tween_method(
+		func(i): black_vignette_material.set_shader_parameter("intensity", i),
+		black_vignette_material.get_shader_parameter("intensity"), 0.0, 0.3
+	)
+	durability_vignette_tween.tween_callback(func():
+		black_vignette.visible = false
+		black_vignette_rect.visible = false
+	)
+
+
+func clear_durability_vignette_immediate() -> void:
+	if durability_vignette_tween and durability_vignette_tween.is_valid():
+		durability_vignette_tween.kill()
+	durability_vignette_tween = null
+	black_vignette.visible = false
+	black_vignette_rect.visible = false
+	black_vignette_material.set_shader_parameter("intensity", 0.0)

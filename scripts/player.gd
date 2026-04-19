@@ -26,6 +26,9 @@ var game_manager
 @onready var death_timer = $DeathTimer
 @onready var shovel_highlight = $ShovelDirection/TileHighlight 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var broken_shovel_indicator: TextureRect = $Control/BrokenShovelIndicator
+@onready var buff_indicator: TextureRect = $Control/BuffIndicator
+@onready var debuff_indicator: TextureRect = $Control/DebuffIndicator
 
 var shovel_distance = 14
 var last_dir := Vector2.DOWN
@@ -194,7 +197,7 @@ func _input(event):
 			if damage_per_hit == 1 && took == 1:
 				took = 0
 			dur_damage_debuff = took
-			damage_per_hit -= took
+			damage_per_hit = maxi(damage_per_hit - took, 1)
 			game_manager.sync_stat_from_player(name, "damage_per_hit", damage_per_hit)
 		
 		#if durability <= 0:
@@ -220,14 +223,31 @@ func add_exp(amount: int):
 func sync_stats_from_manager(data: Dictionary):
 	experience = data.experience
 	shovel_level = data.shovel_level
-	damage_per_hit = data.damage_per_hit
+	damage_per_hit = maxi(data.damage_per_hit, 1)
 	durability = data.durability
 	hp = data.hp
-	
+	_update_status_indicators()
+
 func apply_stat_change(key: String, delta: float) -> void:
 	match key:
 		"damage":
-			damage_per_hit += int(delta)
+			damage_per_hit = maxi(damage_per_hit + int(delta), 1)
+
+
+func refresh_status_indicators() -> void:
+	_update_status_indicators()
+
+
+func _update_status_indicators() -> void:
+	if not is_instance_valid(broken_shovel_indicator):
+		return
+	var bonuses: Array = []
+	if game_manager != null and game_manager.players.has(name):
+		bonuses = game_manager.players[name].active_bonuses
+	var bt = game_manager.BonusType
+	broken_shovel_indicator.visible = durability <= 0
+	buff_indicator.visible = bonuses.has(bt.SSHOVEL) or bonuses.has(bt.SHARPNESS)
+	debuff_indicator.visible = bonuses.has(bt.DULLNESS) or bonuses.has(bt.OVERLOAD)
 
 func apply_sabotage_effect() -> void:
 	AudioManager.play("res://assets/sounds/sabotage.wav")

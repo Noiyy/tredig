@@ -106,7 +106,10 @@ func damage_tile(player: CharacterBody2D):
 		
 	# Odober hp
 	tile_data[tile_coords].hp -= player.damage_per_hit
-	AudioManager.play("res://assets/sounds/hit2.wav", "SFXLower")
+	if player.durability <= 0:
+		AudioManager.play("res://assets/sounds/hit3.wav", "SFXLower")
+	else:
+		AudioManager.play("res://assets/sounds/hit2.wav", "SFXLower")
 	
 	#var damage_tile_value = get_max_hp_for_tile(tile_level) - tile_data[tile_coords].hp
 	var damage_tile_value = calculate_tile_dmg_val(
@@ -190,7 +193,10 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 		}
 
 	tile_data[second_coords].hp -= player.damage_per_hit
-	AudioManager.play("res://assets/sounds/hit2.wav", "SFXLower")
+	if player.durability <= 0:
+		AudioManager.play("res://assets/sounds/hit3.wav", "SFXLower")
+	else:
+		AudioManager.play("res://assets/sounds/hit2.wav", "SFXLower")
 
 	var damage_tile_value := calculate_tile_dmg_val(
 		tile_data[second_coords].hp,

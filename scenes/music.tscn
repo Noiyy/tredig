@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://cjfffc8w66dd6"]
+[gd_scene format=3 uid="uid://cjfffc8w66dd6"]
 
-[ext_resource type="AudioStream" uid="uid://b54o0nf6mgtek" path="res://assets/music/Mining Town (Loop).wav" id="1_05ggv"]
+[ext_resource type="Script" uid="uid://w4r80ihf7l18" path="res://scripts/music.gd" id="1_music"]
+[ext_resource type="AudioStream" uid="uid://dop52y2t32ypq" path="res://assets/music/Mining Town (Loop).wav" id="2_normal"]
 
-[node name="Music" type="AudioStreamPlayer"]
-stream = ExtResource("1_05ggv")
-autoplay = true
+[node name="Music" type="AudioStreamPlayer" unique_id=1120330012]
+stream = ExtResource("2_normal")
 bus = &"Music"
+script = ExtResource("1_music")

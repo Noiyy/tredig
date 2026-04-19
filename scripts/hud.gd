@@ -143,6 +143,8 @@ func update_player_hud(player_id: int, shovel_level: int, experience: int,
 		if leveled_up:
 			left_p_hud.play_exp_level_up_sequence(exp_needed, experience)
 			_bounce_label(left_label)
+		elif left_p_hud.is_exp_level_up_sequence_active():
+			left_p_hud.queue_deferred_exp_update(exp_needed, experience)
 		else:
 			left_p_hud.invalidate_exp_level_up_sequence()
 			left_bar.max_value = exp_needed
@@ -152,6 +154,8 @@ func update_player_hud(player_id: int, shovel_level: int, experience: int,
 		if leveled_up:
 			right_p_hud.play_exp_level_up_sequence(exp_needed, experience)
 			_bounce_label(right_label)
+		elif right_p_hud.is_exp_level_up_sequence_active():
+			right_p_hud.queue_deferred_exp_update(exp_needed, experience)
 		else:
 			right_p_hud.invalidate_exp_level_up_sequence()
 			right_bar.max_value = exp_needed
@@ -184,9 +188,13 @@ func update_player_modifier(player_id: int, value: int):
 			right_modifier_label.text = ""
 
 func update_player_durability(player: CharacterBody2D, current: int, max_value: int) -> void:
-	var bar := left_dur_bar if player.name == "PlayerLeft" else right_dur_bar
-	bar.max_value = max_value
-	bar.value = current
+	var p_hud := left_p_hud if player.name == "PlayerLeft" else right_p_hud
+	p_hud.set_durability_bar(current, max_value)
+
+
+func pulse_durability_empty_shake(player: CharacterBody2D) -> void:
+	var p_hud := left_p_hud if player.name == "PlayerLeft" else right_p_hud
+	p_hud.pulse_durability_empty_shake()
 
 func update_player_hp(player: CharacterBody2D, current: int, max_hp: int, from_lava: bool = false) -> void:
 	var label := left_hp_label if player.name == "PlayerLeft" else right_hp_label
@@ -291,6 +299,9 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 			icon2.texture = null
 			label2.text = ""
 			timer_bar2.tint_progress = Color("#31e312be")
+
+	if player.has_method("refresh_status_indicators"):
+		player.refresh_status_indicators()
 
 func _update_bonus_timer(delta: float) -> void:
 	# Left player slot 1

@@ -1,6 +1,7 @@
 extends Node2D
 
 func _ready() -> void:
+	Music.set_gameplay_music(false)
 	$MainButtons/PlayButton.grab_focus()
 	$SettingsMenu/FullscreenCheckBox.button_pressed = true if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN else false
 	$SettingsMenu/MainVolHSlider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))

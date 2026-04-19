@@ -93,10 +93,13 @@ func _on_both_players_dead() -> void:
 
 func change_durability(player: CharacterBody2D, delta_amount: int, restore: bool) -> void:
 	var data = players[player.name]
+	var prev_dur: int = data.durability
 	data.durability = MAX_DURABILITY if restore \
 		else clamp(data.durability + delta_amount, 0, MAX_DURABILITY)
 	player.sync_stats_from_manager(data)
 	HUD.update_player_durability(player, data.durability, MAX_DURABILITY)
+	if not restore and delta_amount < 0 and prev_dur <= 0:
+		HUD.pulse_durability_empty_shake(player)
 
 func add_player_exp(player: CharacterBody2D, amount: int):
 	var data = players[player.name]
@@ -135,7 +138,14 @@ func apply_bonus(player: CharacterBody2D, b_type: int) -> void:
 	
 func sync_stat_from_player(player_name: String, key: String, new_value: Variant) -> void:
 	var data = players[player_name]
-	data[key] = new_value
+	if key == "damage_per_hit":
+		data[key] = maxi(int(new_value), 1)
+	else:
+		data[key] = new_value
+
+
+func _clamp_damage_per_hit(data: Dictionary) -> void:
+	data.damage_per_hit = maxi(data.damage_per_hit, 1)
 
 func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, delta: float,
  	duration: float) -> void:
@@ -149,7 +159,10 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 	if !can_apply_bonus(player):
 		return
 		
-	AudioManager.play("res://assets/sounds/bonus2.wav")
+	if (b_type == BonusType.DULLNESS):
+		AudioManager.play("res://assets/sounds/debuff.wav")
+	else:
+		AudioManager.play("res://assets/sounds/bonus2.wav")
 	# uprav stat v dátach
 	var original_damage = data.damage_per_hit
 	
@@ -167,6 +180,7 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 			if original_damage < 2: val = 0
 			
 			data.damage_per_hit -= val
+			_clamp_damage_per_hit(data)
 			data.temp_original[key] = val
 			print("wtf ", original_damage, " , ", val)
 			HUD.update_player_modifier(player_id, -val)
@@ -188,6 +202,7 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		match key:
 			"damage":
 				data.damage_per_hit -= int(delta)
+				_clamp_damage_per_hit(data)
 				HUD.update_player_modifier(player_id, 0)
 			"dullness":
 				data.damage_per_hit += data.temp_original.get(key, 0)  # Obnov z data
@@ -211,7 +226,7 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 	if !can_apply_bonus(player):
 		return
 		
-	AudioManager.play("res://assets/sounds/bonus2.wav")
+	AudioManager.play("res://assets/sounds/debuff.wav")
 	data.active_bonuses.append(BonusType.OVERLOAD)
 
 	# aplikuj debuff na hráča

@@ -15,6 +15,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Music.set_gameplay_music(true)
 	players[1].sub_viewport.world_2d = players[0].sub_viewport.world_2d
 	
 	for info in players:

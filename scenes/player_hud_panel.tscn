@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cm3kevhi38x1i" path="res://assets/images/shovel-icon.png" id="5_2fdoe"]
 [ext_resource type="Texture2D" uid="uid://bvyidcwy4b7yq" path="res://assets/images/durability-icon.png" id="6_yhkk5"]
 [ext_resource type="PackedScene" uid="uid://d35r6nnmcbsec" path="res://scenes/red_vignette.tscn" id="7_yhkk5"]
+[ext_resource type="PackedScene" uid="uid://dyiv3up4fdnag" path="res://scenes/black_vignette.tscn" id="8_blkvg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8chcm"]
 bg_color = Color(0.6, 0.6, 0.6, 0.5019608)
@@ -59,6 +60,9 @@ script = ExtResource("1_3lnvr")
 
 [node name="RedVignette" parent="." unique_id=279260029 instance=ExtResource("7_yhkk5")]
 visible = false
+layout_mode = 0
+
+[node name="BlackVignette" parent="." unique_id=279260030 instance=ExtResource("8_blkvg")]
 layout_mode = 0
 
 [node name="ExpProgressBar" type="ProgressBar" parent="." unique_id=332155106]

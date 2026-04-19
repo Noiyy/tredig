@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://3rutvgci8l17"]
+
+[ext_resource type="Script" uid="uid://b56okk561i2le" path="res://scripts/settings_menu.gd" id="1_05p07"]
+
+[node name="SettingsMenu" type="VBoxContainer" unique_id=146333848]
+offset_left = 32.0
+offset_top = 123.0
+offset_right = 227.0
+offset_bottom = 154.0
+script = ExtResource("1_05p07")
+
+[node name="BackButton" type="Button" parent="." unique_id=605325413]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "  Back  "
+alignment = 0
+
+[node name="FullscreenCheckBox" type="CheckBox" parent="." unique_id=107665556]
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="MainVolHSlider" type="HSlider" parent="." unique_id=734571181]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+
+[node name="Label" type="Label" parent="MainVolHSlider" unique_id=327653480]
+layout_mode = 0
+offset_top = -9.0
+offset_right = 101.0
+offset_bottom = 7.0
+theme_override_font_sizes/font_size = 10
+text = "Main volume"
+horizontal_alignment = 1
+
+[node name="MusicVolHSlider" type="HSlider" parent="." unique_id=802619179]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+
+[node name="Label" type="Label" parent="MusicVolHSlider" unique_id=1752152203]
+layout_mode = 0
+offset_top = -9.0
+offset_right = 101.0
+offset_bottom = 7.0
+theme_override_font_sizes/font_size = 10
+text = "Music volume"
+horizontal_alignment = 1
+
+[node name="SFXVolHSlider" type="HSlider" parent="." unique_id=2042670362]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+
+[node name="Label" type="Label" parent="SFXVolHSlider" unique_id=829865774]
+layout_mode = 0
+offset_top = -9.0
+offset_right = 101.0
+offset_bottom = 7.0
+theme_override_font_sizes/font_size = 10
+text = "SFX volume"
+horizontal_alignment = 1

@@ -1,20 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://sxummovykd5b"]
+[gd_scene format=3 uid="uid://sxummovykd5b"]
 
 [ext_resource type="Script" uid="uid://cenws71hslm0g" path="res://scripts/main_menu.gd" id="1_bqqt6"]
 [ext_resource type="Texture2D" uid="uid://cp5mmxnmsac28" path="res://assets/images/menu-bg2.png" id="1_ekxnf"]
 [ext_resource type="Texture2D" uid="uid://e2pcwppf1xtk" path="res://assets/images/logo-font5.png" id="2_ekxnf"]
+[ext_resource type="PackedScene" uid="uid://3rutvgci8l17" path="res://scenes/settings_menu.tscn" id="4_wu84c"]
 
-[node name="MainMenu" type="Node2D"]
+[node name="MainMenu" type="Node2D" unique_id=1570356935]
 script = ExtResource("1_bqqt6")
 
-[node name="Bg" type="TextureRect" parent="."]
+[node name="Bg" type="TextureRect" parent="." unique_id=594030564]
 offset_right = 640.0
 offset_bottom = 360.0
 mouse_filter = 2
 texture = ExtResource("1_ekxnf")
 expand_mode = 1
 
-[node name="Logo" type="TextureRect" parent="."]
+[node name="Logo" type="TextureRect" parent="." unique_id=1164437227]
 offset_left = 27.0
 offset_top = 51.0
 offset_right = 242.0
@@ -24,115 +25,66 @@ texture = ExtResource("2_ekxnf")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="MainButtons" type="VBoxContainer" parent="."]
+[node name="MainButtons" type="VBoxContainer" parent="." unique_id=1878143419]
 offset_left = 32.0
 offset_top = 123.0
 offset_right = 227.0
 offset_bottom = 294.0
 
-[node name="PlayButton" type="Button" parent="MainButtons"]
+[node name="PlayButton" type="Button" parent="MainButtons" unique_id=408702157]
 layout_mode = 2
 text = "Play"
 alignment = 0
 
-[node name="SettingsButton" type="Button" parent="MainButtons"]
+[node name="SettingsButton" type="Button" parent="MainButtons" unique_id=1244898700]
 layout_mode = 2
 text = "Settings"
 alignment = 0
 
-[node name="CreditsButton" type="Button" parent="MainButtons"]
+[node name="CreditsButton" type="Button" parent="MainButtons" unique_id=888570790]
 layout_mode = 2
 text = "Credits"
 alignment = 0
 
-[node name="HowToButton" type="Button" parent="MainButtons"]
+[node name="HowToButton" type="Button" parent="MainButtons" unique_id=640276244]
 layout_mode = 2
 text = "How to play"
 alignment = 0
 
-[node name="QuitButton" type="Button" parent="MainButtons"]
+[node name="QuitButton" type="Button" parent="MainButtons" unique_id=1411422763]
 layout_mode = 2
 text = "Quit"
 alignment = 0
 
-[node name="SettingsMenu" type="VBoxContainer" parent="."]
+[node name="SettingsMenu" parent="." unique_id=1682358799 instance=ExtResource("4_wu84c")]
+visible = false
+
+[node name="CreditsMenu" type="VBoxContainer" parent="." unique_id=253919914]
 visible = false
 offset_left = 32.0
 offset_top = 123.0
-offset_right = 227.0
-offset_bottom = 154.0
+offset_right = 424.0
+offset_bottom = 234.0
 
-[node name="BackButton" type="Button" parent="SettingsMenu"]
-layout_mode = 2
-text = "Back"
-alignment = 0
-
-[node name="FullscreenCheckBox" type="CheckBox" parent="SettingsMenu"]
-layout_mode = 2
-text = "Fullscreen"
-
-[node name="MainVolHSlider" type="HSlider" parent="SettingsMenu"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-max_value = 1.0
-step = 0.001
-
-[node name="Label" type="Label" parent="SettingsMenu/MainVolHSlider"]
-layout_mode = 0
-offset_top = -9.0
-offset_right = 101.0
-offset_bottom = 7.0
-theme_override_font_sizes/font_size = 10
-text = "Main volume"
-horizontal_alignment = 1
-
-[node name="MusicVolHSlider" type="HSlider" parent="SettingsMenu"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-max_value = 1.0
-step = 0.001
-
-[node name="Label" type="Label" parent="SettingsMenu/MusicVolHSlider"]
-layout_mode = 0
-offset_top = -9.0
-offset_right = 101.0
-offset_bottom = 7.0
-theme_override_font_sizes/font_size = 10
-text = "Music volume"
-horizontal_alignment = 1
-
-[node name="SFXVolHSlider" type="HSlider" parent="SettingsMenu"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-max_value = 1.0
-step = 0.001
-
-[node name="Label" type="Label" parent="SettingsMenu/SFXVolHSlider"]
-layout_mode = 0
-offset_top = -9.0
-offset_right = 101.0
-offset_bottom = 7.0
-theme_override_font_sizes/font_size = 10
-text = "SFX volume"
-horizontal_alignment = 1
-
-[node name="CreditsMenu" type="VBoxContainer" parent="."]
-visible = false
-offset_left = 32.0
-offset_top = 123.0
-offset_right = 227.0
-offset_bottom = 181.0
-
-[node name="Label" type="Label" parent="CreditsMenu"]
+[node name="Label" type="Label" parent="CreditsMenu" unique_id=1711051658]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "Game by Noiyy"
-horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="BackButton" type="Button" parent="CreditsMenu"]
+[node name="Label2" type="Label" parent="CreditsMenu" unique_id=2010156856]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-text = "Back"
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -5
+text = "Background music \"Mining Town (Loop)\" by Chris Logsdon, sped up"
+autowrap_mode = 2
+
+[node name="BackButton" type="Button" parent="CreditsMenu" unique_id=8367701]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "  Back  "
 alignment = 0
 
 [connection signal="pressed" from="MainButtons/PlayButton" to="." method="_on_play_button_pressed"]
@@ -140,9 +92,4 @@ alignment = 0
 [connection signal="pressed" from="MainButtons/CreditsButton" to="." method="_on_credits_button_pressed"]
 [connection signal="pressed" from="MainButtons/HowToButton" to="." method="_on_how_to_button_pressed"]
 [connection signal="pressed" from="MainButtons/QuitButton" to="." method="_on_quit_button_pressed"]
-[connection signal="pressed" from="SettingsMenu/BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="toggled" from="SettingsMenu/FullscreenCheckBox" to="." method="_on_fullscreen_check_box_toggled"]
-[connection signal="value_changed" from="SettingsMenu/MainVolHSlider" to="." method="_on_main_vol_h_slider_value_changed"]
-[connection signal="value_changed" from="SettingsMenu/MusicVolHSlider" to="." method="_on_music_vol_h_slider_value_changed"]
-[connection signal="value_changed" from="SettingsMenu/SFXVolHSlider" to="." method="_on_sfx_vol_h_slider_3_value_changed"]
 [connection signal="pressed" from="CreditsMenu/BackButton" to="." method="_on_back_button_pressed"]

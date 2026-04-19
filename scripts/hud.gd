@@ -4,8 +4,8 @@ var game_manager
 var SHOVEL_LEVEL_EXPS
 var elapsed_time: float = 0.0
 
-@onready var left_p_hud: Control            = $LeftPlayerHUD
-@onready var right_p_hud: Control           = $RightPlayerHUD
+@onready var left_p_hud: PlayerHUDPanel      = $LeftPlayerHUD
+@onready var right_p_hud: PlayerHUDPanel    = $RightPlayerHUD
 
 @onready var left_bar: ProgressBar         = $LeftPlayerHUD/ExpProgressBar
 @onready var left_label: Label             = $LeftPlayerHUD/LevelLabel
@@ -16,8 +16,8 @@ var elapsed_time: float = 0.0
 @onready var timer_label: Label            = $TimerLabel
 @onready var left_dur_bar: ProgressBar     = $LeftPlayerHUD/DurabilityBar
 @onready var right_dur_bar: ProgressBar    = $RightPlayerHUD/DurabilityBar
-@onready var left_hp_label: Label          = $LeftPlayerHUD/HPLabel
-@onready var right_hp_label: Label         = $RightPlayerHUD/HPLabel
+@onready var left_hp_label: Label          = $LeftPlayerHUD/HPLabelPulse/HPLabel
+@onready var right_hp_label: Label         = $RightPlayerHUD/HPLabelPulse/HPLabel
 @onready var left_go                       = $LeftGameOverOverlay
 @onready var right_go                      = $RightGameOverOverlay
 
@@ -133,22 +133,29 @@ func _bounce_label(label: Label) -> void:
 	else:
 		right_level_tween = tween
 
+
 func update_player_hud(player_id: int, shovel_level: int, experience: int,
 	leveled_up: bool) -> void:
 	var exp_needed := _get_exp_needed_for_level(shovel_level)
 
 	if player_id == 1:
-		left_bar.max_value = exp_needed
-		left_bar.set_value_animated(experience)
 		left_label.text = "%d" % shovel_level
 		if leveled_up:
+			left_p_hud.play_exp_level_up_sequence(exp_needed, experience)
 			_bounce_label(left_label)
+		else:
+			left_p_hud.invalidate_exp_level_up_sequence()
+			left_bar.max_value = exp_needed
+			left_bar.set_value_animated(experience)
 	elif player_id == 2:
-		right_bar.max_value = exp_needed
-		right_bar.set_value_animated(experience)
 		right_label.text = "%d" % shovel_level
 		if leveled_up:
+			right_p_hud.play_exp_level_up_sequence(exp_needed, experience)
 			_bounce_label(right_label)
+		else:
+			right_p_hud.invalidate_exp_level_up_sequence()
+			right_bar.max_value = exp_needed
+			right_bar.set_value_animated(experience)
 
 func update_player_modifier(player_id: int, value: int):
 	if player_id == 1:
@@ -181,10 +188,15 @@ func update_player_durability(player: CharacterBody2D, current: int, max_value: 
 	bar.max_value = max_value
 	bar.value = current
 
-func update_player_hp(player: CharacterBody2D, current: int, max_hp: int) -> void:
-	var player_id = 1 if player.name == "PlayerLeft" else 2
+func update_player_hp(player: CharacterBody2D, current: int, max_hp: int, from_lava: bool = false) -> void:
 	var label := left_hp_label if player.name == "PlayerLeft" else right_hp_label
 	label.text = "%d" % current
+
+	if from_lava and not player.is_dead:
+		if player.name == "PlayerLeft":
+			left_p_hud.pulse_hp_from_lava()
+		else:
+			right_p_hud.pulse_hp_from_lava()
 	
 	# Zmeň farbu na červenú ak HP <= 30
 	if current <= 30:
@@ -349,10 +361,21 @@ func start_player_bonus_timer(player: CharacterBody2D, duration: float, bonus_ty
 			right_bonus2.visible = true
 			right_bonus_timer2.value = 1.0
 
+func _clear_left_player_damage_fx() -> void:
+	left_p_hud.clear_damage_fx_immediate()
+
+
+func _clear_right_player_damage_fx() -> void:
+	right_p_hud.clear_damage_fx_immediate()
+
+
 func show_left_game_over(time_sec: float, type: String = "gameover") -> void:
+	_clear_left_player_damage_fx()
 	left_go.show_game_over(time_sec, type)
 
+
 func show_right_game_over(time_sec: float, type: String = "gameover") -> void:
+	_clear_right_player_damage_fx()
 	right_go.show_game_over(time_sec, type)
 
 func get_elapsed_time() -> float:

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://w3hm727q4u8w" path="res://scenes/bonus_hud.tscn" id="3_gpjlm"]
 [ext_resource type="Texture2D" uid="uid://wf404itj8a0v" path="res://assets/images/heart.png" id="4_3divr"]
 [ext_resource type="Texture2D" uid="uid://cm3kevhi38x1i" path="res://assets/images/shovel-icon.png" id="5_2fdoe"]
+[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="5_ktj33"]
 [ext_resource type="Texture2D" uid="uid://bvyidcwy4b7yq" path="res://assets/images/durability-icon.png" id="6_yhkk5"]
 [ext_resource type="PackedScene" uid="uid://d35r6nnmcbsec" path="res://scenes/red_vignette.tscn" id="7_yhkk5"]
 [ext_resource type="PackedScene" uid="uid://dyiv3up4fdnag" path="res://scenes/black_vignette.tscn" id="8_blkvg"]
@@ -24,6 +25,13 @@ font_size = 14
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="FontVariation" id="FontVariation_dpdg1"]
+base_font = ExtResource("5_ktj33")
+variation_opentype = {
+1869640570: 14,
+2003265652: 800
+}
+
 [sub_resource type="LabelSettings" id="LabelSettings_3divr"]
 font_size = 20
 outline_size = 4
@@ -42,6 +50,13 @@ corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
+
+[sub_resource type="FontVariation" id="FontVariation_le0by"]
+base_font = ExtResource("5_ktj33")
+variation_opentype = {
+1869640570: 14,
+2003265652: 800
+}
 
 [sub_resource type="LabelSettings" id="LabelSettings_r1vqg"]
 font_size = 12
@@ -91,6 +106,7 @@ layout_mode = 0
 offset_top = -3.0
 offset_right = 31.0
 offset_bottom = 25.0
+theme_override_fonts/font = SubResource("FontVariation_dpdg1")
 text = "1"
 label_settings = SubResource("LabelSettings_3divr")
 horizontal_alignment = 2
@@ -118,6 +134,7 @@ mouse_filter = 2
 layout_mode = 0
 offset_right = 26.0
 offset_bottom = 17.0
+theme_override_fonts/font = SubResource("FontVariation_le0by")
 text = "100"
 label_settings = SubResource("LabelSettings_r1vqg")
 

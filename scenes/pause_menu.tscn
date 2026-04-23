@@ -1,19 +1,27 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbdk5xlafhiv1"]
+[gd_scene format=3 uid="uid://dbdk5xlafhiv1"]
 
 [ext_resource type="Script" uid="uid://df0vd7t65jcmd" path="res://scripts/pause_menu.gd" id="1_myx47"]
 [ext_resource type="Texture2D" uid="uid://e2pcwppf1xtk" path="res://assets/images/logo-font5.png" id="1_n87rw"]
+[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="3_5d2l8"]
 [ext_resource type="PackedScene" uid="uid://3rutvgci8l17" path="res://scenes/settings_menu.tscn" id="3_kukqi"]
 
-[node name="pause_menu" type="CanvasLayer"]
+[sub_resource type="FontVariation" id="FontVariation_rtw2f"]
+base_font = ExtResource("3_5d2l8")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
+
+[node name="pause_menu" type="CanvasLayer" unique_id=1796888793]
 process_mode = 3
 script = ExtResource("1_myx47")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=895530957]
 offset_right = 640.0
 offset_bottom = 360.0
 color = Color(0, 0, 0, 0.6745098)
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=949180609]
 custom_minimum_size = Vector2(50, 50)
 offset_left = 215.0
 offset_top = 35.0
@@ -24,33 +32,36 @@ texture = ExtResource("1_n87rw")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="SettingsMenu" parent="." unique_id=313232587 instance=ExtResource("3_kukqi")]
+visible = false
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=830940301]
 offset_right = 640.0
 offset_bottom = 360.0
 
-[node name="PauseOptions" type="VBoxContainer" parent="CenterContainer"]
+[node name="PauseOptions" type="VBoxContainer" parent="CenterContainer" unique_id=374715004]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 
-[node name="ContinueButton" type="Button" parent="CenterContainer/PauseOptions"]
+[node name="ContinueButton" type="Button" parent="CenterContainer/PauseOptions" unique_id=1274726263]
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_rtw2f")
 text = "Resume"
 
-[node name="SettingsButton" type="Button" parent="CenterContainer/PauseOptions"]
+[node name="SettingsButton" type="Button" parent="CenterContainer/PauseOptions" unique_id=1844184805]
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_rtw2f")
 text = "Settings"
 
-[node name="MenuButton" type="Button" parent="CenterContainer/PauseOptions"]
+[node name="MenuButton" type="Button" parent="CenterContainer/PauseOptions" unique_id=965965335]
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_rtw2f")
 text = "Main menu"
 
-[node name="QuitButton" type="Button" parent="CenterContainer/PauseOptions"]
+[node name="QuitButton" type="Button" parent="CenterContainer/PauseOptions" unique_id=352959479]
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_rtw2f")
 text = "Quit"
-
-[node name="SettingsMenu" parent="CenterContainer" instance=ExtResource("3_kukqi")]
-visible = false
-layout_mode = 2
 
 [connection signal="pressed" from="CenterContainer/PauseOptions/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="CenterContainer/PauseOptions/SettingsButton" to="." method="_on_settings_button_pressed"]

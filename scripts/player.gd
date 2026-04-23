@@ -25,6 +25,8 @@ var game_manager
 @onready var tile_manager = $TileManager
 @onready var death_timer = $DeathTimer
 @onready var shovel_highlight = $ShovelDirection/TileHighlight 
+@onready var shovel_direction: Node2D = $ShovelDirection
+@onready var shovel_area: Area2D = $ShovelDirection/Area2D
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var broken_shovel_indicator: TextureRect = $Control/BrokenShovelIndicator
 @onready var buff_indicator: TextureRect = $Control/BuffIndicator
@@ -99,86 +101,71 @@ func _process(_delta: float) -> void:
 	direction.y = Input.get_action_strength(controls.move_down) - Input.get_action_strength(controls.move_up)
 	
 	if direction != Vector2.ZERO:
-		direction = direction.normalized()
-		last_dir = direction
-		#$"ShovelDirection/Area2D".position = direction * shovel_distance
-		$ShovelDirection.rotation = direction.angle()
-		
-		var min_x := 0.0
-		var max_x := 318.0
-		if self.name == "PlayerRight":
-			min_x = 322.0
-			max_x = 640.0
-	 
-		var area_pos = $ShovelDirection/Area2D.global_position
-		if area_pos.x < global_position.x:
-			facing_left = true
-			animated_sprite.position.x = -6
-		else:
-			facing_left = false
-			animated_sprite.position.x = 6
-		animated_sprite.flip_h = facing_left
+		last_dir = direction.normalized()
+		shovel_direction.rotation = last_dir.angle()
 
-		# Snap shovel highlight to the nearest tile, show highlight if colliding with tile
-		if area_pos.x < min_x or area_pos.x > max_x:
-			shovel_highlight.visible = false
-			return
-		
-		var tile_coords = tilemap.local_to_map(tilemap.to_local(area_pos))
-		var tile_id = tilemap.get_cell_source_id(tile_coords)
-		
-		var tile_level = 4
-		var tileset = tilemap.tile_set
-		var tile_data_res = tilemap.get_cell_tile_data(tile_coords)
-		if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
-			var level_layer = tileset.get_custom_data_layer_by_name("hardness")
-			tile_level += int(tile_data_res.get_custom_data_by_layer_id(level_layer))
-			
-		var easy_max = shovel_level + 2
-		var medium_max = shovel_level + 4
-		var hard_max = shovel_level + 6
+	var min_x := 0.0
+	var max_x := 318.0
+	if self.name == "PlayerRight":
+		min_x = 322.0
+		max_x = 640.0
 
-		if tile_level <= easy_max:
-			shovel_highlight.modulate = Color.WHITE
-		elif tile_level <= medium_max:
-			shovel_highlight.modulate = Color.YELLOW
-		elif tile_level <= hard_max:
-			shovel_highlight.modulate = Color.ORANGE
-		else:
-			shovel_highlight.modulate = Color.RED
-		shovel_highlight.modulate.a = 128.0 / 255.0 # alfa
-
-		if tile_id == -1:
-			shovel_highlight.visible = false
-			return
-
-		# Calculate tile center in world space
-		#var tile_center = tilemap.map_to_local(tile_coords) + Vector2.ZERO / 2
-		var tile_center_local = tilemap.map_to_local(tile_coords)
-		var tile_center_global = tilemap.to_global(tile_center_local)
-
-		shovel_highlight.global_position = tile_center_global
-		#shovel_highlight.global_position = tile_center
-		
-		# Rotation for diagonal tiles
-		if abs(direction.x) > 0.5 and abs(direction.y) > 0.5:
-			# Diagonal direction
-			if (direction.x > 0 and direction.y > 0) or (direction.x < 0 and direction.y < 0):
-				# Bottom-right or top-left => +45°
-				shovel_highlight.rotation_degrees = 45
-			else:
-				# Bottom-left or top-right => -45°
-				shovel_highlight.rotation_degrees = -45
-		else:
-			# Not diagonal (vertical or horizontal) => no rotation
-			shovel_highlight.rotation_degrees = 0
-
-		if tile_id != -1:
-			shovel_highlight.visible = true
-		else:
-			shovel_highlight.visible = false
+	var area_pos = shovel_area.global_position
+	if area_pos.x < global_position.x:
+		facing_left = true
+		animated_sprite.position.x = -6
 	else:
+		facing_left = false
+		animated_sprite.position.x = 6
+	animated_sprite.flip_h = facing_left
+
+	# Keep highlight active even when idle, as long as the shovel area points at a tile.
+	if area_pos.x < min_x or area_pos.x > max_x:
 		shovel_highlight.visible = false
+		return
+
+	var tile_coords = tilemap.local_to_map(tilemap.to_local(area_pos))
+	var tile_id = tilemap.get_cell_source_id(tile_coords)
+	if tile_id == -1:
+		shovel_highlight.visible = false
+		return
+
+	var tile_level = 4
+	var tileset = tilemap.tile_set
+	var tile_data_res = tilemap.get_cell_tile_data(tile_coords)
+	if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
+		var level_layer = tileset.get_custom_data_layer_by_name("hardness")
+		tile_level += int(tile_data_res.get_custom_data_by_layer_id(level_layer))
+
+	var easy_max = shovel_level + 2
+	var medium_max = shovel_level + 4
+	var hard_max = shovel_level + 6
+
+	if tile_level <= easy_max:
+		shovel_highlight.modulate = Color.WHITE
+	elif tile_level <= medium_max:
+		shovel_highlight.modulate = Color.YELLOW
+	elif tile_level <= hard_max:
+		shovel_highlight.modulate = Color.ORANGE
+	else:
+		shovel_highlight.modulate = Color.RED
+	shovel_highlight.modulate.a = 128.0 / 255.0 # alfa
+
+	# Calculate tile center in world space.
+	var tile_center_local = tilemap.map_to_local(tile_coords)
+	var tile_center_global = tilemap.to_global(tile_center_local)
+	shovel_highlight.global_position = tile_center_global
+
+	# Rotation for diagonal tiles.
+	if abs(last_dir.x) > 0.5 and abs(last_dir.y) > 0.5:
+		if (last_dir.x > 0 and last_dir.y > 0) or (last_dir.x < 0 and last_dir.y < 0):
+			shovel_highlight.rotation_degrees = 45
+		else:
+			shovel_highlight.rotation_degrees = -45
+	else:
+		shovel_highlight.rotation_degrees = 0
+
+	shovel_highlight.visible = true
 
 func _input(event):
 	if event.is_action_pressed(controls.use, true):

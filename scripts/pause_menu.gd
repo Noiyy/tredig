@@ -8,14 +8,14 @@ func _input(_event: InputEvent) -> void:
 	if not Input.is_action_just_pressed("ui_cancel"):
 		return
 	if get_tree().paused:
-		if $CenterContainer/SettingsMenu.visible:
-			$CenterContainer/SettingsMenu.close_settings()
+		if $SettingsMenu.visible:
+			$SettingsMenu.close_settings()
 			return
 		visible = false
 		get_tree().paused = false
 	else:
 		visible = true
-		get_tree().paused = true
+		get_tree().paused = true 
 
 func _on_continue_button_pressed() -> void:
 	hide()
@@ -23,9 +23,10 @@ func _on_continue_button_pressed() -> void:
 
 
 func _on_settings_button_pressed() -> void:
-	$CenterContainer/PauseOptions.visible = false
-	$CenterContainer/SettingsMenu.visible = true
-	$CenterContainer/SettingsMenu/BackButton.grab_focus()
+	$CenterContainer.visible = false
+	$TextureRect.visible = false
+	$SettingsMenu.visible = true
+	$SettingsMenu/BackButton.grab_focus()
 
 
 func _on_menu_button_pressed() -> void:

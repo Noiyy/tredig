@@ -3,11 +3,6 @@ extends Node2D
 func _ready() -> void:
 	Music.set_gameplay_music(false)
 	$MainButtons/PlayButton.grab_focus()
-	$SettingsMenu/FullscreenCheckBox.button_pressed = true if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN else false
-	$SettingsMenu/MainVolHSlider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master")))
-	$SettingsMenu/MusicVolHSlider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music")))
-	$SettingsMenu/SFXVolHSlider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
-	
 
 func _on_play_button_pressed() -> void:
 	get_tree().change_scene_to_file(str("res://scenes/main.tscn"))
@@ -16,11 +11,13 @@ func _on_play_button_pressed() -> void:
 func _on_settings_button_pressed() -> void:
 	$MainButtons.visible = false
 	$SettingsMenu.visible = true
+	$BlackOverlay.visible = true
 
 
 func _on_credits_button_pressed() -> void:
 	$MainButtons.visible = false
 	$CreditsMenu.visible = true
+	$BlackOverlay.visible = true
 
 
 func _on_how_to_button_pressed() -> void:
@@ -33,6 +30,8 @@ func _on_quit_button_pressed() -> void:
 
 func _on_back_button_pressed() -> void:
 	$MainButtons.visible = true
+	$BlackOverlay.visible = false
+
 	if $SettingsMenu.visible:
 		$SettingsMenu.visible = false
 		$MainButtons/SettingsButton.grab_focus()

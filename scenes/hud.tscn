@@ -1,25 +1,41 @@
-[gd_scene load_steps=5 format=3 uid="uid://c6vdg72si0aos"]
+[gd_scene format=3 uid="uid://c6vdg72si0aos"]
 
 [ext_resource type="Script" uid="uid://vimqsi4od0t5" path="res://scripts/hud.gd" id="1_ahhtf"]
 [ext_resource type="PackedScene" uid="uid://cfpmja1pxt1dp" path="res://scenes/player_hud_panel.tscn" id="2_oo0fn"]
 [ext_resource type="PackedScene" uid="uid://b0gqgtnrdjxx" path="res://scenes/game_overlay.tscn" id="3_5ysmq"]
+[ext_resource type="Script" uid="uid://cvvrqse1kgolb" path="res://scripts/minimap.gd" id="4_0minimap"]
+[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="5_uo2fv"]
+
+[sub_resource type="FontVariation" id="FontVariation_uo2fv"]
+base_font = ExtResource("5_uo2fv")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
 
 [sub_resource type="LabelSettings" id="LabelSettings_5ysmq"]
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
-[node name="HUD" type="CanvasLayer"]
+[sub_resource type="FontVariation" id="FontVariation_047uy"]
+base_font = ExtResource("5_uo2fv")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
+
+[node name="HUD" type="CanvasLayer" unique_id=60228388]
 script = ExtResource("1_ahhtf")
 
-[node name="LeftPlayerHUD" parent="." instance=ExtResource("2_oo0fn")]
+[node name="LeftPlayerHUD" parent="." unique_id=81224712 instance=ExtResource("2_oo0fn")]
 
-[node name="RightPlayerHUD" parent="." instance=ExtResource("2_oo0fn")]
+[node name="RightPlayerHUD" parent="." unique_id=1438278465 instance=ExtResource("2_oo0fn")]
 offset_left = 640.0
 offset_right = 320.0
 scale = Vector2(-1, 1)
 flipped = true
 
-[node name="LeftGameOverOverlay" parent="." instance=ExtResource("3_5ysmq")]
+[node name="LeftGameOverOverlay" parent="." unique_id=419485899 instance=ExtResource("3_5ysmq")]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,7 +44,7 @@ offset_right = -320.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RightGameOverOverlay" parent="." instance=ExtResource("3_5ysmq")]
+[node name="RightGameOverOverlay" parent="." unique_id=843075796 instance=ExtResource("3_5ysmq")]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,7 +53,7 @@ offset_left = 320.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TimerLabel" type="Label" parent="."]
+[node name="TimerLabel" type="Label" parent="." unique_id=225577206]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -49,22 +65,53 @@ offset_right = 20.5
 offset_bottom = -143.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_uo2fv")
 text = "00:00"
 label_settings = SubResource("LabelSettings_5ysmq")
 
-[node name="MainMenuButton" type="Button" parent="."]
-visible = false
+[node name="MiniMapBg" type="ColorRect" parent="." unique_id=232284954]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -65.0
-offset_top = -13.0
-offset_right = 65.0
-offset_bottom = 13.0
+offset_left = -28.0
+offset_top = -136.0
+offset_right = 28.0
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="MiniMap" type="Control" parent="MiniMapBg" unique_id=277882332]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_0minimap")
+
+[node name="MainMenuButton" type="Button" parent="." unique_id=140053838]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -65.0
+offset_top = -65.0
+offset_right = 65.0
+offset_bottom = -37.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = SubResource("FontVariation_047uy")
 text = "MAIN MENU"
 
 [connection signal="pressed" from="MainMenuButton" to="." method="_on_main_menu_button_pressed"]

@@ -1,31 +1,68 @@
 [gd_scene format=3 uid="uid://3rutvgci8l17"]
 
 [ext_resource type="Script" uid="uid://b56okk561i2le" path="res://scripts/settings_menu.gd" id="1_05p07"]
+[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="2_cr101"]
+
+[sub_resource type="FontVariation" id="FontVariation_rtw2f"]
+base_font = ExtResource("2_cr101")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
 
 [node name="SettingsMenu" type="VBoxContainer" unique_id=146333848]
 offset_left = 32.0
-offset_top = 123.0
-offset_right = 227.0
-offset_bottom = 154.0
+offset_top = 20.0
+offset_right = 607.0
+offset_bottom = 321.0
 script = ExtResource("1_05p07")
 
-[node name="BackButton" type="Button" parent="." unique_id=605325413]
+[node name="TabsContainer" type="HBoxContainer" parent="." unique_id=178384294]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="GeneralTabButton" type="Button" parent="TabsContainer" unique_id=940258797]
+layout_mode = 2
+text = "  General  "
+
+[node name="ControlsTabButton" type="Button" parent="TabsContainer" unique_id=835048227]
+layout_mode = 2
+text = "  Controls  "
+
+[node name="Sections" type="VBoxContainer" parent="." unique_id=792550640]
+layout_mode = 2
+
+[node name="GeneralSection" type="VBoxContainer" parent="Sections" unique_id=1762849645]
+custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-text = "  Back  "
-alignment = 0
 
-[node name="FullscreenCheckBox" type="CheckBox" parent="." unique_id=107665556]
+[node name="MarginContainer" type="MarginContainer" parent="Sections/GeneralSection" unique_id=71933772]
 layout_mode = 2
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Sections/GeneralSection/MarginContainer" unique_id=1028729090]
+layout_mode = 2
+
+[node name="FullscreenCheckBox" type="CheckBox" parent="Sections/GeneralSection/MarginContainer/VBoxContainer" unique_id=107665556]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Fullscreen"
 
-[node name="MainVolHSlider" type="HSlider" parent="." unique_id=734571181]
+[node name="LavaSoundCheckBox" type="CheckBox" parent="Sections/GeneralSection/MarginContainer/VBoxContainer" unique_id=179201337]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Lava sound"
+
+[node name="MainVolHSlider" type="HSlider" parent="Sections/GeneralSection" unique_id=734571181]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 max_value = 1.0
 step = 0.001
 
-[node name="Label" type="Label" parent="MainVolHSlider" unique_id=327653480]
+[node name="Label" type="Label" parent="Sections/GeneralSection/MainVolHSlider" unique_id=327653480]
 layout_mode = 0
 offset_top = -9.0
 offset_right = 101.0
@@ -34,13 +71,13 @@ theme_override_font_sizes/font_size = 10
 text = "Main volume"
 horizontal_alignment = 1
 
-[node name="MusicVolHSlider" type="HSlider" parent="." unique_id=802619179]
+[node name="MusicVolHSlider" type="HSlider" parent="Sections/GeneralSection" unique_id=802619179]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 max_value = 1.0
 step = 0.001
 
-[node name="Label" type="Label" parent="MusicVolHSlider" unique_id=1752152203]
+[node name="Label" type="Label" parent="Sections/GeneralSection/MusicVolHSlider" unique_id=1752152203]
 layout_mode = 0
 offset_top = -9.0
 offset_right = 101.0
@@ -49,13 +86,13 @@ theme_override_font_sizes/font_size = 10
 text = "Music volume"
 horizontal_alignment = 1
 
-[node name="SFXVolHSlider" type="HSlider" parent="." unique_id=2042670362]
+[node name="SFXVolHSlider" type="HSlider" parent="Sections/GeneralSection" unique_id=2042670362]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 max_value = 1.0
 step = 0.001
 
-[node name="Label" type="Label" parent="SFXVolHSlider" unique_id=829865774]
+[node name="Label" type="Label" parent="Sections/GeneralSection/SFXVolHSlider" unique_id=829865774]
 layout_mode = 0
 offset_top = -9.0
 offset_right = 101.0
@@ -63,3 +100,52 @@ offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
 text = "SFX volume"
 horizontal_alignment = 1
+
+[node name="ControlsSection" type="VBoxContainer" parent="Sections" unique_id=1767122476]
+visible = false
+layout_mode = 2
+
+[node name="ControlsHintRow" type="HBoxContainer" parent="Sections/ControlsSection" unique_id=444444444]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ControlsHint" type="Label" parent="Sections/ControlsSection/ControlsHintRow" unique_id=780981531]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "Click action and press new key (Esc cancels)"
+
+[node name="ResetControlsButton" type="Button" parent="Sections/ControlsSection/ControlsHintRow" unique_id=555555555]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Reset"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Sections/ControlsSection" unique_id=318345453]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ControlsActions" type="HBoxContainer" parent="Sections/ControlsSection/ScrollContainer" unique_id=586782896]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 40
+
+[node name="P1Column" type="VBoxContainer" parent="Sections/ControlsSection/ScrollContainer/ControlsActions" unique_id=111111111]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="P2Column" type="VBoxContainer" parent="Sections/ControlsSection/ScrollContainer/ControlsActions" unique_id=222222222]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="BackButton" type="Button" parent="." unique_id=605325413]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 10
+theme_override_fonts/font = SubResource("FontVariation_rtw2f")
+text = "  Back  "
+alignment = 0

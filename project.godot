@@ -43,6 +43,10 @@ version_control/autoload_on_startup=true
 
 enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
+[gui]
+
+theme/custom_font="uid://dblpljlc31cts"
+
 [input]
 
 p1_left={

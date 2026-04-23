@@ -21,6 +21,8 @@ var elapsed_time: float = 0.0
 @onready var left_go                       = $LeftGameOverOverlay
 @onready var right_go                      = $RightGameOverOverlay
 @onready var main_menu_button: Button      = $MainMenuButton
+@onready var minimap_bg: Control           = $MiniMapBg
+@onready var minimap: Control              = $MiniMapBg/MiniMap
 
 @onready var left_bonus1: Control           = $LeftPlayerHUD/Bonus1
 @onready var right_bonus1: Control          = $RightPlayerHUD/Bonus1
@@ -71,6 +73,10 @@ var bonus_icons = {}
 var _left_overlay_revealed: bool = false
 var _right_overlay_revealed: bool = false
 var _main_menu_btn_tween: Tween
+var _player_left_ref: Node2D
+var _player_right_ref: Node2D
+var _lava_ref: Node2D
+var _tilemap_ref: TileMapLayer
 
 func _ready():	
 	game_manager = get_tree().root.get_node("Main/GameManager")
@@ -101,12 +107,14 @@ func _ready():
 	main_menu_button.modulate.a = 0.0
 	left_go.reveal_finished.connect(_on_left_overlay_reveal_finished)
 	right_go.reveal_finished.connect(_on_right_overlay_reveal_finished)
+	call_deferred("_setup_minimap_sources")
 	
 func _process(delta: float) -> void:
 	elapsed_time += delta
 	timer_label.text = _format_time_mm_ss(elapsed_time)
 	
 	_update_bonus_timer(delta)
+	_update_minimap_runtime()
 
 func stop_timer() -> void:
 	set_process(false)
@@ -449,3 +457,57 @@ func _hide_main_menu_button_immediate() -> void:
 
 func _on_main_menu_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
+
+func _setup_minimap_sources() -> void:
+	if minimap == null:
+		return
+
+	var level_path := "Main/HBoxContainer/LeftSubViewportContainer/LeftSubViewport/Level"
+	var level := get_tree().root.get_node_or_null(level_path)
+	if level == null:
+		return
+
+	_player_left_ref = level.get_node_or_null("PlayerLeft") as Node2D
+	_player_right_ref = level.get_node_or_null("PlayerRight") as Node2D
+	_lava_ref = level.get_node_or_null("Lava") as Node2D
+	_tilemap_ref = level.get_node_or_null("TileMapLayer") as TileMapLayer
+	if _player_left_ref == null or _player_right_ref == null or _lava_ref == null or _tilemap_ref == null:
+		return
+
+	var bounds: Array = game_manager.get_world_x_boundaries()
+	var world_left_x := float(bounds[0])
+	var world_right_x := float(bounds[1])
+	var world_tile_size := float(game_manager.get_tile_size())
+	minimap.call(
+		"configure",
+		_tilemap_ref,
+		_player_left_ref,
+		_player_right_ref,
+		_lava_ref,
+		world_left_x,
+		world_right_x,
+		world_tile_size
+	)
+
+
+func _update_minimap_runtime() -> void:
+	if minimap == null:
+		return
+	if _player_left_ref == null or _player_right_ref == null or _lava_ref == null:
+		return
+
+	var left_dead: bool = _player_left_ref.get("is_dead") == true
+	var right_dead: bool = _player_right_ref.get("is_dead") == true
+	var both_dead := left_dead and right_dead
+	if minimap_bg != null:
+		minimap_bg.visible = not both_dead
+	if both_dead:
+		return
+
+	minimap.call(
+		"update_runtime",
+		_player_left_ref.global_position,
+		_player_right_ref.global_position,
+		_lava_ref.call("get_lava_bottom_y") if _lava_ref.has_method("get_lava_bottom_y") else _lava_ref.global_position.y
+	)

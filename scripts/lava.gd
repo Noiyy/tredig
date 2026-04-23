@@ -3,6 +3,9 @@ extends Area2D
 const DEFAULT_GROW_INTERVAL := 1.8
 const LAVA_SHADER := preload("res://scripts/lava_pixel.gdshader")
 const LavaEdgeMath = preload("res://scripts/lava_edge_math.gd")
+const LAVA_BUBBLING_SOUND := preload("res://assets/sounds/bubbling-lava.wav")
+const LAVA_SOUND_UPDATE_INTERVAL := 0.05
+const LAVA_SOUND_SILENT_DB := -80.0
 
 @export var tile_size := 16
 ## Koľko buniek shadera pripadá na jeden hrubý tile (16 px). 8 = bunka ~2 px, 4 = ~4 px.
@@ -12,6 +15,10 @@ const LavaEdgeMath = preload("res://scripts/lava_edge_math.gd")
 @export var grow_interval_sec := DEFAULT_GROW_INTERVAL
 @export var damage_interval_sec := 1.0
 @export var damage_per_tick := 10
+@export var lava_sound_min_distance_px: float = 200.0
+@export var lava_sound_max_distance_px: float = 32.0
+@export var lava_sound_min_db: float = -20.0
+@export var lava_sound_max_db: float = 18.0
 ## Zelený obrys + výplň = presný RectangleShape2D (damage / body_entered), nie orezaný shader.
 @export var debug_show_hitbox := false:
 	set(v):
@@ -40,6 +47,16 @@ var _lava_time: float = 0.0
 var _stub_edge_tex: ImageTexture = null
 var _edge_img: Image = null
 var _edge_tex: ImageTexture = null
+var _lava_audio: AudioStreamPlayer = null
+var _lava_sound_update_accum: float = 0.0
+
+static var _lava_sound_enabled: bool = true
+
+static func set_lava_sound_enabled(enabled: bool) -> void:
+	_lava_sound_enabled = enabled
+
+static func is_lava_sound_enabled() -> bool:
+	return _lava_sound_enabled
 
 
 func _ensure_stub_edge_tex() -> void:
@@ -258,9 +275,15 @@ func _process(_delta: float) -> void:
 	_set_lava_sync_on_materials(sync_t)
 	_sync_bubble_particle_positions(sync_t)
 
+	_lava_sound_update_accum += _delta
+	if _lava_sound_update_accum >= LAVA_SOUND_UPDATE_INTERVAL:
+		_lava_sound_update_accum = 0.0
+		_update_lava_audio_volume()
+
 
 func _ready() -> void:
 	game_manager = get_tree().root.get_node("Main/GameManager")
+	_setup_lava_audio()
 
 	var rs0 := col_shape.shape as RectangleShape2D
 	if rs0:
@@ -297,6 +320,77 @@ func _ready() -> void:
 	body_exited.connect(_on_body_exited)
 
 	_sync_hitbox_debug_overlay()
+
+
+func _setup_lava_audio() -> void:
+	_lava_audio = AudioStreamPlayer.new()
+	_lava_audio.stream = LAVA_BUBBLING_SOUND
+	_lava_audio.bus = &"SFX"
+	_lava_audio.volume_db = lava_sound_min_db
+	add_child(_lava_audio)
+	_lava_audio.finished.connect(func() -> void:
+		if _lava_sound_enabled:
+			_lava_audio.play(0.0)
+	)
+	_update_lava_audio_volume()
+
+
+func get_lava_bottom_y() -> float:
+	return to_global(lava_rect.position + Vector2(0.0, lava_rect.size.y)).y
+
+
+func _update_lava_audio_volume() -> void:
+	if _lava_audio == null:
+		return
+
+	if not _lava_sound_enabled:
+		if _lava_audio.playing:
+			_lava_audio.stop()
+		return
+
+	# Use the visible lava rect bottom edge for audio proximity.
+	# _lava_bounds comes from collision setup and can be offset from what player perceives as lava surface.
+	var surface_y := get_lava_bottom_y()
+	var nearest_alive_distance := INF
+	var nearest_any_distance := INF
+	var has_alive_player := false
+
+	if game_manager != null and game_manager.players.size() > 0:
+		for player_data in game_manager.players.values():
+			if not player_data.has("ref"):
+				continue
+			var player_ref = player_data.ref
+			if player_ref == null or not is_instance_valid(player_ref):
+				continue
+			# Distance is how far player is ahead of lava bottom edge.
+			# If lava reached/passed player, clamp to 0 (max loudness).
+			var vertical_distance := maxf(player_ref.global_position.y - surface_y, 0.0)
+			var alive: bool = not player_ref.is_dead
+			if alive:
+				has_alive_player = true
+				nearest_alive_distance = minf(nearest_alive_distance, vertical_distance)
+			nearest_any_distance = minf(nearest_any_distance, vertical_distance)
+
+	if not _lava_audio.playing:
+		_lava_audio.play()
+
+	var nearest_distance := nearest_alive_distance if has_alive_player else nearest_any_distance
+	var near_dist := minf(lava_sound_min_distance_px, lava_sound_max_distance_px)
+	var far_dist := maxf(lava_sound_min_distance_px, lava_sound_max_distance_px)
+	var target_db := LAVA_SOUND_SILENT_DB
+
+	#  >= far_dist (default 100 px): silent
+	#  <  far_dist: starts at min volume
+	#  <= near_dist (default 32 px): max volume
+	if nearest_distance < far_dist:
+		if nearest_distance <= near_dist:
+			target_db = lava_sound_max_db
+		else:
+			var t := 1.0 - ((nearest_distance - near_dist) / maxf(far_dist - near_dist, 0.001))
+			var eased_t := pow(clampf(t, 0.0, 1.0), 2.0) # ease-in quad (x*x)
+			target_db = lerpf(lava_sound_min_db, lava_sound_max_db, eased_t)
+
+	_lava_audio.volume_db = lerpf(_lava_audio.volume_db, target_db, 0.55)
 
 
 func _deferred_lava_layout_and_collision() -> void:

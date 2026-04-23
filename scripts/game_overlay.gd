@@ -11,7 +11,7 @@ signal reveal_finished
 @onready var time_label: Label  = $VBoxContainer/TimeLabel
 @onready var title_label: Label = $VBoxContainer/TitleLabel
 @onready var sub_title_label: Label = $VBoxContainer/SubTitleLabel
-@onready var btn: Button = $VBoxContainer/Button
+@onready var btn: Button = $VBoxContainer/MarginContainer/Button
 @onready var vbox: VBoxContainer = $VBoxContainer
 @onready var lava_rect: ColorRect = $LavaRect
 

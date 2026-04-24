@@ -16,7 +16,7 @@ const SHOVEL_LEVEL_EXPS = [
 	2150, 2270, 2370, 2500, 2620, 2800
 ]
 const MAX_HP := 100
-const MAX_DURABILITY := 100 #1000
+const MAX_DURABILITY := 1000 #1000
 
 var lava
 var HUD

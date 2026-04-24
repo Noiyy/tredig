@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+func _focus_resume_button() -> void:
+	$CenterContainer/PauseOptions/ContinueButton.call_deferred("grab_focus")
+
 func _ready() -> void:
 	visible = false
 	get_tree().paused = false
@@ -9,13 +12,14 @@ func _input(_event: InputEvent) -> void:
 		return
 	if get_tree().paused:
 		if $SettingsMenu.visible:
-			$SettingsMenu.close_settings()
+			## Settings rieši ui_cancel v _unhandled_input / _input (zrušenie bindu, overlay, až back).
 			return
 		visible = false
 		get_tree().paused = false
 	else:
 		visible = true
-		get_tree().paused = true 
+		get_tree().paused = true
+		_focus_resume_button()
 
 func _on_continue_button_pressed() -> void:
 	hide()
@@ -26,7 +30,7 @@ func _on_settings_button_pressed() -> void:
 	$CenterContainer.visible = false
 	$TextureRect.visible = false
 	$SettingsMenu.visible = true
-	$SettingsMenu/BackButton.grab_focus()
+	$SettingsMenu/VBoxContainer/BackButton.call_deferred("grab_focus")
 
 
 func _on_menu_button_pressed() -> void:

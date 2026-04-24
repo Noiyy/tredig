@@ -9,8 +9,8 @@ extends Control
 @onready var dur_bar: ProgressBar  = $DurabilityBar
 @onready var hp_pulse_host: Control  = $HPLabelPulse
 @onready var hp_label: Label       = $HPLabelPulse/HPLabel
-@onready var bonus1: Control       = $Bonus1
-@onready var bonus2: Control       = $Bonus2
+@onready var bonus1: Control       = $HBoxContainer/Bonus1
+@onready var bonus2: Control       = $HBoxContainer/Bonus2
 
 @onready var red_vignette: Control = $RedVignette
 @onready var vignette_rect: ColorRect = $RedVignette/ColorRect

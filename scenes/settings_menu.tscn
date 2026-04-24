@@ -2,6 +2,91 @@
 
 [ext_resource type="Script" uid="uid://b56okk561i2le" path="res://scripts/settings_menu.gd" id="1_05p07"]
 [ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="2_cr101"]
+[ext_resource type="Texture2D" uid="uid://b6rss7hkni1vf" path="res://assets/images/controller-ps.png" id="3_nh0vc"]
+
+[sub_resource type="FontVariation" id="FontVariation_subtab"]
+base_font = ExtResource("2_cr101")
+variation_opentype = {
+1869640570: 11,
+2003265652: 600
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtab_normal"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.1, 0.1, 0.1, 0.35)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.4)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtab_press"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 0.16)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.9)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtab_hover"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 1, 1, 0.1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_subtabs"]
+
+[sub_resource type="FontVariation" id="FontVariation_wswnh"]
+base_font = ExtResource("2_cr101")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
+
+[sub_resource type="FontVariation" id="FontVariation_labj1"]
+base_font = SubResource("FontVariation_wswnh")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
+
+[sub_resource type="FontVariation" id="FontVariation_lwwgp"]
+base_font = ExtResource("2_cr101")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wswnh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_labj1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwwgp"]
 
 [sub_resource type="FontVariation" id="FontVariation_rtw2f"]
 base_font = ExtResource("2_cr101")
@@ -10,59 +95,245 @@ variation_opentype = {
 2003265652: 600
 }
 
-[node name="SettingsMenu" type="VBoxContainer" unique_id=146333848]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bgjg7"]
+
+[sub_resource type="FontVariation" id="FontVariation_bgjg7"]
+variation_opentype = {
+1869640570: 14,
+2003265652: 700
+}
+
+[sub_resource type="FontVariation" id="FontVariation_48ojb"]
+base_font = ExtResource("2_cr101")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n35ux"]
+bg_color = Color(0, 0.72, 0.21599998, 0.09803922)
+
+[sub_resource type="FontVariation" id="FontVariation_fb6cq"]
+base_font = ExtResource("2_cr101")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ctot"]
+bg_color = Color(0.99, 0.21780004, 0.21780004, 0.09803922)
+
+[sub_resource type="FontVariation" id="FontVariation_jrqig"]
+base_font = ExtResource("2_cr101")
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
+
+[node name="SettingsMenu" type="Control" unique_id=1208449152]
+layout_mode = 3
+anchors_preset = 0
 offset_left = 32.0
 offset_top = 20.0
 offset_right = 607.0
-offset_bottom = 321.0
+offset_bottom = 336.0
 script = ExtResource("1_05p07")
 
-[node name="TabsContainer" type="HBoxContainer" parent="." unique_id=178384294]
+[node name="ControllerConnectorLayer" type="Control" parent="." unique_id=94326771]
+z_index = 1
+anchors_preset = 0
+offset_left = 287.0
+offset_right = 287.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="L2Control" type="Control" parent="ControllerConnectorLayer" unique_id=28639425]
+anchors_preset = 0
+offset_left = -62.0
+offset_top = 63.0
+offset_right = -54.0
+offset_bottom = 71.0
+
+[node name="L1Control" type="Control" parent="ControllerConnectorLayer" unique_id=1723210923]
+anchors_preset = 0
+offset_left = -62.0
+offset_top = 48.0
+offset_right = -54.0
+offset_bottom = 56.0
+
+[node name="R1Control" type="Control" parent="ControllerConnectorLayer" unique_id=980527800]
+anchors_preset = 0
+offset_left = 52.0
+offset_top = 48.0
+offset_right = 60.0
+offset_bottom = 56.0
+
+[node name="R2Control" type="Control" parent="ControllerConnectorLayer" unique_id=1983812285]
+anchors_preset = 0
+offset_left = 52.0
+offset_top = 63.0
+offset_right = 60.0
+offset_bottom = 71.0
+
+[node name="DPadUp" type="Control" parent="ControllerConnectorLayer" unique_id=1681623877]
+anchors_preset = 0
+offset_left = -62.0
+offset_top = 91.0
+offset_right = -54.0
+offset_bottom = 99.0
+
+[node name="DPadRight" type="Control" parent="ControllerConnectorLayer" unique_id=143038160]
+anchors_preset = 0
+offset_left = -48.0
+offset_top = 104.0
+offset_right = -40.0
+offset_bottom = 112.0
+
+[node name="DPadLeft" type="Control" parent="ControllerConnectorLayer" unique_id=1314187800]
+anchors_preset = 0
+offset_left = -75.0
+offset_top = 104.0
+offset_right = -67.0
+offset_bottom = 112.0
+
+[node name="DPadDown" type="Control" parent="ControllerConnectorLayer" unique_id=1417779746]
+anchors_preset = 0
+offset_left = -61.0
+offset_top = 118.0
+offset_right = -53.0
+offset_bottom = 126.0
+
+[node name="LStick" type="Control" parent="ControllerConnectorLayer" unique_id=206073505]
+anchors_preset = 0
+offset_left = -33.0
+offset_top = 139.0
+offset_right = -25.0
+offset_bottom = 147.0
+
+[node name="RStick" type="Control" parent="ControllerConnectorLayer" unique_id=690418793]
+anchors_preset = 0
+offset_left = 23.0
+offset_top = 139.0
+offset_right = 31.0
+offset_bottom = 147.0
+
+[node name="Select" type="Control" parent="ControllerConnectorLayer" unique_id=2105947783]
+anchors_preset = 0
+offset_left = -16.0
+offset_top = 110.0
+offset_right = -8.0
+offset_bottom = 118.0
+
+[node name="Start" type="Control" parent="ControllerConnectorLayer" unique_id=296401986]
+anchors_preset = 0
+offset_left = 6.0
+offset_top = 110.0
+offset_right = 14.0
+offset_bottom = 118.0
+
+[node name="YTriangle" type="Control" parent="ControllerConnectorLayer" unique_id=2107106816]
+anchors_preset = 0
+offset_left = 52.0
+offset_top = 86.0
+offset_right = 60.0
+offset_bottom = 94.0
+
+[node name="BCircle" type="Control" parent="ControllerConnectorLayer" unique_id=423894936]
+anchors_preset = 0
+offset_left = 69.0
+offset_top = 104.0
+offset_right = 77.0
+offset_bottom = 112.0
+
+[node name="XSquare" type="Control" parent="ControllerConnectorLayer" unique_id=1120363209]
+anchors_preset = 0
+offset_left = 33.0
+offset_top = 104.0
+offset_right = 41.0
+offset_bottom = 112.0
+
+[node name="ACross" type="Control" parent="ControllerConnectorLayer" unique_id=1932481206]
+anchors_preset = 0
+offset_left = 51.0
+offset_top = 123.0
+offset_right = 59.0
+offset_bottom = 131.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=948818981]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 575.0
+offset_bottom = 322.0
+
+[node name="TabsContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=178384294]
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="GeneralTabButton" type="Button" parent="TabsContainer" unique_id=940258797]
+[node name="GeneralTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=940258797]
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_labj1")
 text = "  General  "
 
-[node name="ControlsTabButton" type="Button" parent="TabsContainer" unique_id=835048227]
+[node name="ControlsTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=835048227]
 layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_wswnh")
 text = "  Controls  "
 
-[node name="Sections" type="VBoxContainer" parent="." unique_id=792550640]
+[node name="ControllerTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=210398771]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_lwwgp")
+text = "  Controller  "
+
+[node name="Sections" type="VBoxContainer" parent="VBoxContainer" unique_id=792550640]
 layout_mode = 2
 
-[node name="GeneralSection" type="VBoxContainer" parent="Sections" unique_id=1762849645]
+[node name="GeneralSection" type="VBoxContainer" parent="VBoxContainer/Sections" unique_id=1762849645]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
-size_flags_horizontal = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="Sections/GeneralSection" unique_id=71933772]
+[node name="GeneralHintRow" type="HBoxContainer" parent="VBoxContainer/Sections/GeneralSection" unique_id=666666666]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="GeneralHintSpacer" type="Control" parent="VBoxContainer/Sections/GeneralSection/GeneralHintRow" unique_id=777777777]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResetGeneralButton" type="Button" parent="VBoxContainer/Sections/GeneralSection/GeneralHintRow" unique_id=888888888]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Reset"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Sections/GeneralSection" unique_id=71933772]
 layout_mode = 2
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Sections/GeneralSection/MarginContainer" unique_id=1028729090]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Sections/GeneralSection/MarginContainer" unique_id=1028729090]
 layout_mode = 2
 
-[node name="FullscreenCheckBox" type="CheckBox" parent="Sections/GeneralSection/MarginContainer/VBoxContainer" unique_id=107665556]
+[node name="FullscreenCheckBox" type="CheckBox" parent="VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer" unique_id=107665556]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 12
 text = "Fullscreen"
 
-[node name="LavaSoundCheckBox" type="CheckBox" parent="Sections/GeneralSection/MarginContainer/VBoxContainer" unique_id=179201337]
+[node name="LavaSoundCheckBox" type="CheckBox" parent="VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer" unique_id=179201337]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 12
 text = "Lava sound"
 
-[node name="MainVolHSlider" type="HSlider" parent="Sections/GeneralSection" unique_id=734571181]
-custom_minimum_size = Vector2(0, 20)
+[node name="MainVolHSlider" type="HSlider" parent="VBoxContainer/Sections/GeneralSection" unique_id=734571181]
+custom_minimum_size = Vector2(150, 20)
 layout_mode = 2
+size_flags_horizontal = 0
 max_value = 1.0
-step = 0.001
+step = 0.05
 
-[node name="Label" type="Label" parent="Sections/GeneralSection/MainVolHSlider" unique_id=327653480]
+[node name="Label" type="Label" parent="VBoxContainer/Sections/GeneralSection/MainVolHSlider" unique_id=327653480]
 layout_mode = 0
 offset_top = -9.0
 offset_right = 101.0
@@ -71,13 +342,14 @@ theme_override_font_sizes/font_size = 10
 text = "Main volume"
 horizontal_alignment = 1
 
-[node name="MusicVolHSlider" type="HSlider" parent="Sections/GeneralSection" unique_id=802619179]
-custom_minimum_size = Vector2(0, 20)
+[node name="MusicVolHSlider" type="HSlider" parent="VBoxContainer/Sections/GeneralSection" unique_id=802619179]
+custom_minimum_size = Vector2(150, 20)
 layout_mode = 2
+size_flags_horizontal = 0
 max_value = 1.0
-step = 0.001
+step = 0.05
 
-[node name="Label" type="Label" parent="Sections/GeneralSection/MusicVolHSlider" unique_id=1752152203]
+[node name="Label" type="Label" parent="VBoxContainer/Sections/GeneralSection/MusicVolHSlider" unique_id=1752152203]
 layout_mode = 0
 offset_top = -9.0
 offset_right = 101.0
@@ -86,13 +358,14 @@ theme_override_font_sizes/font_size = 10
 text = "Music volume"
 horizontal_alignment = 1
 
-[node name="SFXVolHSlider" type="HSlider" parent="Sections/GeneralSection" unique_id=2042670362]
-custom_minimum_size = Vector2(0, 20)
+[node name="SFXVolHSlider" type="HSlider" parent="VBoxContainer/Sections/GeneralSection" unique_id=2042670362]
+custom_minimum_size = Vector2(150, 20)
 layout_mode = 2
+size_flags_horizontal = 0
 max_value = 1.0
-step = 0.001
+step = 0.05
 
-[node name="Label" type="Label" parent="Sections/GeneralSection/SFXVolHSlider" unique_id=829865774]
+[node name="Label" type="Label" parent="VBoxContainer/Sections/GeneralSection/SFXVolHSlider" unique_id=829865774]
 layout_mode = 0
 offset_top = -9.0
 offset_right = 101.0
@@ -101,51 +374,453 @@ theme_override_font_sizes/font_size = 10
 text = "SFX volume"
 horizontal_alignment = 1
 
-[node name="ControlsSection" type="VBoxContainer" parent="Sections" unique_id=1767122476]
+[node name="ControlsSection" type="VBoxContainer" parent="VBoxContainer/Sections" unique_id=1767122476]
 visible = false
 layout_mode = 2
 
-[node name="ControlsHintRow" type="HBoxContainer" parent="Sections/ControlsSection" unique_id=444444444]
+[node name="ControlsHintRow" type="HBoxContainer" parent="VBoxContainer/Sections/ControlsSection" unique_id=444444444]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ControlsHint" type="Label" parent="Sections/ControlsSection/ControlsHintRow" unique_id=780981531]
+[node name="ControlsHint" type="Label" parent="VBoxContainer/Sections/ControlsSection/ControlsHintRow" unique_id=780981531]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 10
 text = "Click action and press new key (Esc cancels)"
 
-[node name="ResetControlsButton" type="Button" parent="Sections/ControlsSection/ControlsHintRow" unique_id=555555555]
+[node name="ResetControlsButton" type="Button" parent="VBoxContainer/Sections/ControlsSection/ControlsHintRow" unique_id=555555555]
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
 text = "Reset"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Sections/ControlsSection" unique_id=318345453]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Sections/ControlsSection" unique_id=318345453]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="ControlsActions" type="HBoxContainer" parent="Sections/ControlsSection/ScrollContainer" unique_id=586782896]
+[node name="ControlsActions" type="HBoxContainer" parent="VBoxContainer/Sections/ControlsSection/ScrollContainer" unique_id=586782896]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 40
 
-[node name="P1Column" type="VBoxContainer" parent="Sections/ControlsSection/ScrollContainer/ControlsActions" unique_id=111111111]
+[node name="P1Column" type="VBoxContainer" parent="VBoxContainer/Sections/ControlsSection/ScrollContainer/ControlsActions" unique_id=111111111]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="P2Column" type="VBoxContainer" parent="Sections/ControlsSection/ScrollContainer/ControlsActions" unique_id=222222222]
+[node name="P2Column" type="VBoxContainer" parent="VBoxContainer/Sections/ControlsSection/ScrollContainer/ControlsActions" unique_id=222222222]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="BackButton" type="Button" parent="." unique_id=605325413]
+[node name="ControllerSection" type="VBoxContainer" parent="VBoxContainer/Sections" unique_id=919015556]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ControllerLayout" type="HBoxContainer" parent="VBoxContainer/Sections/ControllerSection" unique_id=739512401]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="ControllerLeftPanel" type="PanelContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerLayout" unique_id=656330331]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_wswnh")
+
+[node name="ControllerLeftColumn" type="VBoxContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerLayout/ControllerLeftPanel" unique_id=1185475554]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="ControllerCenterPanel" type="PanelContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerLayout" unique_id=1676773024]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_labj1")
+
+[node name="ControllerCenterMargin" type="MarginContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerLayout/ControllerCenterPanel" unique_id=155420119]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ControllerImage" type="TextureRect" parent="VBoxContainer/Sections/ControllerSection/ControllerLayout/ControllerCenterPanel/ControllerCenterMargin" unique_id=531410612]
+custom_minimum_size = Vector2(220, 164)
+layout_mode = 2
+texture = ExtResource("3_nh0vc")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ControllerRightPanel" type="PanelContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerLayout" unique_id=350178812]
+custom_minimum_size = Vector2(145, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_lwwgp")
+
+[node name="ControllerRightColumn" type="VBoxContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerLayout/ControllerRightPanel" unique_id=1773066040]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="ControllerHintRow" type="HBoxContainer" parent="VBoxContainer/Sections/ControllerSection" unique_id=188020245]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ControllerHint" type="Label" parent="VBoxContainer/Sections/ControllerSection/ControllerHintRow" unique_id=1638461585]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "Current controller bindings preview"
+
+[node name="ResetControllerButton" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerHintRow" unique_id=880822901]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Reset"
+
+[node name="EditControllerButton" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerHintRow" unique_id=198220001]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Edit"
+
+[node name="ControllerSubTabsRow" type="HBoxContainer" parent="VBoxContainer/Sections/ControllerSection" unique_id=199990001]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ControllerP1Subtab" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow" unique_id=199990002]
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_subtab")
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("StyleBoxFlat_subtab_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_subtab_press")
+theme_override_styles/hover = SubResource("StyleBoxFlat_subtab_hover")
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_subtabs")
+text = "  Player 1  "
+
+[node name="ControllerP2Subtab" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow" unique_id=199990003]
+custom_minimum_size = Vector2(88, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_subtab")
+theme_override_font_sizes/font_size = 9
+theme_override_styles/normal = SubResource("StyleBoxFlat_subtab_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_subtab_press")
+theme_override_styles/hover = SubResource("StyleBoxFlat_subtab_hover")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_subtabs")
+text = "  Player 2  "
+
+[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=605325413]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 10
 theme_override_fonts/font = SubResource("FontVariation_rtw2f")
 text = "  Back  "
 alignment = 0
+
+[node name="ControllerEditOverlay" type="ColorRect" parent="." unique_id=198220002]
+visible = false
+z_index = 120
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -20.0
+offset_right = 33.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.82)
+
+[node name="CenterContainer" type="CenterContainer" parent="ControllerEditOverlay" unique_id=198220003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ControllerEditOverlay/CenterContainer" unique_id=198220004]
+custom_minimum_size = Vector2(460, 250)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_bgjg7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer" unique_id=198220005]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220006]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_bgjg7")
+theme_override_font_sizes/font_size = 15
+text = "Controller Bindings"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220049]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Select action and press gamepad button/axis (Esc cancels current bind)"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220007]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 40
+
+[node name="P1Column" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns" unique_id=198220008]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="P1Header" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220009]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="P1Dot" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Header" unique_id=198220050]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.435294, 0.435294, 1)
+theme_override_font_sizes/font_size = 10
+text = "●"
+
+[node name="P1HeaderLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Header" unique_id=198220051]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Player 1"
+
+[node name="P1UpRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220010]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P1UpLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UpRow" unique_id=198220011]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Jump"
+
+[node name="P1UpButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UpRow" unique_id=198220012]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P1LeftRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220013]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P1LeftLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1LeftRow" unique_id=198220014]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Walk Left"
+
+[node name="P1LeftButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1LeftRow" unique_id=198220015]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P1RightRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220016]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P1RightLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1RightRow" unique_id=198220017]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Walk Right"
+
+[node name="P1RightButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1RightRow" unique_id=198220018]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P1DownRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220019]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P1DownLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1DownRow" unique_id=198220020]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Walk Down"
+
+[node name="P1DownButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1DownRow" unique_id=198220021]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P1UseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220022]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P1UseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UseRow" unique_id=198220023]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Dig"
+
+[node name="P1UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UseRow" unique_id=198220024]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P2Column" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns" unique_id=198220025]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="P2Header" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220026]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="P2Dot" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Header" unique_id=198220052]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.392157, 0.709804, 1, 1)
+theme_override_font_sizes/font_size = 10
+text = "●"
+
+[node name="P2HeaderLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Header" unique_id=198220053]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Player 2"
+
+[node name="P2UpRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220027]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P2UpLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UpRow" unique_id=198220028]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Jump"
+
+[node name="P2UpButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UpRow" unique_id=198220029]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P2LeftRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220030]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P2LeftLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2LeftRow" unique_id=198220031]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Walk Left"
+
+[node name="P2LeftButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2LeftRow" unique_id=198220032]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P2RightRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220033]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P2RightLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2RightRow" unique_id=198220034]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Walk Right"
+
+[node name="P2RightButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2RightRow" unique_id=198220035]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P2DownRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220036]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P2DownLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2DownRow" unique_id=198220037]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Walk Down"
+
+[node name="P2DownButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2DownRow" unique_id=198220038]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P2UseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220039]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P2UseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UseRow" unique_id=198220040]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Dig"
+
+[node name="P2UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UseRow" unique_id=198220041]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="PauseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220042]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PauseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/PauseRow" unique_id=198220043]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Pause"
+
+[node name="PauseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/PauseRow" unique_id=198220044]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="ButtonsRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220045]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow" unique_id=198220046]
+custom_minimum_size = Vector2(96, 30)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_48ojb")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_n35ux")
+text = "Confirm"
+
+[node name="CancelButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow" unique_id=198220047]
+custom_minimum_size = Vector2(96, 30)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_fb6cq")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_2ctot")
+text = "Cancel"
+
+[node name="ResetButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow" unique_id=198220048]
+custom_minimum_size = Vector2(96, 30)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_jrqig")
+theme_override_font_sizes/font_size = 10
+text = "Reset"

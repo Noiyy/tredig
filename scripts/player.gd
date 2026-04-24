@@ -39,6 +39,8 @@ var facing_left: bool = false
 var is_digging: bool = false
 var dig_anim_time: float = 0.0
 const DIG_ANIM_DURATION := 0.25
+const DIG_REPEAT_INTERVAL := 0.032
+var dig_repeat_timer: float = 0.0
 
 
 func _ready():
@@ -95,6 +97,14 @@ func _physics_process(delta: float) -> void:
 	global_position.x = clamp(global_position.x, world_left_x, world_right_x)
 
 func _process(_delta: float) -> void:
+	if Input.is_action_pressed(controls.use):
+		dig_repeat_timer -= _delta
+		if dig_repeat_timer <= 0.0:
+			_try_dig()
+			dig_repeat_timer = DIG_REPEAT_INTERVAL
+	else:
+		dig_repeat_timer = 0.0
+
 	var direction = Vector2.ZERO
 		
 	direction.x = Input.get_action_strength(controls.move_right) - Input.get_action_strength(controls.move_left)
@@ -167,40 +177,34 @@ func _process(_delta: float) -> void:
 
 	shovel_highlight.visible = true
 
-func _input(event):
-	if event.is_action_pressed(controls.use, true):
-		if not can_dig:
-			AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
-			return
-		# debuffni hrača automaticky keď mu dojde durability
-		# obnovenie je v levelup-e
-		if durability <= 0 and dur_damage_debuff == 0:
-			set_speed_multiplier(0.5)  # 50 % rýchlosti
-			set_gravity_multiplier(0.9)
-			
-			var took = clamp(damage_per_hit - 1, 1, 3)
-			if damage_per_hit == 1 && took == 1:
-				took = 0
-			dur_damage_debuff = took
-			damage_per_hit = maxi(damage_per_hit - took, 1)
-			game_manager.sync_stat_from_player(name, "damage_per_hit", damage_per_hit)
+func _try_dig() -> void:
+	if not can_dig:
+		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
+		return
+	# debuffni hrača automaticky keď mu dojde durability
+	# obnovenie je v levelup-e
+	if durability <= 0 and dur_damage_debuff == 0:
+		set_speed_multiplier(0.5)  # 50 % rýchlosti
+		set_gravity_multiplier(0.9)
 		
-		#if durability <= 0:
-			#AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
-			#return
-			
-		var anim := "dig_down"
-		if abs(last_dir.y) > abs(last_dir.x):
-			anim = "dig_up" if last_dir.y < 0 else "dig_down"
-		else:
-			anim = "dig_horizontal"
+		var took = clamp(damage_per_hit - 1, 1, 3)
+		if damage_per_hit == 1 && took == 1:
+			took = 0
+		dur_damage_debuff = took
+		damage_per_hit = maxi(damage_per_hit - took, 1)
+		game_manager.sync_stat_from_player(name, "damage_per_hit", damage_per_hit)
+	
+	var anim := "dig_down"
+	if abs(last_dir.y) > abs(last_dir.x):
+		anim = "dig_up" if last_dir.y < 0 else "dig_down"
+	else:
+		anim = "dig_horizontal"
 
-		is_digging = true
-		dig_anim_time = DIG_ANIM_DURATION
-		animated_sprite.flip_h = facing_left
-		#print("! ", anim, " is ", facing_left)
-		animated_sprite.play(anim)
-		tile_manager.damage_tile(self)
+	is_digging = true
+	dig_anim_time = DIG_ANIM_DURATION
+	animated_sprite.flip_h = facing_left
+	animated_sprite.play(anim)
+	tile_manager.damage_tile(self)
 			
 func add_exp(amount: int):
 	game_manager.add_player_exp(self, amount)

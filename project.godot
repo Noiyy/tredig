@@ -17,9 +17,9 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 config/name="Tredig"
 run/main_scene="uid://sxummovykd5b"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="uid://deywui7gry816"
-config/macos_native_icon="res://assets/images/logo-icon.icns"
-config/windows_native_icon="res://assets/images/logo-icon.ico"
+config/icon="uid://tokcwf0wdwti"
+config/macos_native_icon="res://assets/images/logo-icon2.icns"
+config/windows_native_icon="res://assets/images/logo-icon2.ico"
 
 [autoload]
 

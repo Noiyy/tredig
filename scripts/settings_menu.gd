@@ -515,7 +515,7 @@ func _add_column_spacer(column: VBoxContainer) -> void:
 	_add_expander_to(column)
 
 
-func _create_controller_action_label(action_id: StringName, label_text: String, side: int = -1) -> Label:
+func _create_controller_action_label(_action_id: StringName, label_text: String, side: int = -1) -> Label:
 	var info_label := Label.new()
 	info_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	info_label.text = "%s" % [label_text]

@@ -39,7 +39,7 @@ var facing_left: bool = false
 var is_digging: bool = false
 var dig_anim_time: float = 0.0
 const DIG_ANIM_DURATION := 0.25
-const DIG_REPEAT_INTERVAL := 0.032
+const DIG_REPEAT_INTERVAL := 0.1 # 0.032
 var dig_repeat_timer: float = 0.0
 
 
@@ -204,7 +204,9 @@ func _try_dig() -> void:
 	dig_anim_time = DIG_ANIM_DURATION
 	animated_sprite.flip_h = facing_left
 	animated_sprite.play(anim)
-	tile_manager.damage_tile(self)
+	var dig_result: int = tile_manager.damage_tile(self)
+	if dig_result == tile_manager.DigResult.BLOCKED_TOO_HARD:
+		HUD.pulse_level_blocked_shake(self)
 			
 func add_exp(amount: int):
 	game_manager.add_player_exp(self, amount)

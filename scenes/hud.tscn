@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cfpmja1pxt1dp" path="res://scenes/player_hud_panel.tscn" id="2_oo0fn"]
 [ext_resource type="PackedScene" uid="uid://b0gqgtnrdjxx" path="res://scenes/game_overlay.tscn" id="3_5ysmq"]
 [ext_resource type="Script" uid="uid://cvvrqse1kgolb" path="res://scripts/minimap.gd" id="4_0minimap"]
+[ext_resource type="Texture2D" uid="uid://bvngq2cg8mr7r" path="res://assets/images/hourglass.png" id="4_047uy"]
 [ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="5_uo2fv"]
 
 [sub_resource type="FontVariation" id="FontVariation_uo2fv"]
@@ -52,6 +53,14 @@ anchor_bottom = 1.0
 offset_left = 320.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Hourglass" type="TextureRect" parent="." unique_id=1263376700]
+offset_left = 308.0
+offset_top = 9.0
+offset_right = 320.0
+offset_bottom = 24.0
+scale = Vector2(2, 2)
+texture = ExtResource("4_047uy")
 
 [node name="TimerLabel" type="Label" parent="." unique_id=225577206]
 anchors_preset = 8

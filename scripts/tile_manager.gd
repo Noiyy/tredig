@@ -11,6 +11,12 @@ enum TerrainType {
 	DIAMOND = 6
 }
 
+enum DigResult {
+	NONE = 0,
+	DAMAGED = 1,
+	BLOCKED_TOO_HARD = 2
+}
+
 var bonus_drops = []
 
 @onready var tilemap = get_parent().get_parent().get_node("TileMapLayer") as TileMapLayer
@@ -55,7 +61,7 @@ func calculate_tile_dmg_val(current_hp, max_hp, damage_per_hit, max_states=3) ->
 	state_value = clamp(state_value, 0, state_count)
 	return max_states - state_value
 
-func damage_tile(player: CharacterBody2D):
+func damage_tile(player: CharacterBody2D) -> int:
 	var shovel_dir_node := get_parent().get_node("ShovelDirection")
 	var area := shovel_dir_node.get_node("Area2D") as Area2D
 	
@@ -71,7 +77,7 @@ func damage_tile(player: CharacterBody2D):
 	
 	if area_pos.x < min_x or area_pos.x > max_x:
 		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
-		return  # mimo svojho pásma, nič nenič
+		return DigResult.NONE  # mimo svojho pásma, nič nenič
 	
 	var tile_coords = tilemap.local_to_map(tilemap.to_local(area_pos))
 	var tileset = tilemap.tile_set
@@ -80,7 +86,7 @@ func damage_tile(player: CharacterBody2D):
 	# Skontroluj existenciu dlaždice
 	var tile_id = tilemap.get_cell_source_id(tile_coords)
 	if tile_id == -1:
-		return
+		return DigResult.NONE
 
 	# Zisti typ bloku
 	var terrain_type
@@ -96,7 +102,7 @@ func damage_tile(player: CharacterBody2D):
 		
 	if player.shovel_level + 6 < tile_level:
 		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
-		return
+		return DigResult.BLOCKED_TOO_HARD
 		
 	if tile_coords not in tile_data:
 		tile_data[tile_coords] = { "level": tile_level, "hp": tile_level }
@@ -135,6 +141,7 @@ func damage_tile(player: CharacterBody2D):
 		_try_drop_bonus(terrain_type, player)
 	else:
 		dmgTilemap.set_cell(tile_coords, tile_id, Vector2(damage_tile_value, 0))
+	return DigResult.DAMAGED
 
 func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: CharacterBody2D) -> void:
 	# smer v tile mape (−1, 0, 1) podľa dir_vec

@@ -4,26 +4,17 @@
 [ext_resource type="Script" uid="uid://p3m3ft4nwobk" path="res://scripts/progress_bar.gd" id="1_8chcm"]
 [ext_resource type="PackedScene" uid="uid://w3hm727q4u8w" path="res://scenes/bonus_hud.tscn" id="3_gpjlm"]
 [ext_resource type="Texture2D" uid="uid://wf404itj8a0v" path="res://assets/images/heart.png" id="4_3divr"]
-[ext_resource type="Texture2D" uid="uid://cm3kevhi38x1i" path="res://assets/images/shovel-icon.png" id="5_2fdoe"]
+[ext_resource type="Texture2D" uid="uid://clw1l5r8g1ktp" path="res://assets/images/player-shovel.png" id="4_efew1"]
+[ext_resource type="Texture2D" uid="uid://dal5yw8nrupan" path="res://assets/images/player-shovel-under.png" id="4_m54p7"]
+[ext_resource type="Texture2D" uid="uid://bqkbro88x458t" path="res://assets/images/player-shovel-bar.png" id="4_web7g"]
 [ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="5_ktj33"]
+[ext_resource type="Texture2D" uid="uid://cjd22cid4x56r" path="res://assets/images/player-durability-bar.png" id="6_05v3i"]
+[ext_resource type="Texture2D" uid="uid://cvwygdwapbpoq" path="res://assets/images/player-durability.png" id="6_dpdg1"]
 [ext_resource type="Texture2D" uid="uid://bvyidcwy4b7yq" path="res://assets/images/durability-icon.png" id="6_yhkk5"]
+[ext_resource type="Texture2D" uid="uid://bvtj41y5nam5m" path="res://assets/images/player-level.png" id="7_web7g"]
 [ext_resource type="PackedScene" uid="uid://d35r6nnmcbsec" path="res://scenes/red_vignette.tscn" id="7_yhkk5"]
 [ext_resource type="PackedScene" uid="uid://dyiv3up4fdnag" path="res://scenes/black_vignette.tscn" id="8_blkvg"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8chcm"]
-bg_color = Color(0.6, 0.6, 0.6, 0.5019608)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3lnvr"]
-bg_color = Color(0.65882355, 0.7921569, 0.34509805, 0.63529414)
-
-[sub_resource type="LabelSettings" id="LabelSettings_2fdoe"]
-font_size = 14
-outline_size = 2
-outline_color = Color(0, 0, 0, 1)
+[ext_resource type="Texture2D" uid="uid://dg7owir4jjd5" path="res://assets/images/player-durability-under.png" id="8_t3uht"]
 
 [sub_resource type="FontVariation" id="FontVariation_dpdg1"]
 base_font = ExtResource("5_ktj33")
@@ -37,19 +28,16 @@ font_size = 20
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gpjlm"]
-bg_color = Color(0, 0, 0, 0.25882354)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="FontVariation" id="FontVariation_n1k6a"]
+variation_opentype = {
+1869640570: 14,
+2003265652: 600
+}
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3divr"]
-bg_color = Color(0, 0.5573334, 0.88, 0.3764706)
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+[sub_resource type="LabelSettings" id="LabelSettings_2fdoe"]
+font_size = 14
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="FontVariation" id="FontVariation_le0by"]
 base_font = ExtResource("5_ktj33")
@@ -80,54 +68,80 @@ layout_mode = 0
 [node name="BlackVignette" parent="." unique_id=279260030 instance=ExtResource("8_blkvg")]
 layout_mode = 0
 
-[node name="ExpProgressBar" type="ProgressBar" parent="." unique_id=332155106]
+[node name="PlayerHUD" type="Control" parent="." unique_id=394602975]
+anchors_preset = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 174.0
+offset_bottom = 43.0
+
+[node name="ExpProgressBar" type="TextureProgressBar" parent="PlayerHUD" unique_id=964651858]
 layout_mode = 0
-offset_left = 36.0
-offset_top = 4.0
-offset_right = 290.0
-offset_bottom = 20.0
-theme_override_styles/background = SubResource("StyleBoxFlat_8chcm")
-theme_override_styles/fill = SubResource("StyleBoxFlat_3lnvr")
-show_percentage = false
+offset_right = 172.0
+offset_bottom = 41.0
+texture_under = ExtResource("4_m54p7")
+texture_over = ExtResource("4_efew1")
+texture_progress = ExtResource("4_web7g")
+texture_progress_offset = Vector2(38, 4)
+tint_under = Color(0.6, 0.6, 0.6, 0.5019608)
+tint_progress = Color(0.65882355, 0.7921569, 0.34509805, 0.63529414)
 script = ExtResource("1_8chcm")
 
-[node name="ModifierLabel" type="Label" parent="." unique_id=534748236]
-visible = false
+[node name="DurabilityBar" type="TextureProgressBar" parent="PlayerHUD" unique_id=300239829]
 layout_mode = 0
-offset_left = 22.0
-offset_top = 15.0
-offset_right = 42.0
-offset_bottom = 35.0
-text = "+1"
-label_settings = SubResource("LabelSettings_2fdoe")
+offset_right = 172.0
+offset_bottom = 41.0
+value = 100.0
+texture_under = ExtResource("8_t3uht")
+texture_over = ExtResource("6_dpdg1")
+texture_progress = ExtResource("6_05v3i")
+texture_progress_offset = Vector2(112, 33)
+tint_under = Color(0, 0, 0, 0.25882354)
+tint_progress = Color(0, 0.5573334, 0.88, 0.3764706)
+script = ExtResource("1_8chcm")
+
+[node name="LevelIcon" type="TextureRect" parent="PlayerHUD" unique_id=706283836]
+layout_mode = 0
+offset_right = 172.0
+offset_bottom = 41.0
+texture = ExtResource("7_web7g")
 
 [node name="LevelLabel" type="Label" parent="." unique_id=103761948]
 layout_mode = 0
-offset_top = -3.0
-offset_right = 31.0
-offset_bottom = 25.0
+offset_left = -3.0
+offset_top = 10.0
+offset_right = 28.0
+offset_bottom = 38.0
 theme_override_fonts/font = SubResource("FontVariation_dpdg1")
 text = "1"
 label_settings = SubResource("LabelSettings_3divr")
 horizontal_alignment = 2
 
-[node name="DurabilityBar" type="ProgressBar" parent="." unique_id=1426120112]
+[node name="ModifierLabel" type="Label" parent="." unique_id=534748236]
+visible = false
 layout_mode = 0
-offset_left = 175.0
-offset_top = 23.0
-offset_right = 290.0
-offset_bottom = 31.0
-theme_override_styles/background = SubResource("StyleBoxFlat_gpjlm")
-theme_override_styles/fill = SubResource("StyleBoxFlat_3divr")
-show_percentage = false
-script = ExtResource("1_8chcm")
+offset_left = 20.0
+offset_right = 40.0
+offset_bottom = 20.0
+theme_override_fonts/font = SubResource("FontVariation_n1k6a")
+text = "+1"
+label_settings = SubResource("LabelSettings_2fdoe")
+
+[node name="DurabilityIcon" type="TextureRect" parent="." unique_id=1793519871]
+layout_mode = 0
+offset_left = 98.000015
+offset_top = 33.0
+offset_right = 138.00003
+offset_bottom = 73.0
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("6_yhkk5")
 
 [node name="HPLabelPulse" type="Control" parent="." unique_id=278918596]
 anchors_preset = 0
 offset_left = 9.0
-offset_top = 35.0
+offset_top = 44.0
 offset_right = 51.0
-offset_bottom = 52.0
+offset_bottom = 61.0
 mouse_filter = 2
 
 [node name="HPLabel" type="Label" parent="HPLabelPulse" unique_id=984776373]
@@ -163,21 +177,3 @@ layout_mode = 2
 visible = false
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
-
-[node name="ShovelIcon" type="TextureRect" parent="." unique_id=1676304791]
-layout_mode = 0
-offset_left = 292.0
-offset_top = 3.0
-offset_right = 332.0
-offset_bottom = 43.0
-scale = Vector2(0.45, 0.45)
-texture = ExtResource("5_2fdoe")
-
-[node name="DurabilityIcon" type="TextureRect" parent="." unique_id=1793519871]
-layout_mode = 0
-offset_left = 160.00002
-offset_top = 22.0
-offset_right = 200.00002
-offset_bottom = 62.0
-scale = Vector2(0.3, 0.3)
-texture = ExtResource("6_yhkk5")

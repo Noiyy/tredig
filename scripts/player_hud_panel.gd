@@ -3,14 +3,16 @@ extends Control
 
 @export var flipped: bool = false
 
-@onready var exp_bar: ProgressBar  = $ExpProgressBar
+@onready var exp_bar: TextureProgressBar  = $PlayerHUD/ExpProgressBar
 @onready var level_label: Label    = $LevelLabel
 @onready var modifier_label: Label = $ModifierLabel
-@onready var dur_bar: ProgressBar  = $DurabilityBar
+@onready var dur_bar: TextureProgressBar  = $PlayerHUD/DurabilityBar
 @onready var hp_pulse_host: Control  = $HPLabelPulse
 @onready var hp_label: Label       = $HPLabelPulse/HPLabel
 @onready var bonus1: Control       = $HBoxContainer/Bonus1
 @onready var bonus2: Control       = $HBoxContainer/Bonus2
+@onready var bonus1_label: Label   = $HBoxContainer/Bonus1/Label
+@onready var bonus2_label: Label   = $HBoxContainer/Bonus2/Label
 
 @onready var red_vignette: Control = $RedVignette
 @onready var vignette_rect: ColorRect = $RedVignette/ColorRect
@@ -25,14 +27,21 @@ var durability_vignette_tween: Tween
 var hp_pulse_tween: Tween
 
 var _dur_bar_bg_template: StyleBoxFlat
+var _dur_under_tint_normal: Color
 var _dur_bar_base_pos: Vector2
 var _dur_empty_active: bool = false
 var _dur_shake_tween: Tween
 var _dur_shake_running: bool = false
+var _level_label_base_pos: Vector2
+var _level_shake_tween: Tween
+var _level_shake_running: bool = false
 
 const DUR_EMPTY_BG := Color("#660000E1")
+const DUR_EMPTY_PROGRESS_RED := Color(1.0, 0.0, 0.0, 1.0)
 const DUR_SHAKE_AMP_PX := 3.5
 const DUR_SHAKE_HALF_SEC := 0.055
+const LEVEL_SHAKE_AMP_PX := 3.5
+const LEVEL_SHAKE_HALF_SEC := 0.055
 
 var _exp_shine_host: Control
 var _exp_shine_rect: ColorRect
@@ -83,12 +92,14 @@ func _ready() -> void:
 		black_vignette_material = black_vignette_rect.material as ShaderMaterial
 	_apply_flip()
 	_cache_durability_bar_style()
+	_dur_under_tint_normal = dur_bar.tint_under
 	_dur_bar_base_pos = dur_bar.position
+	_level_label_base_pos = level_label.position
 	call_deferred("_setup_exp_level_up_shine")
 
 
 func _cache_durability_bar_style() -> void:
-	var sb: StyleBox = dur_bar.get_theme_stylebox("background", "ProgressBar")
+	var sb: StyleBox = dur_bar.get_theme_stylebox("background", "TextureProgressBar")
 	if sb is StyleBoxFlat:
 		_dur_bar_bg_template = sb.duplicate() as StyleBoxFlat
 
@@ -122,11 +133,14 @@ func _apply_durability_empty_visual() -> void:
 		var s := _dur_bar_bg_template.duplicate() as StyleBoxFlat
 		s.bg_color = DUR_EMPTY_BG
 		dur_bar.add_theme_stylebox_override("background", s)
+	var a := dur_bar.tint_under.a
+	dur_bar.tint_under = Color(DUR_EMPTY_PROGRESS_RED.r, DUR_EMPTY_PROGRESS_RED.g, DUR_EMPTY_PROGRESS_RED.b, a)
 
 
 func _restore_durability_visual() -> void:
 	if _dur_bar_bg_template:
 		dur_bar.add_theme_stylebox_override("background", _dur_bar_bg_template.duplicate() as StyleBoxFlat)
+	dur_bar.tint_under = _dur_under_tint_normal
 
 
 func _start_durability_shake_sequence() -> void:
@@ -162,6 +176,35 @@ func _stop_durability_shake() -> void:
 	dur_bar.position = _dur_bar_base_pos
 
 
+## Pri pokuse o kopanie príliš tvrdého bloku (červený highlight) potras level labelom.
+func pulse_level_blocked_shake() -> void:
+	_start_level_blocked_shake_sequence()
+
+
+func _start_level_blocked_shake_sequence() -> void:
+	if _level_shake_running:
+		return
+	_level_shake_running = true
+	if _level_shake_tween and _level_shake_tween.is_valid():
+		_level_shake_tween.kill()
+	level_label.position = _level_label_base_pos
+	var a := LEVEL_SHAKE_AMP_PX
+	var t := LEVEL_SHAKE_HALF_SEC
+	_level_shake_tween = create_tween()
+	_level_shake_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	for _i in 3:
+		_level_shake_tween.tween_property(level_label, "position", _level_label_base_pos + Vector2(a, 0), t)
+		_level_shake_tween.tween_property(level_label, "position", _level_label_base_pos + Vector2(-a, 0), t)
+	_level_shake_tween.tween_property(level_label, "position", _level_label_base_pos, t)
+	_level_shake_tween.finished.connect(_on_level_blocked_shake_finished, CONNECT_ONE_SHOT)
+
+
+func _on_level_blocked_shake_finished() -> void:
+	_level_shake_tween = null
+	_level_shake_running = false
+	level_label.position = _level_label_base_pos
+
+
 func _setup_exp_level_up_shine() -> void:
 	if _exp_shine_host:
 		return
@@ -171,11 +214,9 @@ func _setup_exp_level_up_shine() -> void:
 	_exp_shine_host.clip_contents = true
 	_exp_shine_host.visible = false
 	exp_bar.add_child(_exp_shine_host)
-	_exp_shine_host.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_exp_shine_host.offset_left = 0.0
-	_exp_shine_host.offset_top = 0.0
-	_exp_shine_host.offset_right = 0.0
-	_exp_shine_host.offset_bottom = 0.0
+	_exp_shine_host.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	_exp_shine_host.position = Vector2(0.0, exp_bar.size.y * 0.25)
+	_exp_shine_host.size = Vector2(exp_bar.size.x, exp_bar.size.y * 0.5)
 
 	_exp_shine_rect = ColorRect.new()
 	_exp_shine_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -295,6 +336,10 @@ func _apply_flip() -> void:
 		bonus1.position.x += bonus1.size.x
 		bonus2.scale.x = -1
 		bonus2.position.x += bonus2.size.x
+		bonus1_label.scale.x = -1
+		bonus1_label.position.x += bonus1_label.size.x
+		bonus2_label.scale.x = -1
+		bonus2_label.position.x += bonus2_label.size.x
 		
 func show_damage_vignette():
 	if vignette_tween and vignette_tween.is_valid():

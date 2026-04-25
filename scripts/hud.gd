@@ -7,15 +7,15 @@ var elapsed_time: float = 0.0
 @onready var left_p_hud: PlayerHUDPanel      = $LeftPlayerHUD
 @onready var right_p_hud: PlayerHUDPanel    = $RightPlayerHUD
 
-@onready var left_bar: ProgressBar         = $LeftPlayerHUD/ExpProgressBar
+@onready var left_bar: TextureProgressBar         = $LeftPlayerHUD/PlayerHUD/ExpProgressBar
 @onready var left_label: Label             = $LeftPlayerHUD/LevelLabel
 @onready var left_modifier_label: Label    = $LeftPlayerHUD/ModifierLabel
-@onready var right_bar: ProgressBar        = $RightPlayerHUD/ExpProgressBar
+@onready var right_bar: TextureProgressBar        = $RightPlayerHUD/PlayerHUD/ExpProgressBar
 @onready var right_label: Label            = $RightPlayerHUD/LevelLabel
 @onready var right_modifier_label: Label   = $RightPlayerHUD/ModifierLabel
 @onready var timer_label: Label            = $TimerLabel
-@onready var left_dur_bar: ProgressBar     = $LeftPlayerHUD/DurabilityBar
-@onready var right_dur_bar: ProgressBar    = $RightPlayerHUD/DurabilityBar
+@onready var left_dur_bar: TextureProgressBar     = $LeftPlayerHUD/PlayerHUD/DurabilityBar
+@onready var right_dur_bar: TextureProgressBar    = $RightPlayerHUD/PlayerHUD/DurabilityBar
 @onready var left_hp_label: Label          = $LeftPlayerHUD/HPLabelPulse/HPLabel
 @onready var right_hp_label: Label         = $RightPlayerHUD/HPLabelPulse/HPLabel
 @onready var left_go                       = $LeftGameOverOverlay
@@ -211,6 +211,11 @@ func update_player_durability(player: CharacterBody2D, current: int, max_value: 
 func pulse_durability_empty_shake(player: CharacterBody2D) -> void:
 	var p_hud := left_p_hud if player.name == "PlayerLeft" else right_p_hud
 	p_hud.pulse_durability_empty_shake()
+
+
+func pulse_level_blocked_shake(player: CharacterBody2D) -> void:
+	var p_hud := left_p_hud if player.name == "PlayerLeft" else right_p_hud
+	p_hud.pulse_level_blocked_shake()
 
 func update_player_hp(player: CharacterBody2D, current: int, _max_hp: int, from_lava: bool = false) -> void:
 	var label := left_hp_label if player.name == "PlayerLeft" else right_hp_label

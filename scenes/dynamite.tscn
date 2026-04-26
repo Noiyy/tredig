@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cx76xlfp860rk"]
+
+[ext_resource type="Script" path="res://scripts/dynamite.gd" id="1_dynsc"]
+[ext_resource type="Texture2D" uid="uid://cr1hy88e47q88" path="res://assets/images/dynamite.png" id="2_dynpng"]
+
+[node name="Dynamite" type="Node2D"]
+script = ExtResource("1_dynsc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_dynpng")
+scale = Vector2(0.5, 0.5)
+
+[node name="FuseTimer" type="Timer" parent="."]
+one_shot = true

@@ -5,6 +5,8 @@ var JUMP_VELOCITY = -200.0
 
 var world_left_x = 0
 var world_right_x = 0
+var dig_min_x: float = 0.0
+var dig_max_x: float = 318.0
 
 @export var controls: PlayerControls = null
 @export var tilemap: TileMapLayer
@@ -14,6 +16,19 @@ var world_right_x = 0
 @export var experience = 0
 @export var hp = 100
 @export var durability = 1000
+
+# Debug/testing: optional preloaded skills in HUD slots (applied on _ready).
+@export var test_apply_skills_on_ready: bool = false
+@export var test_slot1_skill: int = SkillRegistry.SkillType.NONE
+@export_range(1, 3, 1) var test_slot1_level: int = 1
+@export var test_slot1_uses: int = -1
+@export var test_slot2_skill: int = SkillRegistry.SkillType.NONE
+@export_range(1, 3, 1) var test_slot2_level: int = 1
+@export var test_slot2_uses: int = -1
+@export var test_slot3_skill: int = SkillRegistry.SkillType.NONE
+@export_range(1, 3, 1) var test_slot3_level: int = 1
+@export var test_slot3_uses: int = -1
+
 var is_dead = false
 var can_dig: bool = true
 var base_speed: float = SPEED
@@ -42,6 +57,11 @@ const DIG_ANIM_DURATION := 0.25
 const DIG_REPEAT_INTERVAL := 0.1 # 0.032
 var dig_repeat_timer: float = 0.0
 
+# Set true by SkillCardPick when it consumes a `controls.use` press to confirm a card.
+# Causes the dig logic in _process to skip just this frame so a single tap doesn't
+# both confirm a card and fire a dig.
+var pick_consumed_use_this_frame: bool = false
+
 
 func _ready():
 	if name == "PlayerLeft":
@@ -58,8 +78,12 @@ func _ready():
 	var x_boundaries = game_manager.get_world_x_boundaries();
 	world_left_x = x_boundaries[0];
 	world_right_x = x_boundaries[1];
+	if name == "PlayerRight":
+		dig_min_x = 322.0
+		dig_max_x = 640.0
 	
 	HUD = get_tree().root.get_node("Main/HUD")
+	_apply_test_skill_loadout()
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -97,13 +121,24 @@ func _physics_process(delta: float) -> void:
 	global_position.x = clamp(global_position.x, world_left_x, world_right_x)
 
 func _process(_delta: float) -> void:
-	if Input.is_action_pressed(controls.use):
+	if pick_consumed_use_this_frame:
+		dig_repeat_timer = DIG_REPEAT_INTERVAL
+		pick_consumed_use_this_frame = false
+	elif Input.is_action_pressed(controls.use):
 		dig_repeat_timer -= _delta
 		if dig_repeat_timer <= 0.0:
 			_try_dig()
 			dig_repeat_timer = DIG_REPEAT_INTERVAL
 	else:
 		dig_repeat_timer = 0.0
+
+	if not is_dead and game_manager != null:
+		if Input.is_action_just_pressed(controls.skill1):
+			game_manager.use_skill(self, 0)
+		if Input.is_action_just_pressed(controls.skill2):
+			game_manager.use_skill(self, 1)
+		if Input.is_action_just_pressed(controls.skill3):
+			game_manager.use_skill(self, 2)
 
 	var direction = Vector2.ZERO
 		
@@ -114,11 +149,8 @@ func _process(_delta: float) -> void:
 		last_dir = direction.normalized()
 		shovel_direction.rotation = last_dir.angle()
 
-	var min_x := 0.0
-	var max_x := 318.0
-	if self.name == "PlayerRight":
-		min_x = 322.0
-		max_x = 640.0
+	var min_x := dig_min_x
+	var max_x := dig_max_x
 
 	var area_pos = shovel_area.global_position
 	if area_pos.x < global_position.x:
@@ -240,47 +272,54 @@ func _update_status_indicators() -> void:
 	buff_indicator.visible = bonuses.has(bt.SSHOVEL) or bonuses.has(bt.SHARPNESS)
 	debuff_indicator.visible = bonuses.has(bt.DULLNESS) or bonuses.has(bt.OVERLOAD)
 
-func apply_sabotage_effect() -> void:
+func apply_sabotage_effect(radius: int, hp_bump: int = 2) -> void:
 	AudioManager.play("res://assets/sounds/sabotage.wav")
 	var t := get_tree().create_timer(1.0)
 	t.timeout.connect(func():
 		AudioManager.play("res://assets/sounds/laugh.ogg", "SFX", true, true)
 	)
-	
+
 	var tile_size = game_manager.get_tile_size()
 	var tileset = tile_manager.tilemap.tile_set
-	
-	var start_x := 0 if name == "PlayerLeft" else int(320.0 / float(tile_size))
-	var start_y = int(global_position.y / float(tile_size)) + 1
-	
-	for y_offset in 3:
-		var target_y = start_y + y_offset
-		# Sekvenčne spracuj bloky s oneskorenim
-		for x_offset in 20:
-			_apply_sabotage_to_tile(Vector2i(start_x + x_offset, target_y), tileset)
-			await get_tree().create_timer(0.0075).timeout
 
-func _apply_sabotage_to_tile(target_coords: Vector2i, tileset: TileSet) -> void:
+	var center := Vector2i(
+		int(global_position.x / float(tile_size)),
+		int(global_position.y / float(tile_size))
+	)
+
+	var coords: Array[Vector2i] = []
+	for dy in range(-radius, radius + 1):
+		for dx in range(-radius, radius + 1):
+			if dx * dx + dy * dy <= radius * radius:
+				coords.append(center + Vector2i(dx, dy))
+	coords.shuffle()
+
+	for c in coords:
+		_apply_sabotage_to_tile(c, tileset, hp_bump)
+		await get_tree().create_timer(0.0005).timeout
+
+func _apply_sabotage_to_tile(target_coords: Vector2i, tileset: TileSet, hp_bump: int = 1) -> void:
 	var tile_data_res: TileData = tile_manager.tilemap.get_cell_tile_data(target_coords)
 	var tile_id = tile_manager.tilemap.get_cell_source_id(target_coords)
 	if tile_id == -1:
 		return
-	
+
 	var tile_level := 4
 	if tileset.has_custom_data_layer_by_name("hardness") and tile_data_res:
 		var hardness_layer = tileset.get_custom_data_layer_by_name("hardness")
 		tile_level += int(tile_data_res.get_custom_data_by_layer_id(hardness_layer))
-	
+
 	if target_coords not in tile_manager.tile_data:
 		tile_manager.tile_data[target_coords] = {"level": tile_level, "hp": tile_level}
-	
+
 	var td: Dictionary = tile_manager.tile_data[target_coords]
-	td.hp += 1
-	td.level += 1
-	
+	td.hp += hp_bump
+	td.level += hp_bump
+
 	var damage_val = tile_manager.calculate_tile_dmg_val(td.hp, tile_level, damage_per_hit)
 	tile_manager.dmgTilemap.set_cell(target_coords, tile_id, Vector2(damage_val, 0))
-	tile_manager.effectTilemap.set_cell(target_coords, tile_id, Vector2i(1, 0))
+	var atlas_coords: Vector2i = tile_manager.tilemap.get_cell_atlas_coords(target_coords)
+	tile_manager.effectTilemap.set_cell(target_coords, tile_id, atlas_coords)
 
 
 func on_level_up():
@@ -320,3 +359,13 @@ func set_speed_multiplier(mult: float) -> void:
 
 func set_gravity_multiplier(mult: float) -> void:
 	JUMP_VELOCITY = base_jump_velocity * mult
+
+
+func _apply_test_skill_loadout() -> void:
+	if not test_apply_skills_on_ready:
+		return
+	if game_manager == null:
+		return
+	game_manager.set_skill_slot_for_testing(self, 0, test_slot1_skill, test_slot1_level, test_slot1_uses)
+	game_manager.set_skill_slot_for_testing(self, 1, test_slot2_skill, test_slot2_level, test_slot2_uses)
+	game_manager.set_skill_slot_for_testing(self, 2, test_slot3_skill, test_slot3_level, test_slot3_uses)

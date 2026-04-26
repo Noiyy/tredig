@@ -1,6 +1,7 @@
 extends Node2D
 
 signal destroyed_tile
+const SABOTAGE_STONE_SHADER := preload("res://scripts/sabotage_stone.gdshader")
 
 enum TerrainType {
 	NORMAL = 1,
@@ -30,15 +31,27 @@ var game_manager
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	game_manager = get_tree().root.get_node("Main/GameManager")
+	_apply_sabotage_overlay_shader()
 	
 	bonus_drops = [
 		{ "type": game_manager.BonusType.SHARPNESS },
 		{ "type": game_manager.BonusType.SSHOVEL },
-		{ "type": game_manager.BonusType.SABOTAGE},
 		{ "type": game_manager.BonusType.DULLNESS },
 		{ "type": game_manager.BonusType.OVERLOAD },
 		{ "type": game_manager.BonusType.NONE }
 	]
+
+
+func _apply_sabotage_overlay_shader() -> void:
+	if effectTilemap == null:
+		return
+	# Overlay must use the same tileset as the gameplay tilemap so copied
+	# source/atlas coords at the same cell position render correctly.
+	if tilemap != null and tilemap.tile_set != null and effectTilemap.tile_set != tilemap.tile_set:
+		effectTilemap.tile_set = tilemap.tile_set
+	var mat := ShaderMaterial.new()
+	mat.shader = SABOTAGE_STONE_SHADER
+	effectTilemap.material = mat
 
 func calculate_tile_dmg_val(current_hp, max_hp, damage_per_hit, max_states=3) -> int:
 	 # Ak je damage per hit väčšie alebo rovné max HP, tak sa stav mení o väčšiu hodnotu, ináč štandardne
@@ -68,12 +81,8 @@ func damage_tile(player: CharacterBody2D) -> int:
 	var area_pos = area.global_position
 	var dir_vec := (area_pos - player.global_position).normalized()
 	
-	# hranice subviewportun pre daného hráča
-	var min_x := 0.0
-	var max_x := 318.0
-	if player.name == "PlayerRight":
-		min_x = 322.0
-		max_x = 640.0
+	var min_x: float = player.dig_min_x
+	var max_x: float = player.dig_max_x
 	
 	if area_pos.x < min_x or area_pos.x > max_x:
 		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
@@ -249,9 +258,8 @@ func pick_bonus(list: Array, terrain_type: TerrainType):
 	if list.is_empty():
 		return game_manager.BonusType.NONE
 
-	var buffs: Array = [ game_manager.BonusType.SHARPNESS, game_manager.BonusType.SSHOVEL,
-		game_manager.BonusType.SABOTAGE ]
-	var debuffs: Array = [ game_manager.BonusType.DULLNESS, 
+	var buffs: Array = [ game_manager.BonusType.SHARPNESS, game_manager.BonusType.SSHOVEL ]
+	var debuffs: Array = [ game_manager.BonusType.DULLNESS,
 		game_manager.BonusType.OVERLOAD ]
 	
    # 67% buff, 33% debuff

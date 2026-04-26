@@ -6,3 +6,6 @@ class_name PlayerControls extends Resource
 @export var move_up := "p1_up"
 @export var move_down := "p1_down"
 @export var use := "p1_use"
+@export var skill1 := "p1_skill1"
+@export var skill2 := "p1_skill2"
+@export var skill3 := "p1_skill3"

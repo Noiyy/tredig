@@ -16,7 +16,10 @@ const CONTROLLER_BIND_ACTIONS := [
 	{"id": &"right", "label": "Walk Right", "side": -1},
 	{"id": &"down", "label": "Walk Down", "side": -1},
 	{"id": &"ui_cancel", "label": "Pause", "side": 1},
-	{"id": &"use", "label": "Dig", "side": 1}
+	{"id": &"use", "label": "Dig", "side": 1},
+	{"id": &"skill1", "label": "Skill 1", "side": 1},
+	{"id": &"skill2", "label": "Skill 2", "side": 1},
+	{"id": &"skill3", "label": "Skill 3", "side": 1}
 ]
 const CONTROLLER_STATIC_LABELS := [
 	{"id": &"move_left", "label": "Move", "side": 1, "anchor": "LStick"},
@@ -28,11 +31,17 @@ const CONTROL_ACTIONS := [
 	{"action": "p1_up", "label": "Player 1 Up"},
 	{"action": "p1_down", "label": "Player 1 Down"},
 	{"action": "p1_use", "label": "Player 1 Use"},
+	{"action": "p1_skill1", "label": "Player 1 Skill 1"},
+	{"action": "p1_skill2", "label": "Player 1 Skill 2"},
+	{"action": "p1_skill3", "label": "Player 1 Skill 3"},
 	{"action": "p2_left", "label": "Player 2 Left"},
 	{"action": "p2_right", "label": "Player 2 Right"},
 	{"action": "p2_up", "label": "Player 2 Up"},
 	{"action": "p2_down", "label": "Player 2 Down"},
 	{"action": "p2_use", "label": "Player 2 Use"},
+	{"action": "p2_skill1", "label": "Player 2 Skill 1"},
+	{"action": "p2_skill2", "label": "Player 2 Skill 2"},
+	{"action": "p2_skill3", "label": "Player 2 Skill 3"},
 	{"action": "ui_cancel", "label": "Pause"},
 ]
 
@@ -76,6 +85,12 @@ const CONTROL_ACTIONS := [
 @onready var controller_overlay_p2_right_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2RightRow/P2RightButton
 @onready var controller_overlay_p2_down_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2DownRow/P2DownButton
 @onready var controller_overlay_p2_use_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UseRow/P2UseButton
+@onready var controller_overlay_p1_skill1_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill1Row/P1Skill1Button
+@onready var controller_overlay_p1_skill2_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill2Row/P1Skill2Button
+@onready var controller_overlay_p1_skill3_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill3Row/P1Skill3Button
+@onready var controller_overlay_p2_skill1_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill1Row/P2Skill1Button
+@onready var controller_overlay_p2_skill2_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill2Row/P2Skill2Button
+@onready var controller_overlay_p2_skill3_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill3Row/P2Skill3Button
 @onready var controller_overlay_pause_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/PauseRow/PauseButton
 @onready var controller_overlay_confirm_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow/ConfirmButton
 @onready var controller_overlay_cancel_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow/CancelButton
@@ -128,11 +143,17 @@ func _ready() -> void:
 		"p1_right": controller_overlay_p1_right_button,
 		"p1_down": controller_overlay_p1_down_button,
 		"p1_use": controller_overlay_p1_use_button,
+		"p1_skill1": controller_overlay_p1_skill1_button,
+		"p1_skill2": controller_overlay_p1_skill2_button,
+		"p1_skill3": controller_overlay_p1_skill3_button,
 		"p2_up": controller_overlay_p2_up_button,
 		"p2_left": controller_overlay_p2_left_button,
 		"p2_right": controller_overlay_p2_right_button,
 		"p2_down": controller_overlay_p2_down_button,
 		"p2_use": controller_overlay_p2_use_button,
+		"p2_skill1": controller_overlay_p2_skill1_button,
+		"p2_skill2": controller_overlay_p2_skill2_button,
+		"p2_skill3": controller_overlay_p2_skill3_button,
 		"ui_cancel": controller_overlay_pause_button
 	}
 	for action_name in _overlay_action_buttons.keys():
@@ -1069,7 +1090,13 @@ func _setup_controller_overlay_focus_neighbors() -> void:
 	controller_overlay_p1_down_button.focus_neighbor_top = controller_overlay_p1_right_button.get_path()
 	controller_overlay_p1_down_button.focus_neighbor_bottom = controller_overlay_p1_use_button.get_path()
 	controller_overlay_p1_use_button.focus_neighbor_top = controller_overlay_p1_down_button.get_path()
-	controller_overlay_p1_use_button.focus_neighbor_bottom = controller_overlay_pause_button.get_path()
+	controller_overlay_p1_use_button.focus_neighbor_bottom = controller_overlay_p1_skill1_button.get_path()
+	controller_overlay_p1_skill1_button.focus_neighbor_top = controller_overlay_p1_use_button.get_path()
+	controller_overlay_p1_skill1_button.focus_neighbor_bottom = controller_overlay_p1_skill2_button.get_path()
+	controller_overlay_p1_skill2_button.focus_neighbor_top = controller_overlay_p1_skill1_button.get_path()
+	controller_overlay_p1_skill2_button.focus_neighbor_bottom = controller_overlay_p1_skill3_button.get_path()
+	controller_overlay_p1_skill3_button.focus_neighbor_top = controller_overlay_p1_skill2_button.get_path()
+	controller_overlay_p1_skill3_button.focus_neighbor_bottom = controller_overlay_pause_button.get_path()
 
 	controller_overlay_p2_up_button.focus_neighbor_bottom = controller_overlay_p2_left_button.get_path()
 	controller_overlay_p2_left_button.focus_neighbor_top = controller_overlay_p2_up_button.get_path()
@@ -1079,21 +1106,33 @@ func _setup_controller_overlay_focus_neighbors() -> void:
 	controller_overlay_p2_down_button.focus_neighbor_top = controller_overlay_p2_right_button.get_path()
 	controller_overlay_p2_down_button.focus_neighbor_bottom = controller_overlay_p2_use_button.get_path()
 	controller_overlay_p2_use_button.focus_neighbor_top = controller_overlay_p2_down_button.get_path()
-	controller_overlay_p2_use_button.focus_neighbor_bottom = controller_overlay_pause_button.get_path()
+	controller_overlay_p2_use_button.focus_neighbor_bottom = controller_overlay_p2_skill1_button.get_path()
+	controller_overlay_p2_skill1_button.focus_neighbor_top = controller_overlay_p2_use_button.get_path()
+	controller_overlay_p2_skill1_button.focus_neighbor_bottom = controller_overlay_p2_skill2_button.get_path()
+	controller_overlay_p2_skill2_button.focus_neighbor_top = controller_overlay_p2_skill1_button.get_path()
+	controller_overlay_p2_skill2_button.focus_neighbor_bottom = controller_overlay_p2_skill3_button.get_path()
+	controller_overlay_p2_skill3_button.focus_neighbor_top = controller_overlay_p2_skill2_button.get_path()
+	controller_overlay_p2_skill3_button.focus_neighbor_bottom = controller_overlay_pause_button.get_path()
 
 	controller_overlay_p1_up_button.focus_neighbor_right = controller_overlay_p2_up_button.get_path()
 	controller_overlay_p1_left_button.focus_neighbor_right = controller_overlay_p2_left_button.get_path()
 	controller_overlay_p1_right_button.focus_neighbor_right = controller_overlay_p2_right_button.get_path()
 	controller_overlay_p1_down_button.focus_neighbor_right = controller_overlay_p2_down_button.get_path()
 	controller_overlay_p1_use_button.focus_neighbor_right = controller_overlay_p2_use_button.get_path()
+	controller_overlay_p1_skill1_button.focus_neighbor_right = controller_overlay_p2_skill1_button.get_path()
+	controller_overlay_p1_skill2_button.focus_neighbor_right = controller_overlay_p2_skill2_button.get_path()
+	controller_overlay_p1_skill3_button.focus_neighbor_right = controller_overlay_p2_skill3_button.get_path()
 
 	controller_overlay_p2_up_button.focus_neighbor_left = controller_overlay_p1_up_button.get_path()
 	controller_overlay_p2_left_button.focus_neighbor_left = controller_overlay_p1_left_button.get_path()
 	controller_overlay_p2_right_button.focus_neighbor_left = controller_overlay_p1_right_button.get_path()
 	controller_overlay_p2_down_button.focus_neighbor_left = controller_overlay_p1_down_button.get_path()
 	controller_overlay_p2_use_button.focus_neighbor_left = controller_overlay_p1_use_button.get_path()
+	controller_overlay_p2_skill1_button.focus_neighbor_left = controller_overlay_p1_skill1_button.get_path()
+	controller_overlay_p2_skill2_button.focus_neighbor_left = controller_overlay_p1_skill2_button.get_path()
+	controller_overlay_p2_skill3_button.focus_neighbor_left = controller_overlay_p1_skill3_button.get_path()
 
-	controller_overlay_pause_button.focus_neighbor_top = controller_overlay_p1_use_button.get_path()
+	controller_overlay_pause_button.focus_neighbor_top = controller_overlay_p1_skill3_button.get_path()
 	controller_overlay_pause_button.focus_neighbor_bottom = controller_overlay_confirm_button.get_path()
 
 	controller_overlay_confirm_button.focus_neighbor_top = controller_overlay_pause_button.get_path()
@@ -1187,6 +1226,13 @@ func _get_anchor_node_for_action(action_id: StringName) -> Control:
 		if ad != null:
 			return ad
 		return _get_default_anchor_node(&"use")
+	if action_id == &"skill1" or action_id == &"skill2" or action_id == &"skill3":
+		var prefix := "p1_" if _controller_preview_slot == 1 else "p2_"
+		var sk := prefix + String(action_id)
+		var sa := _get_first_joypad_anchor_for_map_action(sk)
+		if sa != null:
+			return sa
+		return _get_default_anchor_node(action_id)
 	return null
 
 
@@ -1277,6 +1323,12 @@ func _get_default_anchor_node(action_id: StringName) -> Control:
 			return _get_anchor_node_by_button_name("DPadRight")
 		&"use":
 			return _get_anchor_node_by_button_name("YTriangle")
+		&"skill1":
+			return _get_anchor_node_by_button_name("XSquare")
+		&"skill2":
+			return _get_anchor_node_by_button_name("ACross")
+		&"skill3":
+			return _get_anchor_node_by_button_name("BCircle")
 		&"ui_cancel":
 			return _get_anchor_node_by_button_name("BCircle")
 	return null
@@ -1294,6 +1346,12 @@ func _resolve_controller_actions(action_id: StringName) -> Array[String]:
 			return ["p1_down", "p2_down"]
 		&"use":
 			return ["p1_use", "p2_use"]
+		&"skill1":
+			return ["p1_skill1", "p2_skill1"]
+		&"skill2":
+			return ["p1_skill2", "p2_skill2"]
+		&"skill3":
+			return ["p1_skill3", "p2_skill3"]
 		&"ui_cancel":
 			return ["ui_cancel"]
 		_:
@@ -1312,6 +1370,12 @@ func _action_to_controller_action_id(action_name: String) -> StringName:
 			return &"down"
 		"p1_use", "p2_use":
 			return &"use"
+		"p1_skill1", "p2_skill1":
+			return &"skill1"
+		"p1_skill2", "p2_skill2":
+			return &"skill2"
+		"p1_skill3", "p2_skill3":
+			return &"skill3"
 		"ui_cancel":
 			return &"ui_cancel"
 		_:

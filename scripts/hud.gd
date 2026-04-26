@@ -41,6 +41,19 @@ var elapsed_time: float = 0.0
 @onready var right_bonus_label1: Label       = $RightPlayerHUD/HBoxContainer/Bonus1/Label
 @onready var right_bonus_label2: Label       = $RightPlayerHUD/HBoxContainer/Bonus2/Label
 
+@onready var left_skill_slots: Array = [
+	$LeftPlayerHUD/HBoxContainer2/Skill,
+	$LeftPlayerHUD/HBoxContainer2/Skill2,
+	$LeftPlayerHUD/HBoxContainer2/Skill3,
+]
+@onready var right_skill_slots: Array = [
+	$RightPlayerHUD/HBoxContainer2/Skill,
+	$RightPlayerHUD/HBoxContainer2/Skill2,
+	$RightPlayerHUD/HBoxContainer2/Skill3,
+]
+const SKILL_KEY_LABELS_LEFT  := ["Z", "X", "C"]
+const SKILL_KEY_LABELS_RIGHT := ["1", "2", "3"]
+
 # Left player slot 1
 var left_bonus1_active: bool = false
 var left_bonus1_duration: float = 0.0
@@ -91,7 +104,6 @@ func _ready():
 	bonus_icons = {
 		game_manager.BonusType.SHARPNESS: preload("res://assets/images/sharpness.png"),
 		game_manager.BonusType.SSHOVEL: preload("res://assets/images/sshovel.png"),
-		game_manager.BonusType.SABOTAGE: preload("res://assets/images/sabotage.png"),
 		game_manager.BonusType.DULLNESS: preload("res://assets/images/dullness.png"),
 		game_manager.BonusType.OVERLOAD: preload("res://assets/images/overload.png"),
 	}
@@ -323,6 +335,26 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 
 	if player.has_method("refresh_status_indicators"):
 		player.refresh_status_indicators()
+
+
+func update_player_skills(player: CharacterBody2D, skills: Array) -> void:
+	var slots: Array
+	var key_labels: Array
+	if player.name == "PlayerLeft":
+		slots = left_skill_slots
+		key_labels = SKILL_KEY_LABELS_LEFT
+	else:
+		slots = right_skill_slots
+		key_labels = SKILL_KEY_LABELS_RIGHT
+
+	for i in slots.size():
+		var slot_node = slots[i]
+		var data = skills[i] if i < skills.size() else null
+		if data == null:
+			slot_node.clear()
+		else:
+			slot_node.set_skill(data.type, data.level, data.uses_remaining, key_labels[i])
+
 
 func _update_bonus_timer(delta: float) -> void:
 	# Left player slot 1

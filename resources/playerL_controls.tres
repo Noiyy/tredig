@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PlayerControls" load_steps=2 format=3 uid="uid://yijshowpi6hf"]
+[gd_resource type="Resource" script_class="PlayerControls" format=3 uid="uid://yijshowpi6hf"]
 
 [ext_resource type="Script" uid="uid://dafcv0e4e7i4a" path="res://scripts/player_controls.gd" id="1_xou5q"]
 
@@ -10,4 +10,7 @@ move_right = "p2_right"
 move_up = "p2_up"
 move_down = "p2_down"
 use = "p2_use"
+skill1 = "p2_skill1"
+skill2 = "p2_skill2"
+skill3 = "p2_skill3"
 metadata/_custom_type_script = "uid://dafcv0e4e7i4a"

@@ -680,6 +680,54 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
+[node name="P1Skill1Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220101]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P1Skill1Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill1Row" unique_id=198220102]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Skill 1"
+
+[node name="P1Skill1Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill1Row" unique_id=198220103]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P1Skill2Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220104]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P1Skill2Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill2Row" unique_id=198220105]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Skill 2"
+
+[node name="P1Skill2Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill2Row" unique_id=198220106]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P1Skill3Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220107]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P1Skill3Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill3Row" unique_id=198220108]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Skill 3"
+
+[node name="P1Skill3Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill3Row" unique_id=198220109]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
 [node name="P2Column" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns" unique_id=198220025]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -776,6 +824,54 @@ theme_override_font_sizes/font_size = 12
 text = "Dig"
 
 [node name="P2UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UseRow" unique_id=198220041]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P2Skill1Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220111]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P2Skill1Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill1Row" unique_id=198220112]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Skill 1"
+
+[node name="P2Skill1Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill1Row" unique_id=198220113]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P2Skill2Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220114]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P2Skill2Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill2Row" unique_id=198220115]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Skill 2"
+
+[node name="P2Skill2Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill2Row" unique_id=198220116]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="P2Skill3Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220117]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="P2Skill3Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill3Row" unique_id=198220118]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Skill 3"
+
+[node name="P2Skill3Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill3Row" unique_id=198220119]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3

@@ -1,0 +1,269 @@
+[gd_scene format=3 uid="uid://dc0rt0qy6mtxm"]
+
+[ext_resource type="Script" path="res://scripts/skill_card_pick.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panelbg"]
+bg_color = Color(0, 0, 0, 0.65)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0, 0, 0, 0.55)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="SkillCardPick" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+mouse_filter = 1
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 300.0
+offset_bottom = 90.0
+theme_override_font_sizes/font_size = 14
+theme_override_fonts/font = ExtResource("2_font")
+text = "CHOOSE A SKILL"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 100.0
+offset_right = 312.0
+offset_bottom = 240.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panelbg")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+theme_override_constants/separation = 6
+
+[node name="Card1" type="Control" parent="Panel/HBoxContainer"]
+custom_minimum_size = Vector2(94, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card1"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 8.0
+offset_right = 62.0
+offset_bottom = 40.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card1"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 42.0
+offset_right = 90.0
+offset_bottom = 56.0
+theme_override_font_sizes/font_size = 9
+theme_override_fonts/font = ExtResource("2_font")
+text = "NAME"
+horizontal_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card1"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 56.0
+offset_right = 90.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+text = "I"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card1"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 72.0
+offset_right = 90.0
+offset_bottom = 124.0
+theme_override_font_sizes/font_size = 7
+theme_override_fonts/font = ExtResource("2_font")
+text = "Description"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card2" type="Control" parent="Panel/HBoxContainer"]
+custom_minimum_size = Vector2(94, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card2"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 8.0
+offset_right = 62.0
+offset_bottom = 40.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card2"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 42.0
+offset_right = 90.0
+offset_bottom = 56.0
+theme_override_font_sizes/font_size = 9
+theme_override_fonts/font = ExtResource("2_font")
+text = "NAME"
+horizontal_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card2"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 56.0
+offset_right = 90.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+text = "I"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card2"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 72.0
+offset_right = 90.0
+offset_bottom = 124.0
+theme_override_font_sizes/font_size = 7
+theme_override_fonts/font = ExtResource("2_font")
+text = "Description"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+
+[node name="Card3" type="Control" parent="Panel/HBoxContainer"]
+custom_minimum_size = Vector2(94, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card3"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 8.0
+offset_right = 62.0
+offset_bottom = 40.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card3"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 42.0
+offset_right = 90.0
+offset_bottom = 56.0
+theme_override_font_sizes/font_size = 9
+theme_override_fonts/font = ExtResource("2_font")
+text = "NAME"
+horizontal_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card3"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 56.0
+offset_right = 90.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+text = "I"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card3"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 72.0
+offset_right = 90.0
+offset_bottom = 124.0
+theme_override_font_sizes/font_size = 7
+theme_override_fonts/font = ExtResource("2_font")
+text = "Description"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true

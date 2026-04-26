@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://b5b60jf7citvj"]
 
-[ext_resource type="Texture2D" uid="uid://bo73137ft3o4x" path="res://assets/images/logo_transparent.png" id="1_b121j"]
+[ext_resource type="Texture2D" uid="uid://c1llfbn8l1ml2" path="res://_Documents/logo-font5.png" id="1_8c41q"]
 [ext_resource type="Texture2D" uid="uid://cdi6bsajetjns" path="res://assets/images/tileset2.png" id="2_b121j"]
 [ext_resource type="Texture2D" uid="uid://bnbfa3htfwc5p" path="res://assets/images/tiles-dmg.png" id="2_mx8sn"]
 [ext_resource type="Texture2D" uid="uid://0445cuft855b" path="res://assets/images/tile-effects.png" id="3_klq6b"]
@@ -12546,9 +12546,6 @@ terrain_set_0/terrain_0/name = "Terrain 0"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/1 = SubResource("TileSetAtlasSource_t1rx8")
 
-[sub_resource type="LabelSettings" id="LabelSettings_klq6b"]
-font_color = Color(0.21, 0.09828, 0.0903, 1)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2r41h"]
 size = Vector2(640, 360)
 
@@ -12583,13 +12580,13 @@ offset_bottom = 8731.0
 color = Color(0.03529412, 0.039215688, 0.078431375, 1)
 
 [node name="Logo" type="TextureRect" parent="." unique_id=941148241]
-modulate = Color(0.2, 0.107999995, 0.14939998, 0.16078432)
+modulate = Color(0.2, 0.11000001, 0.149, 0.3372549)
 offset_left = 220.00002
 offset_top = 44.0
 offset_right = 2140.0
 offset_bottom = 588.0
 scale = Vector2(0.1, 0.1)
-texture = ExtResource("1_b121j")
+texture = ExtResource("1_8c41q")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=833253260]
 use_parent_material = true
@@ -12613,26 +12610,6 @@ offset_right = 656.0
 offset_bottom = 8760.0
 color = Color(0.9019608, 0.5411765, 0.07058824, 0.8784314)
 
-[node name="LeftControlsInfo" type="Label" parent="." unique_id=633751999]
-offset_left = 22.0
-offset_top = 58.0
-offset_right = 102.0
-offset_bottom = 107.0
-text = "W A S D
-SPACEBAR"
-label_settings = SubResource("LabelSettings_klq6b")
-horizontal_alignment = 1
-
-[node name="RightControlsInfo" type="Label" parent="." unique_id=1267124176]
-offset_left = 542.0
-offset_top = 58.0
-offset_right = 622.0
-offset_bottom = 107.0
-text = "ARROWS
-ENTER"
-label_settings = SubResource("LabelSettings_klq6b")
-horizontal_alignment = 1
-
 [node name="ChestLeft" parent="." unique_id=865514516 instance=ExtResource("9_8c41q")]
 position = Vector2(135, 8551)
 
@@ -12655,12 +12632,17 @@ position = Vector2(320, -164)
 shape = SubResource("RectangleShape2D_2r41h")
 
 [node name="PlayerLeft" parent="." unique_id=1950137877 node_paths=PackedStringArray("tilemap") instance=ExtResource("3_ppgk2")]
-position = Vector2(160, 16)
+position = Vector2(152, 16)
 controls = ExtResource("5_2r41h")
 tilemap = NodePath("../TileMapLayer")
+test_apply_skills_on_ready = true
+test_slot1_skill = 5
+test_slot1_uses = 5
+test_slot2_skill = 4
+test_slot2_uses = 5
 
 [node name="PlayerRight" parent="." unique_id=1183736317 node_paths=PackedStringArray("tilemap") instance=ExtResource("3_ppgk2")]
-position = Vector2(480, 16)
+position = Vector2(488, 16)
 controls = ExtResource("4_ppgk2")
 tilemap = NodePath("../TileMapLayer")
 

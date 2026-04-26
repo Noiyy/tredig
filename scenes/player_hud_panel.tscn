@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://d35r6nnmcbsec" path="res://scenes/red_vignette.tscn" id="7_yhkk5"]
 [ext_resource type="PackedScene" uid="uid://dyiv3up4fdnag" path="res://scenes/black_vignette.tscn" id="8_blkvg"]
 [ext_resource type="Texture2D" uid="uid://dg7owir4jjd5" path="res://assets/images/player-durability-under.png" id="8_t3uht"]
+[ext_resource type="PackedScene" uid="uid://ccp0w72ofk7kd" path="res://scenes/skill_hud.tscn" id="16_m54p7"]
+[ext_resource type="PackedScene" uid="uid://dc0rt0qy6mtxm" path="res://scenes/skill_card_pick.tscn" id="17_skpick"]
 
 [sub_resource type="FontVariation" id="FontVariation_dpdg1"]
 base_font = ExtResource("5_ktj33")
@@ -177,3 +179,26 @@ layout_mode = 2
 visible = false
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=589453042]
+layout_direction = 2
+layout_mode = 0
+offset_left = 128.0
+offset_top = 312.0
+offset_right = 278.0
+offset_bottom = 360.0
+
+[node name="Skill" parent="HBoxContainer2" unique_id=113994824 instance=ExtResource("16_m54p7")]
+visible = false
+layout_mode = 2
+
+[node name="Skill2" parent="HBoxContainer2" unique_id=1129649204 instance=ExtResource("16_m54p7")]
+visible = false
+layout_mode = 2
+
+[node name="Skill3" parent="HBoxContainer2" unique_id=1724840942 instance=ExtResource("16_m54p7")]
+visible = false
+layout_mode = 2
+
+[node name="SkillCardPick" parent="." unique_id=480775423 instance=ExtResource("17_skpick")]
+layout_mode = 1

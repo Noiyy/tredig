@@ -60,7 +60,10 @@ const EXP_SHINE_ROT_DEG := -38.0
 func pulse_hp_from_lava() -> void:
 	if hp_pulse_tween and hp_pulse_tween.is_valid():
 		hp_pulse_tween.kill()
-	var current_scale := hp_pulse_host.scale
+	# Multiple hits can arrive in quick succession (e.g. stacked dynamite blasts).
+	# Always restart from a stable baseline to avoid scale drift/stuck pulse states.
+	var current_scale := Vector2.ONE
+	hp_pulse_host.scale = current_scale
 	var big_scale := current_scale * 1.35
 	hp_pulse_host.pivot_offset = hp_pulse_host.size / 2.0
 	hp_pulse_tween = create_tween()
@@ -340,7 +343,22 @@ func _apply_flip() -> void:
 		bonus1_label.position.x += bonus1_label.size.x
 		bonus2_label.scale.x = -1
 		bonus2_label.position.x += bonus2_label.size.x
-		
+
+		var hbox2: HBoxContainer = $HBoxContainer2
+		hbox2.scale.x = -1
+		hbox2.position.x += hbox2.size.x
+		hbox2.alignment = BoxContainer.ALIGNMENT_END
+
+		var scp_title: Label = $SkillCardPick/Title
+		scp_title.scale.x = -1
+		scp_title.position.x += scp_title.size.x
+		var scp_panel: Panel = $SkillCardPick/Panel
+		scp_panel.scale.x = -1
+		scp_panel.position.x += scp_panel.size.x
+	else:
+		var hbox2_default: HBoxContainer = $HBoxContainer2
+		hbox2_default.alignment = BoxContainer.ALIGNMENT_BEGIN
+
 func show_damage_vignette():
 	if vignette_tween and vignette_tween.is_valid():
 		vignette_tween.kill()

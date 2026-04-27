@@ -2,9 +2,11 @@ shader_type canvas_item;
 
 uniform vec4 polygon_tint : source_color = vec4(0.62, 0.58, 0.5, 1.0);
 uniform vec4 polygon_edge_tint : source_color = vec4(0.86, 0.82, 0.74, 1.0);
-uniform float overlay_alpha : hint_range(0.0, 1.0) = 0.62;
+uniform float overlay_alpha : hint_range(0.0, 1.0) = 0.32;
 uniform float polygon_strength : hint_range(0.0, 1.0) = 1.0;
 uniform float tile_size_px : hint_range(4.0, 64.0) = 16.0;
+
+varying vec2 world_pos_px;
 
 float hash21(vec2 p) {
 	p = fract(p * vec2(123.34, 456.21));
@@ -19,14 +21,18 @@ float sd_ngon(vec2 p, float radius, float n_sides) {
 	return length(p) * cos(b) - radius;
 }
 
+void vertex() {
+	world_pos_px = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
+}
+
 void fragment() {
 	vec4 tex = texture(TEXTURE, UV);
 	if (tex.a <= 0.001) {
 		COLOR = tex;
 	} else {
-		// Per-tile random seed from world pixel position.
-		vec2 tile_coord = floor(FRAGCOORD.xy / tile_size_px);
-		vec2 tile_local = fract(FRAGCOORD.xy / tile_size_px);
+		// Per-tile random seed from world position.
+		vec2 tile_coord = floor(world_pos_px / tile_size_px);
+		vec2 tile_local = fract(world_pos_px / tile_size_px);
 		float edge_mask = 0.0;
 		float fill_mask = 0.0;
 		vec2 c0 = vec2(-10.0);

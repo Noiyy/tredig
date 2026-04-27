@@ -6,10 +6,10 @@ extends Node2D
 const FUSE_SEC := 2.0
 const EXPLOSION_DAMAGE := 6
 const PLAYER_DAMAGE := 10
-const WARNING_COLOR := Color(1.0, 0.0, 0.0, 0.18)
-const WARNING_OUTLINE_COLOR := Color(1.0, 0.12, 0.08, 0.4)
-const WARNING_WHITE_COLOR := Color(1.0, 1.0, 1.0, 0.22)
-const WARNING_WHITE_OUTLINE_COLOR := Color(1.0, 1.0, 1.0, 0.4)
+const WARNING_COLOR := Color(1.0, 0.0, 0.0, 0.08)
+const WARNING_OUTLINE_COLOR := Color(1.0, 0.12, 0.08, 0.2)
+const WARNING_WHITE_COLOR := Color(1.0, 1.0, 1.0, 0.1)
+const WARNING_WHITE_OUTLINE_COLOR := Color(1.0, 1.0, 1.0, 0.2)
 const PARTICLE_LIFETIME := 0.55
 
 class WarningOverlay extends Node2D:

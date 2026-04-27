@@ -371,7 +371,23 @@ offset_top = -9.0
 offset_right = 101.0
 offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
-text = "SFX volume"
+text = "Primary SFX volume"
+horizontal_alignment = 1
+
+[node name="SFXLowerVolHSlider" type="HSlider" parent="VBoxContainer/Sections/GeneralSection" unique_id=2042670363]
+custom_minimum_size = Vector2(150, 20)
+layout_mode = 2
+size_flags_horizontal = 0
+max_value = 1.0
+step = 0.05
+
+[node name="Label" type="Label" parent="VBoxContainer/Sections/GeneralSection/SFXLowerVolHSlider" unique_id=829865775]
+layout_mode = 0
+offset_top = -9.0
+offset_right = 101.0
+offset_bottom = 7.0
+theme_override_font_sizes/font_size = 10
+text = "Secondary SFX volume"
 horizontal_alignment = 1
 
 [node name="ControlsSection" type="VBoxContainer" parent="VBoxContainer/Sections" unique_id=1767122476]
@@ -495,7 +511,17 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="ControllerP1Subtab" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow" unique_id=199990002]
+[node name="ControllerP1SubtabRow" type="HBoxContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow" unique_id=199990010]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ControllerP1Dot" type="Label" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP1SubtabRow" unique_id=199990011]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.435294, 0.435294, 1)
+theme_override_font_sizes/font_size = 10
+text = "●"
+
+[node name="ControllerP1Subtab" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP1SubtabRow" unique_id=199990002]
 custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_subtab")
@@ -508,7 +534,17 @@ button_pressed = true
 button_group = SubResource("ButtonGroup_subtabs")
 text = "  Player 1  "
 
-[node name="ControllerP2Subtab" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow" unique_id=199990003]
+[node name="ControllerP2SubtabRow" type="HBoxContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow" unique_id=199990012]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ControllerP2Dot" type="Label" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP2SubtabRow" unique_id=199990013]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.392157, 0.709804, 1, 1)
+theme_override_font_sizes/font_size = 10
+text = "●"
+
+[node name="ControllerP2Subtab" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP2SubtabRow" unique_id=199990003]
 custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_subtab")
@@ -553,7 +589,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="ControllerEditOverlay/CenterContainer" unique_id=198220004]
-custom_minimum_size = Vector2(460, 250)
+custom_minimum_size = Vector2(520, 340)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_bgjg7")
 
@@ -574,320 +610,332 @@ theme_override_font_sizes/font_size = 10
 text = "Select action and press gamepad button/axis (Esc cancels current bind)"
 horizontal_alignment = 1
 
-[node name="Columns" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220007]
+[node name="ControllerScrollContainer" type="ScrollContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220120]
+custom_minimum_size = Vector2(0, 190)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ControllerScrollContent" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer" unique_id=198220121]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Columns" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent" unique_id=198220007]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 40
 
-[node name="P1Column" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns" unique_id=198220008]
+[node name="P1Column" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns" unique_id=198220008]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="P1Header" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220009]
+[node name="P1Header" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220009]
 layout_mode = 2
 theme_override_constants/separation = 6
 alignment = 1
 
-[node name="P1Dot" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Header" unique_id=198220050]
+[node name="P1Dot" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Header" unique_id=198220050]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.435294, 0.435294, 1)
 theme_override_font_sizes/font_size = 10
 text = "●"
 
-[node name="P1HeaderLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Header" unique_id=198220051]
+[node name="P1HeaderLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Header" unique_id=198220051]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Player 1"
 
-[node name="P1UpRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220010]
+[node name="P1UpRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220010]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P1UpLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UpRow" unique_id=198220011]
+[node name="P1UpLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1UpRow" unique_id=198220011]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Jump"
 
-[node name="P1UpButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UpRow" unique_id=198220012]
+[node name="P1UpButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1UpRow" unique_id=198220012]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P1LeftRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220013]
+[node name="P1LeftRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220013]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P1LeftLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1LeftRow" unique_id=198220014]
+[node name="P1LeftLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1LeftRow" unique_id=198220014]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Walk Left"
 
-[node name="P1LeftButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1LeftRow" unique_id=198220015]
+[node name="P1LeftButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1LeftRow" unique_id=198220015]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P1RightRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220016]
+[node name="P1RightRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220016]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P1RightLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1RightRow" unique_id=198220017]
+[node name="P1RightLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1RightRow" unique_id=198220017]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Walk Right"
 
-[node name="P1RightButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1RightRow" unique_id=198220018]
+[node name="P1RightButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1RightRow" unique_id=198220018]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P1DownRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220019]
+[node name="P1DownRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220019]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P1DownLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1DownRow" unique_id=198220020]
+[node name="P1DownLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1DownRow" unique_id=198220020]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Walk Down"
 
-[node name="P1DownButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1DownRow" unique_id=198220021]
+[node name="P1DownButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1DownRow" unique_id=198220021]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P1UseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220022]
+[node name="P1UseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220022]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P1UseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UseRow" unique_id=198220023]
+[node name="P1UseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1UseRow" unique_id=198220023]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Dig"
 
-[node name="P1UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UseRow" unique_id=198220024]
+[node name="P1UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1UseRow" unique_id=198220024]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P1Skill1Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220101]
+[node name="P1Skill1Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220101]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P1Skill1Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill1Row" unique_id=198220102]
+[node name="P1Skill1Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill1Row" unique_id=198220102]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Skill 1"
 
-[node name="P1Skill1Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill1Row" unique_id=198220103]
+[node name="P1Skill1Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill1Row" unique_id=198220103]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P1Skill2Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220104]
+[node name="P1Skill2Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220104]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P1Skill2Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill2Row" unique_id=198220105]
+[node name="P1Skill2Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill2Row" unique_id=198220105]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Skill 2"
 
-[node name="P1Skill2Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill2Row" unique_id=198220106]
+[node name="P1Skill2Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill2Row" unique_id=198220106]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P1Skill3Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column" unique_id=198220107]
+[node name="P1Skill3Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220107]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P1Skill3Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill3Row" unique_id=198220108]
+[node name="P1Skill3Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill3Row" unique_id=198220108]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Skill 3"
 
-[node name="P1Skill3Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill3Row" unique_id=198220109]
+[node name="P1Skill3Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill3Row" unique_id=198220109]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P2Column" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns" unique_id=198220025]
+[node name="P2Column" type="VBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns" unique_id=198220025]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="P2Header" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220026]
+[node name="P2Header" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220026]
 layout_mode = 2
 theme_override_constants/separation = 6
 alignment = 1
 
-[node name="P2Dot" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Header" unique_id=198220052]
+[node name="P2Dot" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Header" unique_id=198220052]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.392157, 0.709804, 1, 1)
 theme_override_font_sizes/font_size = 10
 text = "●"
 
-[node name="P2HeaderLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Header" unique_id=198220053]
+[node name="P2HeaderLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Header" unique_id=198220053]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Player 2"
 
-[node name="P2UpRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220027]
+[node name="P2UpRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220027]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P2UpLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UpRow" unique_id=198220028]
+[node name="P2UpLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2UpRow" unique_id=198220028]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Jump"
 
-[node name="P2UpButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UpRow" unique_id=198220029]
+[node name="P2UpButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2UpRow" unique_id=198220029]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P2LeftRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220030]
+[node name="P2LeftRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220030]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P2LeftLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2LeftRow" unique_id=198220031]
+[node name="P2LeftLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2LeftRow" unique_id=198220031]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Walk Left"
 
-[node name="P2LeftButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2LeftRow" unique_id=198220032]
+[node name="P2LeftButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2LeftRow" unique_id=198220032]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P2RightRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220033]
+[node name="P2RightRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220033]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P2RightLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2RightRow" unique_id=198220034]
+[node name="P2RightLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2RightRow" unique_id=198220034]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Walk Right"
 
-[node name="P2RightButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2RightRow" unique_id=198220035]
+[node name="P2RightButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2RightRow" unique_id=198220035]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P2DownRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220036]
+[node name="P2DownRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220036]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P2DownLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2DownRow" unique_id=198220037]
+[node name="P2DownLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2DownRow" unique_id=198220037]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Walk Down"
 
-[node name="P2DownButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2DownRow" unique_id=198220038]
+[node name="P2DownButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2DownRow" unique_id=198220038]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P2UseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220039]
+[node name="P2UseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220039]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P2UseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UseRow" unique_id=198220040]
+[node name="P2UseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2UseRow" unique_id=198220040]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Dig"
 
-[node name="P2UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UseRow" unique_id=198220041]
+[node name="P2UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2UseRow" unique_id=198220041]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P2Skill1Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220111]
+[node name="P2Skill1Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220111]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P2Skill1Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill1Row" unique_id=198220112]
+[node name="P2Skill1Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill1Row" unique_id=198220112]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Skill 1"
 
-[node name="P2Skill1Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill1Row" unique_id=198220113]
+[node name="P2Skill1Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill1Row" unique_id=198220113]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P2Skill2Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220114]
+[node name="P2Skill2Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220114]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P2Skill2Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill2Row" unique_id=198220115]
+[node name="P2Skill2Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill2Row" unique_id=198220115]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Skill 2"
 
-[node name="P2Skill2Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill2Row" unique_id=198220116]
+[node name="P2Skill2Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill2Row" unique_id=198220116]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="P2Skill3Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column" unique_id=198220117]
+[node name="P2Skill3Row" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220117]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="P2Skill3Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill3Row" unique_id=198220118]
+[node name="P2Skill3Label" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill3Row" unique_id=198220118]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Skill 3"
 
-[node name="P2Skill3Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill3Row" unique_id=198220119]
+[node name="P2Skill3Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill3Row" unique_id=198220119]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
 
-[node name="PauseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220042]
+[node name="PauseRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent" unique_id=198220042]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PauseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/PauseRow" unique_id=198220043]
+[node name="PauseLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/PauseRow" unique_id=198220043]
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Pause"
 
-[node name="PauseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/PauseRow" unique_id=198220044]
+[node name="PauseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/PauseRow" unique_id=198220044]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_horizontal = 3

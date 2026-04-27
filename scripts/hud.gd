@@ -53,6 +53,10 @@ var elapsed_time: float = 0.0
 ]
 const SKILL_KEY_LABELS_LEFT  := ["Z", "X", "C"]
 const SKILL_KEY_LABELS_RIGHT := ["1", "2", "3"]
+var _player_using_gamepad: Dictionary = {
+	"PlayerLeft": false,
+	"PlayerRight": false,
+}
 
 # Left player slot 1
 var left_bonus1_active: bool = false
@@ -127,6 +131,65 @@ func _process(delta: float) -> void:
 	
 	_update_bonus_timer(delta)
 	_update_minimap_runtime()
+
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventJoypadButton:
+		var jb := event as InputEventJoypadButton
+		if jb != null and jb.pressed:
+			_set_using_gamepad_for_event(event, true)
+	elif event is InputEventJoypadMotion:
+		var jm := event as InputEventJoypadMotion
+		if jm != null and absf(jm.axis_value) >= 0.5:
+			_set_using_gamepad_for_event(event, true)
+	elif event is InputEventKey:
+		var ke := event as InputEventKey
+		if ke != null and ke.pressed and not ke.echo:
+			_set_using_gamepad_for_event(event, false)
+
+
+func _set_using_gamepad_for_event(event: InputEvent, value: bool) -> void:
+	for player_name in _get_player_names_for_input_event(event):
+		_set_player_using_gamepad(player_name, value)
+
+
+func _set_player_using_gamepad(player_name: String, value: bool) -> void:
+	if bool(_player_using_gamepad.get(player_name, false)) == value:
+		return
+	_player_using_gamepad[player_name] = value
+	_refresh_skill_slot_key_labels_for_player_name(player_name)
+
+
+func _get_player_names_for_input_event(event: InputEvent) -> Array[String]:
+	var result: Array[String] = []
+	if game_manager == null:
+		return result
+	for player_name in game_manager.players.keys():
+		var data: Dictionary = game_manager.players[player_name]
+		var player: CharacterBody2D = data.get("ref", null)
+		if player == null:
+			continue
+		var controls: PlayerControls = player.get("controls")
+		if controls == null:
+			continue
+		for action_name in _get_player_control_actions(controls):
+			if InputMap.has_action(action_name) and event.is_action_pressed(action_name):
+				result.append(String(player_name))
+				break
+	return result
+
+
+func _get_player_control_actions(controls: PlayerControls) -> Array[String]:
+	return [
+		controls.move_left,
+		controls.move_right,
+		controls.move_up,
+		controls.move_down,
+		controls.use,
+		controls.skill1,
+		controls.skill2,
+		controls.skill3,
+	]
 
 func stop_timer() -> void:
 	set_process(false)
@@ -339,13 +402,11 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 
 func update_player_skills(player: CharacterBody2D, skills: Array) -> void:
 	var slots: Array
-	var key_labels: Array
 	if player.name == "PlayerLeft":
 		slots = left_skill_slots
-		key_labels = SKILL_KEY_LABELS_LEFT
 	else:
 		slots = right_skill_slots
-		key_labels = SKILL_KEY_LABELS_RIGHT
+	var key_labels: Array = _get_skill_slot_labels_for_player(player)
 
 	for i in slots.size():
 		var slot_node = slots[i]
@@ -354,6 +415,191 @@ func update_player_skills(player: CharacterBody2D, skills: Array) -> void:
 			slot_node.clear()
 		else:
 			slot_node.set_skill(data.type, data.level, data.uses_remaining, key_labels[i])
+
+
+func refresh_skill_slot_key_labels() -> void:
+	if game_manager == null:
+		return
+	if game_manager.players.has("PlayerLeft"):
+		_refresh_skill_slot_key_labels_for_player_name("PlayerLeft")
+	if game_manager.players.has("PlayerRight"):
+		_refresh_skill_slot_key_labels_for_player_name("PlayerRight")
+
+
+func _refresh_skill_slot_key_labels_for_player_name(player_name: String) -> void:
+	if game_manager == null or not game_manager.players.has(player_name):
+		return
+	var data: Dictionary = game_manager.players[player_name]
+	var player_ref: CharacterBody2D = data.get("ref", null)
+	if player_ref != null:
+		update_player_skills(player_ref, data.get("skills", []))
+
+
+func _get_skill_slot_labels_for_player(player: CharacterBody2D) -> Array:
+	var fallback: Array = SKILL_KEY_LABELS_LEFT if player.name == "PlayerLeft" else SKILL_KEY_LABELS_RIGHT
+	if player == null:
+		return fallback
+	var controls: PlayerControls = player.get("controls")
+	if controls == null:
+		return fallback
+	var use_gamepad_labels := _is_player_using_gamepad(player.name)
+	return [
+		_get_binding_label_for_action(controls.skill1, use_gamepad_labels),
+		_get_binding_label_for_action(controls.skill2, use_gamepad_labels),
+		_get_binding_label_for_action(controls.skill3, use_gamepad_labels),
+	]
+
+
+func _is_player_using_gamepad(player_name: String) -> bool:
+	return bool(_player_using_gamepad.get(player_name, false))
+
+
+func _friendly_key_name(s: String) -> String:
+	if s.begins_with("Kp "):
+		return s.substr(3)
+	return s
+
+
+## Udalosti z InputMap často majú `keycode` 0 alebo nesprávne mapovanie NumPadu bez Num Lock:
+## systém používa End/Arrow/PageDown ale fyzický kód je KEY_KP_* — najprv KP → číslica.
+func _numpad_digit_from_key_enum(k_raw: int) -> String:
+	match k_raw as Key:
+		KEY_KP_0:
+			return "0"
+		KEY_KP_1:
+			return "1"
+		KEY_KP_2:
+			return "2"
+		KEY_KP_3:
+			return "3"
+		KEY_KP_4:
+			return "4"
+		KEY_KP_5:
+			return "5"
+		KEY_KP_6:
+			return "6"
+		KEY_KP_7:
+			return "7"
+		KEY_KP_8:
+			return "8"
+		KEY_KP_9:
+			return "9"
+	return ""
+
+
+func _key_label_string_from_key_event(key_event: InputEventKey) -> String:
+	var d: String = _numpad_digit_from_key_enum(key_event.physical_keycode)
+	if not d.is_empty():
+		return d
+	d = _numpad_digit_from_key_enum(key_event.keycode)
+	if not d.is_empty():
+		return d
+	d = _numpad_digit_from_key_enum(key_event.key_label)
+	if not d.is_empty():
+		return d
+	if key_event.physical_keycode != 0 and DisplayServer.has_method(
+		&"keyboard_get_label_from_physical"
+	):
+		var label_k: int = DisplayServer.keyboard_get_label_from_physical(
+			key_event.physical_keycode
+		)
+		if label_k != 0:
+			d = _numpad_digit_from_key_enum(label_k)
+			if not d.is_empty():
+				return d
+			var label_str := _friendly_key_name(OS.get_keycode_string(label_k))
+			if label_str.length() == 1 and label_str.is_valid_int():
+				return label_str
+	if key_event.keycode != 0:
+		return OS.get_keycode_string(key_event.keycode)
+	if key_event.key_label != 0:
+		return OS.get_keycode_string(key_event.key_label)
+	if key_event.physical_keycode != 0:
+		var mapped: int = DisplayServer.keyboard_get_keycode_from_physical(
+			key_event.physical_keycode
+		)
+		if mapped != 0:
+			d = _numpad_digit_from_key_enum(mapped)
+			if not d.is_empty():
+				return d
+			return OS.get_keycode_string(mapped)
+		return OS.get_keycode_string(key_event.physical_keycode)
+	return ""
+
+
+func _get_binding_label_for_action(action_name: String, use_gamepad_labels: bool) -> String:
+	if not InputMap.has_action(action_name):
+		return "?"
+	var events := InputMap.action_get_events(action_name)
+	if use_gamepad_labels:
+		for event in events:
+			var gamepad_label := _get_short_gamepad_label(event)
+			if not gamepad_label.is_empty():
+				return gamepad_label
+	for event in events:
+		var key_event := event as InputEventKey
+		if key_event != null:
+			return _friendly_key_name(_key_label_string_from_key_event(key_event))
+	if not use_gamepad_labels:
+		for event in events:
+			var gamepad_fallback := _get_short_gamepad_label(event)
+			if not gamepad_fallback.is_empty():
+				return gamepad_fallback
+	return "?"
+
+
+func _get_short_gamepad_label(event: InputEvent) -> String:
+	var joy_button := event as InputEventJoypadButton
+	if joy_button != null:
+		match joy_button.button_index:
+			JOY_BUTTON_A:
+				return "X"
+			JOY_BUTTON_B:
+				return "○"
+			JOY_BUTTON_X:
+				return "□"
+			JOY_BUTTON_Y:
+				return "△"
+			JOY_BUTTON_BACK:
+				return "Back"
+			JOY_BUTTON_START:
+				return "Start"
+			JOY_BUTTON_LEFT_STICK:
+				return "L3"
+			JOY_BUTTON_RIGHT_STICK:
+				return "R3"
+			JOY_BUTTON_LEFT_SHOULDER:
+				return "L1"
+			JOY_BUTTON_RIGHT_SHOULDER:
+				return "R1"
+			JOY_BUTTON_DPAD_UP:
+				return "D-Up"
+			JOY_BUTTON_DPAD_DOWN:
+				return "D-Down"
+			JOY_BUTTON_DPAD_LEFT:
+				return "D-Left"
+			JOY_BUTTON_DPAD_RIGHT:
+				return "D-Right"
+			_:
+				return ""
+	var joy_axis := event as InputEventJoypadMotion
+	if joy_axis != null:
+		match joy_axis.axis:
+			JOY_AXIS_TRIGGER_LEFT:
+				return "LT"
+			JOY_AXIS_TRIGGER_RIGHT:
+				return "RT"
+			JOY_AXIS_LEFT_X:
+				return "LS"
+			JOY_AXIS_LEFT_Y:
+				return "LS"
+			JOY_AXIS_RIGHT_X:
+				return "RS"
+			JOY_AXIS_RIGHT_Y:
+				return "RS"
+			_:
+				return ""
+	return ""
 
 
 func _update_bonus_timer(delta: float) -> void:

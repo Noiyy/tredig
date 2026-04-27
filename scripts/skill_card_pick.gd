@@ -14,9 +14,12 @@ var _player: CharacterBody2D
 var _choices: Array = []
 var _focused_idx: int = 0
 var _active: bool = false
+var _confirm_unlock_time_ms: int = 0
+var _wait_for_use_release: bool = false
 
 const FOCUS_BG := Color(1.0, 0.85, 0.3, 0.35)
 const NORMAL_BG := Color(0.0, 0.0, 0.0, 0.55)
+const CONFIRM_LOCK_MS := 300
 
 
 func _ready() -> void:
@@ -34,6 +37,8 @@ func show_for(player: CharacterBody2D, choices: Array) -> void:
 	_choices = choices
 	_focused_idx = 0
 	_active = true
+	_confirm_unlock_time_ms = Time.get_ticks_msec() + CONFIRM_LOCK_MS
+	_wait_for_use_release = true
 	_render_cards()
 	visible = true
 
@@ -60,6 +65,8 @@ func _render_cards() -> void:
 			level_label.visible = false
 		var desc_label: Label = card.get_node("DescriptionLabel")
 		desc_label.text = SkillRegistry.format_description(entry.type, entry.level)
+		var uses_label: Label = card.get_node("UseCountLabel")
+		uses_label.text = "Uses: %dx" % int(def.use_count)
 	_apply_focus_visual()
 
 
@@ -84,13 +91,15 @@ func _process(_delta: float) -> void:
 	var controls: PlayerControls = _player.controls
 	if controls == null:
 		return
+	if _wait_for_use_release and not Input.is_action_pressed(controls.use):
+		_wait_for_use_release = false
 	if Input.is_action_just_pressed(controls.move_left):
 		_focused_idx = (_focused_idx - 1 + _choices.size()) % _choices.size()
 		_apply_focus_visual()
 	elif Input.is_action_just_pressed(controls.move_right):
 		_focused_idx = (_focused_idx + 1) % _choices.size()
 		_apply_focus_visual()
-	if Input.is_action_just_pressed(controls.use):
+	if Input.is_action_just_pressed(controls.use) and _can_confirm_with_use():
 		_confirm(_focused_idx)
 
 
@@ -113,3 +122,9 @@ func _confirm(idx: int) -> void:
 		gm.assign_skill_from_card(_player, entry.type, entry.level)
 	_player = null
 	_choices = []
+
+
+func _can_confirm_with_use() -> bool:
+	if _wait_for_use_release:
+		return false
+	return Time.get_ticks_msec() >= _confirm_unlock_time_ms

@@ -49,6 +49,17 @@ theme_override_fonts/font = ExtResource("2_font")
 text = "CHOOSE A SKILL"
 horizontal_alignment = 1
 
+[node name="HintLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 84.0
+offset_right = 300.0
+offset_bottom = 98.0
+theme_override_font_sizes/font_size = 9
+theme_override_fonts/font = ExtResource("2_font")
+text = "Press USE to confirm"
+horizontal_alignment = 1
+
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 8.0
@@ -120,12 +131,23 @@ layout_mode = 0
 offset_left = 4.0
 offset_top = 72.0
 offset_right = 90.0
-offset_bottom = 124.0
+offset_bottom = 112.0
 theme_override_font_sizes/font_size = 7
 theme_override_fonts/font = ExtResource("2_font")
 text = "Description"
 horizontal_alignment = 1
 autowrap_mode = 2
+
+[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card1"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 114.0
+offset_right = 90.0
+offset_bottom = 128.0
+theme_override_font_sizes/font_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+text = "Uses: 1x"
+horizontal_alignment = 1
 
 [node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card1"]
 layout_mode = 1
@@ -186,12 +208,23 @@ layout_mode = 0
 offset_left = 4.0
 offset_top = 72.0
 offset_right = 90.0
-offset_bottom = 124.0
+offset_bottom = 112.0
 theme_override_font_sizes/font_size = 7
 theme_override_fonts/font = ExtResource("2_font")
 text = "Description"
 horizontal_alignment = 1
 autowrap_mode = 2
+
+[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card2"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 114.0
+offset_right = 90.0
+offset_bottom = 128.0
+theme_override_font_sizes/font_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+text = "Uses: 1x"
+horizontal_alignment = 1
 
 [node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card2"]
 layout_mode = 1
@@ -252,12 +285,23 @@ layout_mode = 0
 offset_left = 4.0
 offset_top = 72.0
 offset_right = 90.0
-offset_bottom = 124.0
+offset_bottom = 112.0
 theme_override_font_sizes/font_size = 7
 theme_override_fonts/font = ExtResource("2_font")
 text = "Description"
 horizontal_alignment = 1
 autowrap_mode = 2
+
+[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card3"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 114.0
+offset_right = 90.0
+offset_bottom = 128.0
+theme_override_font_sizes/font_size = 8
+theme_override_fonts/font = ExtResource("2_font")
+text = "Uses: 1x"
+horizontal_alignment = 1
 
 [node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card3"]
 layout_mode = 1

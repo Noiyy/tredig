@@ -158,6 +158,28 @@ func apply_bonus(player: CharacterBody2D, b_type: int) -> void:
 			_add_timed_stat(player, b_type, "dullness", 2, 10.0)
 		BonusType.OVERLOAD:
 			_add_overload_debuff(player, 3.5)
+
+
+func _spawn_bonus_particles(player: CharacterBody2D, b_type: int) -> void:
+	var particle_config := {}
+	match b_type:
+		BonusType.SHARPNESS:
+			particle_config = CustomParticleEmitter2D.preset_sharpness()
+		BonusType.SSHOVEL:
+			particle_config = CustomParticleEmitter2D.preset_sshovel()
+		BonusType.DULLNESS:
+			particle_config = CustomParticleEmitter2D.preset_dullness()
+		BonusType.OVERLOAD:
+			particle_config = CustomParticleEmitter2D.preset_overload()
+		_:
+			return
+	_spawn_player_particles(player, particle_config)
+
+
+func _spawn_player_particles(player: CharacterBody2D, particle_config: Dictionary) -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	CustomParticleEmitter2D.spawn_on_player(player, particle_config, Vector2(10.0, -12.0))
 	
 func sync_stat_from_player(player_name: String, key: String, new_value: Variant) -> void:
 	var data = players[player_name]
@@ -186,6 +208,7 @@ func _add_timed_stat(player: CharacterBody2D, b_type: BonusType, key: String, de
 		AudioManager.play("res://assets/sounds/debuff.wav")
 	else:
 		AudioManager.play("res://assets/sounds/bonus2.wav")
+	_spawn_bonus_particles(player, b_type)
 	# uprav stat v dátach
 	var original_damage = data.damage_per_hit
 	
@@ -248,6 +271,7 @@ func _add_overload_debuff(player: CharacterBody2D, duration: float) -> void:
 		return
 		
 	AudioManager.play("res://assets/sounds/debuff.wav")
+	_spawn_bonus_particles(player, BonusType.OVERLOAD)
 	data.active_bonuses.append(BonusType.OVERLOAD)
 
 	# aplikuj debuff na hráča
@@ -433,6 +457,7 @@ func _apply_heal(player: CharacterBody2D, amount: int) -> void:
 	var data = players[player.name]
 	var prev = data.hp
 	data.hp = min(data.hp + amount, MAX_HP)
+	_spawn_player_particles(player, CustomParticleEmitter2D.preset_heal())
 	if data.hp == prev:
 		return
 	player.sync_stats_from_manager(data)
@@ -441,9 +466,13 @@ func _apply_heal(player: CharacterBody2D, amount: int) -> void:
 
 func _apply_durability_up(player: CharacterBody2D, percent: int) -> void:
 	var amount: int = int(round(MAX_DURABILITY * percent / 100.0))
+	var data = players[player.name]
+	var prev: int = data.durability
 	change_durability(player, amount, false)
 	AudioManager.play("res://assets/sounds/bonus2.wav")
 	_flash_player_color(player, Color(0.2, 0.4, 1.0, 0.75), 0.7)
+	if data.durability > prev:
+		_spawn_player_particles(player, CustomParticleEmitter2D.preset_durability_up())
 
 
 func _flash_player_color(player: CharacterBody2D, color: Color, duration: float) -> void:

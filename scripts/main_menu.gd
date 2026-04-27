@@ -1,10 +1,21 @@
 extends Node2D
 
+const MENU_NAV_DEADZONE := 0.55
+const MENU_NAV_REPEAT_DELAY := 0.32
+const MENU_NAV_REPEAT_INTERVAL := 0.08
+
 var _last_main_buttons_focus: Control
+var _held_menu_nav_action: StringName = &""
+var _menu_nav_repeat_timer := 0.0
+var _menu_nav_repeat_wait := MENU_NAV_REPEAT_DELAY
 
 func _ready() -> void:
 	Music.set_gameplay_music(false)
 	$MainButtons/PlayButton.grab_focus()
+
+
+func _process(delta: float) -> void:
+	_tick_controller_menu_navigation_repeat(delta)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -70,6 +81,77 @@ func _restore_main_buttons_focus(fallback: Control) -> void:
 	var target := _last_main_buttons_focus if _last_main_buttons_focus != null else fallback
 	if target != null and is_instance_valid(target):
 		target.call_deferred("grab_focus")
+
+
+func _tick_controller_menu_navigation_repeat(delta: float) -> void:
+	if not $MainButtons.visible and not $CreditsMenu.visible:
+		_reset_controller_menu_navigation_repeat()
+		return
+
+	var action := _get_held_controller_menu_navigation_action()
+	if action == &"":
+		_reset_controller_menu_navigation_repeat()
+		return
+
+	if action != _held_menu_nav_action:
+		_held_menu_nav_action = action
+		_menu_nav_repeat_timer = 0.0
+		_menu_nav_repeat_wait = MENU_NAV_REPEAT_DELAY
+		return
+
+	_menu_nav_repeat_timer += delta
+	if _menu_nav_repeat_timer < _menu_nav_repeat_wait:
+		return
+
+	_menu_nav_repeat_timer = 0.0
+	_menu_nav_repeat_wait = MENU_NAV_REPEAT_INTERVAL
+	_emit_menu_navigation_action(action)
+
+
+func _reset_controller_menu_navigation_repeat() -> void:
+	_held_menu_nav_action = &""
+	_menu_nav_repeat_timer = 0.0
+	_menu_nav_repeat_wait = MENU_NAV_REPEAT_DELAY
+
+
+func _get_held_controller_menu_navigation_action() -> StringName:
+	for device in Input.get_connected_joypads():
+		var axis_action := _get_held_controller_axis_navigation_action(device)
+		if axis_action != &"":
+			return axis_action
+
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_DOWN):
+			return &"ui_down"
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_UP):
+			return &"ui_up"
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_RIGHT):
+			return &"ui_right"
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_LEFT):
+			return &"ui_left"
+
+	return &""
+
+
+func _get_held_controller_axis_navigation_action(device: int) -> StringName:
+	var x := Input.get_joy_axis(device, JOY_AXIS_LEFT_X)
+	var y := Input.get_joy_axis(device, JOY_AXIS_LEFT_Y)
+	if absf(y) >= absf(x) and absf(y) >= MENU_NAV_DEADZONE:
+		return &"ui_down" if y > 0.0 else &"ui_up"
+	if absf(x) >= MENU_NAV_DEADZONE:
+		return &"ui_right" if x > 0.0 else &"ui_left"
+	return &""
+
+
+func _emit_menu_navigation_action(action: StringName) -> void:
+	var press := InputEventAction.new()
+	press.action = action
+	press.pressed = true
+	Input.parse_input_event(press)
+
+	var release := InputEventAction.new()
+	release.action = action
+	release.pressed = false
+	Input.parse_input_event(release)
 
 
 func _on_fullscreen_check_box_toggled(toggled_on: bool) -> void:

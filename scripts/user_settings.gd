@@ -8,12 +8,14 @@ const SAVE_PATH := "user://user_settings.cfg"
 ## Rovnaké `action` ako v settings_menu.gd (CONTROL_ACTIONS)
 const PERSISTED_ACTIONS: Array[String] = [
 	"p1_left", "p1_right", "p1_up", "p1_down", "p1_use",
+	"p1_skill1", "p1_skill2", "p1_skill3",
 	"p2_left", "p2_right", "p2_up", "p2_down", "p2_use",
 	"ui_cancel",
 ]
 
 func _ready() -> void:
 	load_and_apply()
+	_ensure_enter_pairs_for_all_actions()
 
 
 func load_and_apply() -> void:
@@ -24,6 +26,69 @@ func load_and_apply() -> void:
 		return
 	_apply_general_from_config(config)
 	_apply_input_from_config(config)
+	_ensure_enter_pairs_for_all_actions()
+
+
+func _is_enter_key_enum(k_raw: int) -> bool:
+	match k_raw as Key:
+		KEY_ENTER, KEY_KP_ENTER:
+			return true
+	return false
+
+
+func _is_enter_key_event(event: InputEvent) -> bool:
+	var key_event := event as InputEventKey
+	if key_event == null:
+		return false
+	return (
+		_is_enter_key_enum(key_event.keycode)
+		or _is_enter_key_enum(key_event.physical_keycode)
+		or _is_enter_key_enum(key_event.key_label)
+	)
+
+
+func _key_event_matches_key(event: InputEvent, key: Key) -> bool:
+	var key_event := event as InputEventKey
+	if key_event == null:
+		return false
+	return (
+		key_event.keycode == key
+		or key_event.physical_keycode == key
+		or key_event.key_label == key
+	)
+
+
+func _make_plain_key_event(key: Key) -> InputEventKey:
+	var event := InputEventKey.new()
+	event.physical_keycode = key
+	return event
+
+
+func _ensure_enter_pair_for_action(action: StringName) -> void:
+	if not InputMap.has_action(action):
+		return
+	var events := InputMap.action_get_events(action)
+	var has_any_enter := false
+	var has_enter := false
+	var has_kp_enter := false
+	for event in events:
+		if _is_enter_key_event(event):
+			has_any_enter = true
+		if _key_event_matches_key(event, KEY_ENTER):
+			has_enter = true
+		if _key_event_matches_key(event, KEY_KP_ENTER):
+			has_kp_enter = true
+	if not has_any_enter:
+		return
+	if not has_enter:
+		InputMap.action_add_event(action, _make_plain_key_event(KEY_ENTER))
+	if not has_kp_enter:
+		InputMap.action_add_event(action, _make_plain_key_event(KEY_KP_ENTER))
+
+
+func _ensure_enter_pairs_for_all_actions() -> void:
+	for action in InputMap.get_actions():
+		_ensure_enter_pair_for_action(action)
 
 
 func _apply_general_from_config(config: ConfigFile) -> void:
@@ -39,6 +104,7 @@ func _apply_general_from_config(config: ConfigFile) -> void:
 	_apply_bus_from_config_key(config, "master", "Master")
 	_apply_bus_from_config_key(config, "music", "Music")
 	_apply_bus_from_config_key(config, "sfx", "SFX")
+	_apply_bus_from_config_key(config, "sfx_lower", "SFXLower")
 
 
 func _apply_bus_from_config_key(
@@ -79,6 +145,7 @@ func _apply_input_from_config(config: ConfigFile) -> void:
 
 
 func save() -> void:
+	_ensure_enter_pairs_for_all_actions()
 	var config := ConfigFile.new()
 	config.set_value("general", "version", SETTINGS_VERSION)
 	var wmode: DisplayServer.WindowMode = DisplayServer.window_get_mode()
@@ -91,6 +158,7 @@ func save() -> void:
 	_save_bus_to_config(config, "master", "Master")
 	_save_bus_to_config(config, "music", "Music")
 	_save_bus_to_config(config, "sfx", "SFX")
+	_save_bus_to_config(config, "sfx_lower", "SFXLower")
 	for action in PERSISTED_ACTIONS:
 		var sname: StringName = StringName(action)
 		if not InputMap.has_action(sname):

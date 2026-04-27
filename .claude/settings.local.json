@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(\"/c/Users/mular/Desktop/gamedev/Godot/Godot_v4.6.2-stable_win64_console.exe\" --headless --script _tmp_keycheck.gd)"
+    ]
+  }
+}

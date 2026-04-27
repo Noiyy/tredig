@@ -6,6 +6,6 @@ Copyright (c) 2026 Benjamín Muľár. All rights reserved.
 Game made in Godot Engine (MIT License):
 https://godotengine.org/license
 
-Background music "Mining Town (Loop)", sped up:
+Background music "Mining Town (Loop)":
 Author: Chris Logsdon
 Link: https://chrislsound.itch.io/fantasy-towns-music-pack

@@ -12635,16 +12635,20 @@ shape = SubResource("RectangleShape2D_2r41h")
 position = Vector2(152, 16)
 controls = ExtResource("5_2r41h")
 tilemap = NodePath("../TileMapLayer")
-test_apply_skills_on_ready = true
-test_slot1_skill = 5
+test_slot1_skill = 1
 test_slot1_uses = 5
-test_slot2_skill = 4
+test_slot2_skill = 2
 test_slot2_uses = 5
 
 [node name="PlayerRight" parent="." unique_id=1183736317 node_paths=PackedStringArray("tilemap") instance=ExtResource("3_ppgk2")]
 position = Vector2(488, 16)
 controls = ExtResource("4_ppgk2")
 tilemap = NodePath("../TileMapLayer")
+test_apply_skills_on_ready = true
+test_slot1_skill = 1
+test_slot1_uses = 2
+test_slot2_skill = 2
+test_slot3_skill = 3
 
 [node name="MiddleBorder" type="StaticBody2D" parent="." unique_id=84205073]
 

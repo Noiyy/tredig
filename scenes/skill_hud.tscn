@@ -6,10 +6,15 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3xp7n"]
 bg_color = Color(0, 0, 0, 0.5294118)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.8, 0.8, 0.25882354)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="FontVariation" id="FontVariation_hu6yu"]
 base_font = ExtResource("2_hps0a")
@@ -19,6 +24,12 @@ variation_opentype = {
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61n55"]
 bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.97, 0.16166651, 0.05490196)
+border_blend = true
 corner_radius_top_left = 2
 corner_radius_top_right = 2
 corner_radius_bottom_right = 2
@@ -59,9 +70,9 @@ texture = ExtResource("1_hps0a")
 
 [node name="UseCountLabel" type="Label" parent="." unique_id=618116276]
 layout_mode = 0
-offset_left = 31.0
+offset_left = 32.0
 offset_top = 15.0
-offset_right = 43.0
+offset_right = 44.0
 offset_bottom = 29.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = -5

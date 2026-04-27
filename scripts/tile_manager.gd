@@ -79,7 +79,6 @@ func damage_tile(player: CharacterBody2D) -> int:
 	var area := shovel_dir_node.get_node("Area2D") as Area2D
 	
 	var area_pos = area.global_position
-	var dir_vec := (area_pos - player.global_position).normalized()
 	
 	var min_x: float = player.dig_min_x
 	var max_x: float = player.dig_max_x
@@ -134,7 +133,7 @@ func damage_tile(player: CharacterBody2D) -> int:
 	
 	# SSHOVEL: znič druhý blok v smere kopania
 	if game_manager.player_has_bonus(player, game_manager.BonusType.SSHOVEL):
-		_damage_second_tile(tile_coords, dir_vec, player)
+		_damage_second_tile(tile_coords, player.last_dir, player)
 	
 	if tile_data[tile_coords].hp <= 0:
 		#tilemap.set_cell(tile_coords, tile_id, tile_coords, -1) # Odstráni tile

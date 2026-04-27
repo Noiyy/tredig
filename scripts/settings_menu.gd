@@ -10,6 +10,10 @@ const DEFAULT_LAVA_SOUND := true
 const DEFAULT_MASTER_DB := 0.0
 const DEFAULT_MUSIC_DB := -8.798218
 const DEFAULT_SFX_DB := -10.0691595
+const DEFAULT_SFXLOWER_DB := -12.461078
+const MENU_NAV_DEADZONE := 0.55
+const MENU_NAV_REPEAT_DELAY := 0.32
+const MENU_NAV_REPEAT_INTERVAL := 0.08
 const CONTROLLER_BIND_ACTIONS := [
 	{"id": &"up", "label": "Jump", "side": -1},
 	{"id": &"left", "label": "Walk Left", "side": -1},
@@ -30,7 +34,7 @@ const CONTROL_ACTIONS := [
 	{"action": "p1_right", "label": "Player 1 Right"},
 	{"action": "p1_up", "label": "Player 1 Up"},
 	{"action": "p1_down", "label": "Player 1 Down"},
-	{"action": "p1_use", "label": "Player 1 Use"},
+	{"action": "p1_use", "label": "Player 1 Dig/Use"},
 	{"action": "p1_skill1", "label": "Player 1 Skill 1"},
 	{"action": "p1_skill2", "label": "Player 1 Skill 2"},
 	{"action": "p1_skill3", "label": "Player 1 Skill 3"},
@@ -38,7 +42,7 @@ const CONTROL_ACTIONS := [
 	{"action": "p2_right", "label": "Player 2 Right"},
 	{"action": "p2_up", "label": "Player 2 Up"},
 	{"action": "p2_down", "label": "Player 2 Down"},
-	{"action": "p2_use", "label": "Player 2 Use"},
+	{"action": "p2_use", "label": "Player 2 Dig/Use"},
 	{"action": "p2_skill1", "label": "Player 2 Skill 1"},
 	{"action": "p2_skill2", "label": "Player 2 Skill 2"},
 	{"action": "p2_skill3", "label": "Player 2 Skill 3"},
@@ -58,6 +62,7 @@ const CONTROL_ACTIONS := [
 @onready var main_volume_slider: HSlider = $VBoxContainer/Sections/GeneralSection/MainVolHSlider
 @onready var music_volume_slider: HSlider = $VBoxContainer/Sections/GeneralSection/MusicVolHSlider
 @onready var sfx_volume_slider: HSlider = $VBoxContainer/Sections/GeneralSection/SFXVolHSlider
+@onready var sfx_lower_volume_slider: HSlider = $VBoxContainer/Sections/GeneralSection/SFXLowerVolHSlider
 @onready var reset_general_button: Button = $VBoxContainer/Sections/GeneralSection/GeneralHintRow/ResetGeneralButton
 
 @onready var p1_column: VBoxContainer = $VBoxContainer/Sections/ControlsSection/ScrollContainer/ControlsActions/P1Column
@@ -65,8 +70,8 @@ const CONTROL_ACTIONS := [
 @onready var reset_controls_button: Button = $VBoxContainer/Sections/ControlsSection/ControlsHintRow/ResetControlsButton
 @onready var controls_scroll_container: ScrollContainer = $VBoxContainer/Sections/ControlsSection/ScrollContainer
 @onready var controller_subtabs_row: HBoxContainer = $VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow
-@onready var controller_p1_subtab: Button = $VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP1Subtab
-@onready var controller_p2_subtab: Button = $VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP2Subtab
+@onready var controller_p1_subtab: Button = $VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP1SubtabRow/ControllerP1Subtab
+@onready var controller_p2_subtab: Button = $VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP2SubtabRow/ControllerP2Subtab
 @onready var controller_left_column: VBoxContainer = $VBoxContainer/Sections/ControllerSection/ControllerLayout/ControllerLeftPanel/ControllerLeftColumn
 @onready var controller_right_column: VBoxContainer = $VBoxContainer/Sections/ControllerSection/ControllerLayout/ControllerRightPanel/ControllerRightColumn
 @onready var controller_connector_layer: Control = $ControllerConnectorLayer
@@ -75,23 +80,24 @@ const CONTROL_ACTIONS := [
 @onready var reset_controller_button: Button = $VBoxContainer/Sections/ControllerSection/ControllerHintRow/ResetControllerButton
 @onready var controller_edit_button: Button = $VBoxContainer/Sections/ControllerSection/ControllerHintRow/EditControllerButton
 @onready var controller_overlay: ColorRect = $ControllerEditOverlay
-@onready var controller_overlay_p1_up_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UpRow/P1UpButton
-@onready var controller_overlay_p1_left_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1LeftRow/P1LeftButton
-@onready var controller_overlay_p1_right_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1RightRow/P1RightButton
-@onready var controller_overlay_p1_down_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1DownRow/P1DownButton
-@onready var controller_overlay_p1_use_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1UseRow/P1UseButton
-@onready var controller_overlay_p2_up_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UpRow/P2UpButton
-@onready var controller_overlay_p2_left_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2LeftRow/P2LeftButton
-@onready var controller_overlay_p2_right_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2RightRow/P2RightButton
-@onready var controller_overlay_p2_down_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2DownRow/P2DownButton
-@onready var controller_overlay_p2_use_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2UseRow/P2UseButton
-@onready var controller_overlay_p1_skill1_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill1Row/P1Skill1Button
-@onready var controller_overlay_p1_skill2_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill2Row/P1Skill2Button
-@onready var controller_overlay_p1_skill3_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P1Column/P1Skill3Row/P1Skill3Button
-@onready var controller_overlay_p2_skill1_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill1Row/P2Skill1Button
-@onready var controller_overlay_p2_skill2_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill2Row/P2Skill2Button
-@onready var controller_overlay_p2_skill3_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/Columns/P2Column/P2Skill3Row/P2Skill3Button
-@onready var controller_overlay_pause_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/PauseRow/PauseButton
+@onready var controller_overlay_scroll_container: ScrollContainer = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer
+@onready var controller_overlay_p1_up_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1UpRow/P1UpButton
+@onready var controller_overlay_p1_left_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1LeftRow/P1LeftButton
+@onready var controller_overlay_p1_right_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1RightRow/P1RightButton
+@onready var controller_overlay_p1_down_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1DownRow/P1DownButton
+@onready var controller_overlay_p1_use_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1UseRow/P1UseButton
+@onready var controller_overlay_p2_up_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2UpRow/P2UpButton
+@onready var controller_overlay_p2_left_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2LeftRow/P2LeftButton
+@onready var controller_overlay_p2_right_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2RightRow/P2RightButton
+@onready var controller_overlay_p2_down_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2DownRow/P2DownButton
+@onready var controller_overlay_p2_use_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2UseRow/P2UseButton
+@onready var controller_overlay_p1_skill1_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill1Row/P1Skill1Button
+@onready var controller_overlay_p1_skill2_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill2Row/P1Skill2Button
+@onready var controller_overlay_p1_skill3_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill3Row/P1Skill3Button
+@onready var controller_overlay_p2_skill1_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill1Row/P2Skill1Button
+@onready var controller_overlay_p2_skill2_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill2Row/P2Skill2Button
+@onready var controller_overlay_p2_skill3_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill3Row/P2Skill3Button
+@onready var controller_overlay_pause_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/PauseRow/PauseButton
 @onready var controller_overlay_confirm_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow/ConfirmButton
 @onready var controller_overlay_cancel_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow/CancelButton
 @onready var controller_overlay_reset_button: Button = $ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow/ResetButton
@@ -114,6 +120,9 @@ var _overlay_bindings: Dictionary = {}
 var _overlay_rebind_action := ""
 var _overlay_rebind_button: Button
 var _controller_overlay_open := false
+var _held_menu_nav_action: StringName = &""
+var _menu_nav_repeat_timer := 0.0
+var _menu_nav_repeat_wait := MENU_NAV_REPEAT_DELAY
 
 func _ready() -> void:
 	visibility_changed.connect(_on_visibility_changed)
@@ -130,6 +139,7 @@ func _ready() -> void:
 	main_volume_slider.value_changed.connect(_on_main_vol_h_slider_value_changed)
 	music_volume_slider.value_changed.connect(_on_music_vol_h_slider_value_changed)
 	sfx_volume_slider.value_changed.connect(_on_sfx_vol_h_slider_value_changed)
+	sfx_lower_volume_slider.value_changed.connect(_on_sfx_lower_vol_h_slider_value_changed)
 	reset_general_button.pressed.connect(_on_reset_general_pressed)
 
 	reset_controls_button.pressed.connect(_on_reset_controls_pressed)
@@ -159,6 +169,7 @@ func _ready() -> void:
 	for action_name in _overlay_action_buttons.keys():
 		var bind_button: Button = _overlay_action_buttons[action_name]
 		bind_button.pressed.connect(_on_overlay_action_button_pressed.bind(String(action_name), bind_button))
+		bind_button.focus_entered.connect(_on_focusable_control_focused.bind(bind_button))
 	_setup_controller_overlay_focus_neighbors()
 	controller_hint_label.text = "Current controller bindings preview"
 	reset_controller_button.visible = false
@@ -169,6 +180,10 @@ func _ready() -> void:
 	_set_controller_subtab(1, false)
 	_select_tab("general")
 	_sync_from_system()
+
+
+func _process(delta: float) -> void:
+	_tick_controller_menu_navigation_repeat(delta)
 
 
 func _on_visibility_changed() -> void:
@@ -200,10 +215,84 @@ func _sync_from_system() -> void:
 		AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music"))
 	)
 	sfx_volume_slider.value = db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX")))
+	sfx_lower_volume_slider.value = db_to_linear(
+		AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFXLower"))
+	)
 
 
 func _on_back_button_pressed() -> void:
 	close_settings()
+
+
+func _tick_controller_menu_navigation_repeat(delta: float) -> void:
+	if not visible or not _rebind_action.is_empty() or not _overlay_rebind_action.is_empty():
+		_reset_controller_menu_navigation_repeat()
+		return
+
+	var action := _get_held_controller_menu_navigation_action()
+	if action == &"":
+		_reset_controller_menu_navigation_repeat()
+		return
+
+	if action != _held_menu_nav_action:
+		_held_menu_nav_action = action
+		_menu_nav_repeat_timer = 0.0
+		_menu_nav_repeat_wait = MENU_NAV_REPEAT_DELAY
+		return
+
+	_menu_nav_repeat_timer += delta
+	if _menu_nav_repeat_timer < _menu_nav_repeat_wait:
+		return
+
+	_menu_nav_repeat_timer = 0.0
+	_menu_nav_repeat_wait = MENU_NAV_REPEAT_INTERVAL
+	_emit_menu_navigation_action(action)
+
+
+func _reset_controller_menu_navigation_repeat() -> void:
+	_held_menu_nav_action = &""
+	_menu_nav_repeat_timer = 0.0
+	_menu_nav_repeat_wait = MENU_NAV_REPEAT_DELAY
+
+
+func _get_held_controller_menu_navigation_action() -> StringName:
+	for device in Input.get_connected_joypads():
+		var axis_action := _get_held_controller_axis_navigation_action(device)
+		if axis_action != &"":
+			return axis_action
+
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_DOWN):
+			return &"ui_down"
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_UP):
+			return &"ui_up"
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_RIGHT):
+			return &"ui_right"
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_LEFT):
+			return &"ui_left"
+
+	return &""
+
+
+func _get_held_controller_axis_navigation_action(device: int) -> StringName:
+	var x := Input.get_joy_axis(device, JOY_AXIS_LEFT_X)
+	var y := Input.get_joy_axis(device, JOY_AXIS_LEFT_Y)
+	if absf(y) >= absf(x) and absf(y) >= MENU_NAV_DEADZONE:
+		return &"ui_down" if y > 0.0 else &"ui_up"
+	if absf(x) >= MENU_NAV_DEADZONE:
+		return &"ui_right" if x > 0.0 else &"ui_left"
+	return &""
+
+
+func _emit_menu_navigation_action(action: StringName) -> void:
+	var press := InputEventAction.new()
+	press.action = action
+	press.pressed = true
+	Input.parse_input_event(press)
+
+	var release := InputEventAction.new()
+	release.action = action
+	release.pressed = false
+	Input.parse_input_event(release)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
@@ -294,15 +383,22 @@ func _on_sfx_vol_h_slider_value_changed(value: float) -> void:
 	UserSettings.save()
 
 
+func _on_sfx_lower_vol_h_slider_value_changed(value: float) -> void:
+	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("SFXLower"), value)
+	UserSettings.save()
+
+
 func _on_reset_general_pressed() -> void:
 	var default_master_linear := db_to_linear(DEFAULT_MASTER_DB)
 	var default_music_linear := db_to_linear(DEFAULT_MUSIC_DB)
 	var default_sfx_linear := db_to_linear(DEFAULT_SFX_DB)
+	var default_sfx_lower_linear := db_to_linear(DEFAULT_SFXLOWER_DB)
 	fullscreen_checkbox.set_pressed_no_signal(DEFAULT_FULLSCREEN)
 	lava_sound_checkbox.set_pressed_no_signal(DEFAULT_LAVA_SOUND)
 	main_volume_slider.set_value_no_signal(default_master_linear)
 	music_volume_slider.set_value_no_signal(default_music_linear)
 	sfx_volume_slider.set_value_no_signal(default_sfx_linear)
+	sfx_lower_volume_slider.set_value_no_signal(default_sfx_lower_linear)
 	if DEFAULT_FULLSCREEN:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	else:
@@ -311,6 +407,7 @@ func _on_reset_general_pressed() -> void:
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Master"), default_master_linear)
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Music"), default_music_linear)
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("SFX"), default_sfx_linear)
+	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("SFXLower"), default_sfx_lower_linear)
 	UserSettings.save()
 
 
@@ -404,6 +501,7 @@ func _on_reset_controls_pressed() -> void:
 	InputMap.load_from_project_settings()
 	_refresh_controls_ui()
 	_refresh_controller_ui()
+	_notify_hud_skill_key_refresh()
 	UserSettings.save()
 
 
@@ -412,6 +510,7 @@ func _on_reset_controller_pressed() -> void:
 	InputMap.load_from_project_settings()
 	_refresh_controls_ui()
 	_refresh_controller_ui()
+	_notify_hud_skill_key_refresh()
 	UserSettings.save()
 
 
@@ -426,9 +525,11 @@ func _build_controls_ui() -> void:
 		var action_name := str(action_entry["action"])
 		var label_text := str(action_entry["label"])
 
-		if action_name.begins_with("p1_"):
-			_add_action_row(p1_column, action_name, label_text.trim_prefix("Player 1 "), true)
-		elif action_name.begins_with("p2_"):
+		# Gameplay maps PlayerLeft to p2_* and PlayerRight to p1_*.
+		# Keep headers as "Player 1 / Player 2", but show actions under matching side.
+		if action_name.begins_with("p2_"):
+			_add_action_row(p1_column, action_name, label_text.trim_prefix("Player 2 "), true)
+		elif action_name.begins_with("p1_"):
 			_add_action_row(p2_column, action_name, "", false)
 		else:
 			var pause_row := HBoxContainer.new()
@@ -620,6 +721,7 @@ func _on_controller_edit_pressed() -> void:
 	_overlay_bindings = _collect_current_controller_bindings()
 	_controller_overlay_open = true
 	controller_overlay.visible = true
+	controller_overlay_scroll_container.scroll_vertical = 0
 	_refresh_overlay_action_buttons()
 	if controller_overlay_p1_up_button != null:
 		controller_overlay_p1_up_button.call_deferred("grab_focus")
@@ -807,6 +909,7 @@ func _apply_controller_bindings(bindings: Dictionary) -> void:
 		_inputmap_set_single_gamepad_event_for_action(String(action_name), bound_event)
 	_refresh_controls_ui()
 	_refresh_controller_ui()
+	_notify_hud_skill_key_refresh()
 	UserSettings.save()
 
 
@@ -833,15 +936,83 @@ func _cancel_rebind() -> void:
 	_rebind_mode = ""
 
 
+func _friendly_key_name(s: String) -> String:
+	if s.begins_with("Kp "):
+		return s.substr(3)
+	return s
+
+
+func _numpad_digit_from_key_enum(k_raw: int) -> String:
+	match k_raw as Key:
+		KEY_KP_0:
+			return "0"
+		KEY_KP_1:
+			return "1"
+		KEY_KP_2:
+			return "2"
+		KEY_KP_3:
+			return "3"
+		KEY_KP_4:
+			return "4"
+		KEY_KP_5:
+			return "5"
+		KEY_KP_6:
+			return "6"
+		KEY_KP_7:
+			return "7"
+		KEY_KP_8:
+			return "8"
+		KEY_KP_9:
+			return "9"
+	return ""
+
+
+func _key_label_string_from_key_event(key_event: InputEventKey) -> String:
+	var d: String = _numpad_digit_from_key_enum(key_event.physical_keycode)
+	if not d.is_empty():
+		return d
+	d = _numpad_digit_from_key_enum(key_event.keycode)
+	if not d.is_empty():
+		return d
+	d = _numpad_digit_from_key_enum(key_event.key_label)
+	if not d.is_empty():
+		return d
+	if key_event.physical_keycode != 0 and DisplayServer.has_method(
+		&"keyboard_get_label_from_physical"
+	):
+		var label_k: int = DisplayServer.keyboard_get_label_from_physical(
+			key_event.physical_keycode
+		)
+		if label_k != 0:
+			d = _numpad_digit_from_key_enum(label_k)
+			if not d.is_empty():
+				return d
+			var label_str := _friendly_key_name(OS.get_keycode_string(label_k))
+			if label_str.length() == 1 and label_str.is_valid_int():
+				return label_str
+	if key_event.keycode != 0:
+		return OS.get_keycode_string(key_event.keycode)
+	if key_event.key_label != 0:
+		return OS.get_keycode_string(key_event.key_label)
+	if key_event.physical_keycode != 0:
+		var mapped: int = DisplayServer.keyboard_get_keycode_from_physical(
+			key_event.physical_keycode
+		)
+		if mapped != 0:
+			d = _numpad_digit_from_key_enum(mapped)
+			if not d.is_empty():
+				return d
+			return OS.get_keycode_string(mapped)
+		return OS.get_keycode_string(key_event.physical_keycode)
+	return ""
+
+
 func _get_keyboard_action_text(action_name: String) -> String:
 	var action_events := InputMap.action_get_events(action_name)
 	for action_event in action_events:
 		var key_event := action_event as InputEventKey
 		if key_event != null:
-			var keycode := key_event.physical_keycode
-			if keycode == 0:
-				keycode = key_event.keycode
-			return OS.get_keycode_string(keycode)
+			return _friendly_key_name(_key_label_string_from_key_event(key_event))
 
 	if action_events.is_empty():
 		return "Unassigned"
@@ -971,6 +1142,29 @@ func _get_action_label(action_name: String) -> String:
 	return action_name
 
 
+func _is_enter_key_enum(k_raw: int) -> bool:
+	match k_raw as Key:
+		KEY_ENTER, KEY_KP_ENTER:
+			return true
+	return false
+
+
+func _is_enter_key_event(event: InputEventKey) -> bool:
+	if event == null:
+		return false
+	return (
+		_is_enter_key_enum(event.keycode)
+		or _is_enter_key_enum(event.physical_keycode)
+		or _is_enter_key_enum(event.key_label)
+	)
+
+
+func _make_plain_key_event(key: Key) -> InputEventKey:
+	var event := InputEventKey.new()
+	event.physical_keycode = key
+	return event
+
+
 func _replace_keyboard_binding(action_name: String, new_key_event: InputEventKey) -> void:
 	var existing_events := InputMap.action_get_events(action_name)
 	InputMap.action_erase_events(action_name)
@@ -978,24 +1172,36 @@ func _replace_keyboard_binding(action_name: String, new_key_event: InputEventKey
 		if existing_event is InputEventKey:
 			continue
 		InputMap.action_add_event(action_name, existing_event)
-	InputMap.action_add_event(action_name, new_key_event)
+	if _is_enter_key_event(new_key_event):
+		InputMap.action_add_event(action_name, _make_plain_key_event(KEY_ENTER))
+		InputMap.action_add_event(action_name, _make_plain_key_event(KEY_KP_ENTER))
+	else:
+		InputMap.action_add_event(action_name, new_key_event)
+	_notify_hud_skill_key_refresh()
 
 
 func _replace_controller_binding_for_all_devices(action_id: StringName, new_controller_event: InputEvent) -> void:
 	for action_name in _resolve_controller_actions(action_id):
 		_inputmap_set_single_gamepad_event_for_action(String(action_name), new_controller_event)
+	_notify_hud_skill_key_refresh()
+
+
+func _notify_hud_skill_key_refresh() -> void:
+	var hud = get_tree().root.get_node_or_null("Main/HUD")
+	if hud != null and hud.has_method("refresh_skill_slot_key_labels"):
+		hud.call("refresh_skill_slot_key_labels")
 
 
 func _get_joy_button_label(button_index: int) -> String:
 	match button_index:
 		JOY_BUTTON_A:
-			return "A"
-		JOY_BUTTON_B:
-			return "B"
-		JOY_BUTTON_X:
 			return "X"
+		JOY_BUTTON_B:
+			return "Circle"
+		JOY_BUTTON_X:
+			return "Square"
 		JOY_BUTTON_Y:
-			return "Y"
+			return "Triangle"
 		JOY_BUTTON_BACK:
 			return "Back"
 		JOY_BUTTON_GUIDE:
@@ -1167,6 +1373,8 @@ func _is_action_pressed_if_exists(event: InputEvent, action: StringName) -> bool
 func _on_focusable_control_focused(control: Control) -> void:
 	if controls_section.visible and controls_scroll_container.is_ancestor_of(control):
 		controls_scroll_container.ensure_control_visible(control)
+	if _controller_overlay_open and controller_overlay_scroll_container.is_ancestor_of(control):
+		controller_overlay_scroll_container.ensure_control_visible(control)
 
 
 func _notification(what: int) -> void:

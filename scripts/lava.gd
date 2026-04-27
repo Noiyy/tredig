@@ -6,6 +6,12 @@ const LavaEdgeMath = preload("res://scripts/lava_edge_math.gd")
 const LAVA_BUBBLING_SOUND := preload("res://assets/sounds/bubbling-lava.wav")
 const LAVA_SOUND_UPDATE_INTERVAL := 0.05
 const LAVA_SOUND_SILENT_DB := -80.0
+const CATCHUP_DISTANCE_START_TILES := 10.0
+const CATCHUP_DISTANCE_FIRST_THIRD_TILES := 8.0
+const CATCHUP_DISTANCE_HALF_TILES := 6.0
+const CATCHUP_DISTANCE_SECOND_THIRD_TILES := 5.0
+const CATCHUP_SPEED_MULTIPLIER := 3.0
+const CATCHUP_GRACE_SEC := 5.0
 
 @export var tile_size := 16
 ## Koľko buniek shadera pripadá na jeden hrubý tile (16 px). 8 = bunka ~2 px, 4 = ~4 px.
@@ -35,6 +41,11 @@ var damage_timer: Timer
 var bodies_in_lava: Array = []   # hráči, ktorí sú aktuálne v láve
 
 var last_interval_was_short: bool = false
+var _last_base_grow_interval: float = DEFAULT_GROW_INTERVAL
+var _catchup_boost_active: bool = false
+var _catchup_grace_left: float = 0.0
+var _initial_lava_bottom_y: float = 0.0
+var _map_end_y: float = 0.0
 
 var _bubble_particles: GPUParticles2D = null
 var _bubble_particles_bottom: GPUParticles2D = null
@@ -269,6 +280,7 @@ func _sync_bubble_particle_positions(sync_t: float) -> void:
 
 
 func _process(_delta: float) -> void:
+	_update_catchup_boost(_delta)
 	_lava_time += _delta
 	var sync_t: float = _lava_time * flow_speed
 	_sync_edge_lut_and_collision(sync_t)
@@ -284,6 +296,8 @@ func _process(_delta: float) -> void:
 func _ready() -> void:
 	game_manager = get_tree().root.get_node("Main/GameManager")
 	_setup_lava_audio()
+	_initial_lava_bottom_y = get_lava_bottom_y()
+	_map_end_y = _get_map_end_y()
 
 	var rs0 := col_shape.shape as RectangleShape2D
 	if rs0:
@@ -302,7 +316,8 @@ func _ready() -> void:
 
 	# timer na posúvanie lávy
 	grow_timer = Timer.new()
-	grow_timer.wait_time = grow_interval_sec
+	_last_base_grow_interval = grow_interval_sec
+	grow_timer.wait_time = _get_effective_grow_interval(_last_base_grow_interval)
 	grow_timer.autostart = true
 	grow_timer.one_shot = false
 	add_child(grow_timer)
@@ -405,24 +420,116 @@ func _on_grow_timeout() -> void:
 	_set_next_grow_interval()
 
 func _set_next_grow_interval() -> void:
+	var next_base_interval := DEFAULT_GROW_INTERVAL
 	if last_interval_was_short:
-		grow_timer.wait_time = DEFAULT_GROW_INTERVAL
+		next_base_interval = DEFAULT_GROW_INTERVAL
 		last_interval_was_short = false
 	else:
 		# 25% = normal, 45% = fast, 30% = fastest
 		var rand := randf()
 		if rand < 0.3:
-			grow_timer.wait_time = 0.8
+			next_base_interval = 0.8
 			last_interval_was_short = true
 		elif rand < 0.25 + 0.45:
-			grow_timer.wait_time = 1.25
+			next_base_interval = 1.25
 			last_interval_was_short = false
 		else:
-			grow_timer.wait_time = DEFAULT_GROW_INTERVAL
+			next_base_interval = DEFAULT_GROW_INTERVAL
 			last_interval_was_short = false
+	_last_base_grow_interval = next_base_interval
+	grow_timer.wait_time = _get_effective_grow_interval(next_base_interval)
 
 	# Restart timer s novým wait_time (pre ďalšie timeouty)
 	grow_timer.start()
+
+
+func _get_effective_grow_interval(base_interval: float) -> float:
+	if _catchup_boost_active:
+		return base_interval / CATCHUP_SPEED_MULTIPLIER
+	return base_interval
+
+
+func _get_map_end_y() -> float:
+	var level := get_parent()
+	if level == null:
+		return _initial_lava_bottom_y
+
+	var end_y := -INF
+	for chest_name in ["ChestLeft", "ChestRight"]:
+		var chest := level.get_node_or_null(chest_name) as Node2D
+		if chest != null:
+			end_y = maxf(end_y, chest.global_position.y)
+	if end_y > -INF:
+		return end_y
+
+	var tilemap := level.get_node_or_null("TileMapLayer") as TileMapLayer
+	if tilemap != null:
+		var used_rect := tilemap.get_used_rect()
+		return tilemap.to_global(tilemap.map_to_local(used_rect.end)).y
+	return _initial_lava_bottom_y
+
+
+func _get_lava_map_progress_ratio() -> float:
+	var total_distance := maxf(_map_end_y - _initial_lava_bottom_y, 1.0)
+	var covered_distance := get_lava_bottom_y() - _initial_lava_bottom_y
+	return clampf(covered_distance / total_distance, 0.0, 1.0)
+
+
+func _get_current_catchup_distance_tiles() -> float:
+	var progress := _get_lava_map_progress_ratio()
+	if progress >= 2.0 / 3.0:
+		return CATCHUP_DISTANCE_SECOND_THIRD_TILES
+	if progress >= 0.5:
+		return CATCHUP_DISTANCE_HALF_TILES
+	if progress >= 1.0 / 3.0:
+		return CATCHUP_DISTANCE_FIRST_THIRD_TILES
+	return CATCHUP_DISTANCE_START_TILES
+
+
+func _update_catchup_boost(delta: float) -> void:
+	var all_players_far := _are_all_alive_players_far_from_lava()
+	var was_active := _catchup_boost_active
+
+	if all_players_far:
+		_catchup_boost_active = true
+		_catchup_grace_left = CATCHUP_GRACE_SEC
+	elif _catchup_boost_active:
+		_catchup_grace_left -= delta
+		if _catchup_grace_left <= 0.0:
+			_catchup_boost_active = false
+			_catchup_grace_left = 0.0
+
+	if was_active != _catchup_boost_active:
+		_resync_grow_timer_speed()
+
+
+func _are_all_alive_players_far_from_lava() -> bool:
+	if game_manager == null or game_manager.players.size() == 0:
+		return false
+	var surface_y := get_lava_bottom_y()
+	var threshold_px := _get_current_catchup_distance_tiles() * float(tile_size)
+	var alive_count := 0
+	for player_data in game_manager.players.values():
+		if not player_data.has("ref"):
+			continue
+		var player_ref = player_data.ref
+		if player_ref == null or not is_instance_valid(player_ref) or player_ref.is_dead:
+			continue
+		alive_count += 1
+		var vertical_distance := maxf(player_ref.global_position.y - surface_y, 0.0)
+		if vertical_distance <= threshold_px:
+			return false
+	return alive_count >= 2
+
+
+func _resync_grow_timer_speed() -> void:
+	if grow_timer == null or grow_timer.is_stopped():
+		return
+	var old_wait := maxf(grow_timer.wait_time, 0.001)
+	var progress := 1.0 - clampf(grow_timer.time_left / old_wait, 0.0, 1.0)
+	var new_wait := _get_effective_grow_interval(_last_base_grow_interval)
+	grow_timer.wait_time = new_wait
+	grow_timer.start(maxf(new_wait * (1.0 - progress), 0.001))
 
 func stop_growing() -> void:
 	grow_timer.stop()

@@ -27,6 +27,10 @@ var bonus_drops = []
 
 var tile_data = {} # key: Vector2 (pozícia tile), value: {"level": int, "hp": int}
 var game_manager
+const DIG_HIT_SOUND_COOLDOWN_SEC := 0.12
+const DIG_DISABLED_SOUND_COOLDOWN_SEC := 0.28
+var _next_hit_sound_time_sec := 0.0
+var _next_disabled_sound_time_sec := 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -84,7 +88,7 @@ func damage_tile(player: CharacterBody2D) -> int:
 	var max_x: float = player.dig_max_x
 	
 	if area_pos.x < min_x or area_pos.x > max_x:
-		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
+		_play_disabled_sound_throttled()
 		return DigResult.NONE  # mimo svojho pásma, nič nenič
 	
 	var tile_coords = tilemap.local_to_map(tilemap.to_local(area_pos))
@@ -109,7 +113,7 @@ func damage_tile(player: CharacterBody2D) -> int:
 		tile_level += int(tile_data_res.get_custom_data_by_layer_id(hardness_layer))
 		
 	if player.shovel_level + 6 < tile_level:
-		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
+		_play_disabled_sound_throttled()
 		return DigResult.BLOCKED_TOO_HARD
 		
 	if tile_coords not in tile_data:
@@ -118,9 +122,9 @@ func damage_tile(player: CharacterBody2D) -> int:
 	# Odober hp
 	tile_data[tile_coords].hp -= player.damage_per_hit
 	if player.durability <= 0:
-		AudioManager.play("res://assets/sounds/hit3.wav", "SFXLower")
+		_play_hit_sound_throttled("res://assets/sounds/hit3.wav")
 	else:
-		AudioManager.play("res://assets/sounds/hit2.wav", "SFXLower")
+		_play_hit_sound_throttled("res://assets/sounds/hit2.wav")
 	
 	#var damage_tile_value = get_max_hp_for_tile(tile_level) - tile_data[tile_coords].hp
 	var damage_tile_value = calculate_tile_dmg_val(
@@ -172,7 +176,7 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 	
 	# kontrola či nejde poza čiaru
 	if second_global_pos.x < min_x or second_global_pos.x > max_x:
-		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
+		_play_disabled_sound_throttled()
 		return
 	
 	var tile_id := tilemap.get_cell_source_id(second_coords)
@@ -204,9 +208,9 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 
 	tile_data[second_coords].hp -= player.damage_per_hit
 	if player.durability <= 0:
-		AudioManager.play("res://assets/sounds/hit3.wav", "SFXLower")
+		_play_hit_sound_throttled("res://assets/sounds/hit3.wav")
 	else:
-		AudioManager.play("res://assets/sounds/hit2.wav", "SFXLower")
+		_play_hit_sound_throttled("res://assets/sounds/hit2.wav")
 
 	var damage_tile_value := calculate_tile_dmg_val(
 		tile_data[second_coords].hp,
@@ -228,6 +232,23 @@ func _damage_second_tile(first_coords: Vector2i, dir_vec: Vector2, player: Chara
 		_try_drop_bonus(terrain_type, player)
 	else:
 		dmgTilemap.set_cell(second_coords, tile_id, Vector2(damage_tile_value, 0))
+
+
+func _play_hit_sound_throttled(sound_path: String) -> void:
+	var now_sec := Time.get_ticks_msec() / 1000.0
+	if now_sec < _next_hit_sound_time_sec:
+		return
+	_next_hit_sound_time_sec = now_sec + DIG_HIT_SOUND_COOLDOWN_SEC
+	AudioManager.play(sound_path, "SFXLower")
+
+
+func _play_disabled_sound_throttled() -> void:
+	var now_sec := Time.get_ticks_msec() / 1000.0
+	if now_sec < _next_disabled_sound_time_sec:
+		return
+	_next_disabled_sound_time_sec = now_sec + DIG_DISABLED_SOUND_COOLDOWN_SEC
+	AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
+
 
 func pick_weighted_drop(drop_table):
 	var rand = randf()

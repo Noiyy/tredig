@@ -26,6 +26,7 @@ config/windows_native_icon="res://assets/images/logo-icon2.ico"
 UserSettings="*res://scripts/user_settings.gd"
 Music="*res://scenes/music.tscn"
 AudioManager="*res://scenes/audio_manager.tscn"
+ExpoSandbox="*res://scenes/expo_sandbox.tscn"
 
 [display]
 

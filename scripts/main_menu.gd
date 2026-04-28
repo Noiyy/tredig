@@ -11,6 +11,9 @@ var _menu_nav_repeat_wait := MENU_NAV_REPEAT_DELAY
 
 func _ready() -> void:
 	Music.set_gameplay_music(false)
+	if _is_expo_sandbox_enabled():
+		$MainButtons/QuitButton.visible = false
+		$MainButtons/QuitButton.focus_mode = Control.FOCUS_NONE
 	$MainButtons/PlayButton.grab_focus()
 
 
@@ -50,6 +53,8 @@ func _on_how_to_button_pressed() -> void:
 
 
 func _on_quit_button_pressed() -> void:
+	if _is_expo_sandbox_enabled():
+		return
 	get_tree().quit()
 
 
@@ -67,6 +72,11 @@ func _on_back_button_pressed() -> void:
 	_restore_main_buttons_focus(
 		$MainButtons/SettingsButton if was_settings_open else $MainButtons/CreditsButton
 	)
+
+
+func _is_expo_sandbox_enabled() -> bool:
+	var sandbox := get_node_or_null("/root/ExpoSandbox")
+	return sandbox != null and sandbox.has_method("is_enabled") and bool(sandbox.call("is_enabled"))
 
 
 func _capture_main_buttons_focus(fallback: Control) -> void:

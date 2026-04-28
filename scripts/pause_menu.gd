@@ -14,6 +14,9 @@ func _focus_resume_button() -> void:
 func _ready() -> void:
 	visible = false
 	get_tree().paused = false
+	if _is_expo_sandbox_enabled():
+		$CenterContainer/PauseOptions/QuitButton.visible = false
+		$CenterContainer/PauseOptions/QuitButton.focus_mode = Control.FOCUS_NONE
 
 
 func _process(delta: float) -> void:
@@ -122,4 +125,11 @@ func _on_menu_button_pressed() -> void:
 
 
 func _on_quit_button_pressed() -> void:
+	if _is_expo_sandbox_enabled():
+		return
 	get_tree().quit()
+
+
+func _is_expo_sandbox_enabled() -> bool:
+	var sandbox := get_node_or_null("/root/ExpoSandbox")
+	return sandbox != null and sandbox.has_method("is_enabled") and bool(sandbox.call("is_enabled"))

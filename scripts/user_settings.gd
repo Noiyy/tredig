@@ -2,6 +2,7 @@ extends Node
 
 const LavaScript = preload("res://scripts/lava.gd")
 
+const EXPO_SANDBOX_FEATURE := "expo_sandbox"
 const SETTINGS_VERSION := 1
 const SAVE_PATH := "user://user_settings.cfg"
 
@@ -94,7 +95,9 @@ func _ensure_enter_pairs_for_all_actions() -> void:
 func _apply_general_from_config(config: ConfigFile) -> void:
 	if not config.has_section("general"):
 		return
-	if config.has_section_key("general", "fullscreen"):
+	if OS.has_feature(EXPO_SANDBOX_FEATURE):
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	elif config.has_section_key("general", "fullscreen"):
 		if config.get_value("general", "fullscreen"):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		else:

@@ -179,6 +179,7 @@ func _ready() -> void:
 	_build_controller_ui()
 	_set_controller_subtab(1, false)
 	_select_tab("general")
+	_apply_expo_sandbox_menu_lockdown()
 	_sync_from_system()
 
 
@@ -188,6 +189,7 @@ func _process(delta: float) -> void:
 
 func _on_visibility_changed() -> void:
 	if visible:
+		_apply_expo_sandbox_menu_lockdown()
 		_sync_from_system()
 		_refresh_controls_ui()
 		_refresh_controller_ui()
@@ -201,12 +203,38 @@ func _on_visibility_changed() -> void:
 		_update_controller_connectors()
 
 
+func _apply_expo_sandbox_menu_lockdown() -> void:
+	if not _is_expo_sandbox_enabled():
+		return
+
+	fullscreen_checkbox.visible = false
+	fullscreen_checkbox.focus_mode = Control.FOCUS_NONE
+	fullscreen_checkbox.set_pressed_no_signal(true)
+	_enforce_expo_sandbox_fullscreen()
+
+
+func _is_expo_sandbox_enabled() -> bool:
+	var sandbox := get_node_or_null("/root/ExpoSandbox")
+	return sandbox != null and sandbox.has_method("is_enabled") and bool(sandbox.call("is_enabled"))
+
+
+func _enforce_expo_sandbox_fullscreen() -> void:
+	var sandbox := get_node_or_null("/root/ExpoSandbox")
+	if sandbox != null and sandbox.has_method("enforce_fullscreen"):
+		sandbox.call("enforce_fullscreen")
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+
 func _sync_from_system() -> void:
 	var window_mode := DisplayServer.window_get_mode()
 	fullscreen_checkbox.button_pressed = (
 		window_mode == DisplayServer.WINDOW_MODE_FULLSCREEN
 		or window_mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
 	)
+	if _is_expo_sandbox_enabled():
+		fullscreen_checkbox.set_pressed_no_signal(true)
+		_enforce_expo_sandbox_fullscreen()
 	lava_sound_checkbox.button_pressed = LavaScript.is_lava_sound_enabled()
 	main_volume_slider.value = db_to_linear(
 		AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Master"))
@@ -356,6 +384,12 @@ func close_settings() -> void:
 
 
 func _on_fullscreen_check_box_toggled(toggled_on: bool) -> void:
+	if _is_expo_sandbox_enabled():
+		fullscreen_checkbox.set_pressed_no_signal(true)
+		_enforce_expo_sandbox_fullscreen()
+		UserSettings.save()
+		return
+
 	if toggled_on:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	else:
@@ -393,13 +427,15 @@ func _on_reset_general_pressed() -> void:
 	var default_music_linear := db_to_linear(DEFAULT_MUSIC_DB)
 	var default_sfx_linear := db_to_linear(DEFAULT_SFX_DB)
 	var default_sfx_lower_linear := db_to_linear(DEFAULT_SFXLOWER_DB)
-	fullscreen_checkbox.set_pressed_no_signal(DEFAULT_FULLSCREEN)
+	fullscreen_checkbox.set_pressed_no_signal(true if _is_expo_sandbox_enabled() else DEFAULT_FULLSCREEN)
 	lava_sound_checkbox.set_pressed_no_signal(DEFAULT_LAVA_SOUND)
 	main_volume_slider.set_value_no_signal(default_master_linear)
 	music_volume_slider.set_value_no_signal(default_music_linear)
 	sfx_volume_slider.set_value_no_signal(default_sfx_linear)
 	sfx_lower_volume_slider.set_value_no_signal(default_sfx_lower_linear)
-	if DEFAULT_FULLSCREEN:
+	if _is_expo_sandbox_enabled():
+		_enforce_expo_sandbox_fullscreen()
+	elif DEFAULT_FULLSCREEN:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	else:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)

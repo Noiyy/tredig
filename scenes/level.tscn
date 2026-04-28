@@ -12644,7 +12644,6 @@ test_slot2_uses = 5
 position = Vector2(488, 16)
 controls = ExtResource("4_ppgk2")
 tilemap = NodePath("../TileMapLayer")
-test_apply_skills_on_ready = true
 test_slot1_skill = 1
 test_slot1_uses = 2
 test_slot2_skill = 2

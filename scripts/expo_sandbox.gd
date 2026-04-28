@@ -123,6 +123,7 @@ func _start_attract_mode() -> void:
 	if _attract_active:
 		return
 
+	_reset_controls_for_expo_video()
 	_attract_active = true
 	_previous_paused = get_tree().paused
 	get_tree().paused = true
@@ -151,6 +152,15 @@ func _stop_attract_mode() -> void:
 
 func _reset_idle_timer() -> void:
 	_idle_time_sec = 0.0
+
+
+func _reset_controls_for_expo_video() -> void:
+	InputMap.load_from_project_settings()
+	for action in InputMap.get_actions():
+		Input.action_release(action)
+	Input.flush_buffered_events()
+	if Engine.has_singleton("UserSettings"):
+		UserSettings.save()
 
 
 func _is_activity_event(event: InputEvent) -> bool:

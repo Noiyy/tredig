@@ -119,6 +119,37 @@ theme_override_fonts/font = SubResource("FontVariation_rtw2f")
 text = "  Back  "
 alignment = 0
 
+[node name="HowToMenu" type="Control" parent="." unique_id=2013143708]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="Label" type="Label" parent="HowToMenu" unique_id=1380520300]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 38.0
+offset_right = 608.0
+offset_bottom = 288.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Si 1 z 2 trpaslíkov utekajúci pred lávou. Pohybuj sa a vyber si bloky ktore chceš zničiť aby si sa dostal ďalej. 
+
+Ale pozor, čím si hlbšie, tým je zem tvrdšia a preto si vylepšuj lopatu! To dokážeš zbieraním zlata alebo železa. Tvoja lopata je ale špeciálna a z týchto surovín vieš získať rôzne bonusy, ktoré ti môžu a aj nemusia pomôcť.
+
+ Okrem toho za každý párny level lopaty budeš odmenený výberom 1 schopnosti. Trpaslík s najrýchlejším časom pri dotknutí truhly na konci vyhráva."
+autowrap_mode = 2
+
+[node name="BackButton" type="Button" parent="HowToMenu" unique_id=173575944]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 300.0
+offset_right = 146.0
+offset_bottom = 331.0
+theme_override_fonts/font = SubResource("FontVariation_rtw2f")
+text = "  Back  "
+alignment = 0
+
 [connection signal="pressed" from="MainButtons/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MainButtons/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="MainButtons/CreditsButton" to="." method="_on_credits_button_pressed"]
@@ -126,3 +157,4 @@ alignment = 0
 [connection signal="pressed" from="MainButtons/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="meta_clicked" from="CreditsMenu/Label" to="CreditsMenu/Label" method="_on_meta_clicked"]
 [connection signal="pressed" from="CreditsMenu/MarginContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="HowToMenu/BackButton" to="." method="_on_back_button_pressed"]

@@ -24,7 +24,7 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_cancel"):
 		return
-	if not $SettingsMenu.visible and not $CreditsMenu.visible:
+	if not $SettingsMenu.visible and not $CreditsMenu.visible and not $HowToMenu.visible:
 		return
 
 	_on_back_button_pressed()
@@ -49,7 +49,10 @@ func _on_credits_button_pressed() -> void:
 
 
 func _on_how_to_button_pressed() -> void:
-	pass # Replace with function body.
+	_capture_main_buttons_focus($MainButtons/HowToButton)
+	$MainButtons.visible = false
+	$HowToMenu.visible = true
+	$BlackOverlay.visible = true
 
 
 func _on_quit_button_pressed() -> void:
@@ -61,6 +64,7 @@ func _on_quit_button_pressed() -> void:
 func _on_back_button_pressed() -> void:
 	var was_settings_open: bool = $SettingsMenu.visible
 	var was_credits_open: bool = $CreditsMenu.visible
+	var was_how_to_open: bool = $HowToMenu.visible
 	$MainButtons.visible = true
 	$BlackOverlay.visible = false
 
@@ -69,8 +73,19 @@ func _on_back_button_pressed() -> void:
 		
 	if was_credits_open:
 		$CreditsMenu.visible = false
+	
+	if was_how_to_open:
+		$HowToMenu.visible = false
+
+	var fallback := $MainButtons/PlayButton
+	if was_settings_open:
+		fallback = $MainButtons/SettingsButton
+	elif was_credits_open:
+		fallback = $MainButtons/CreditsButton
+	elif was_how_to_open:
+		fallback = $MainButtons/HowToButton
 	_restore_main_buttons_focus(
-		$MainButtons/SettingsButton if was_settings_open else $MainButtons/CreditsButton
+		fallback
 	)
 
 
@@ -94,7 +109,7 @@ func _restore_main_buttons_focus(fallback: Control) -> void:
 
 
 func _tick_controller_menu_navigation_repeat(delta: float) -> void:
-	if not $MainButtons.visible and not $CreditsMenu.visible:
+	if not $MainButtons.visible and not $CreditsMenu.visible and not $HowToMenu.visible:
 		_reset_controller_menu_navigation_repeat()
 		return
 

@@ -55,7 +55,9 @@ var is_digging: bool = false
 var dig_anim_time: float = 0.0
 const DIG_ANIM_DURATION := 0.25
 const DIG_REPEAT_INTERVAL := 0.1 # 0.032
+const DISABLED_DIG_SOUND_COOLDOWN_SEC := 0.28
 var dig_repeat_timer: float = 0.0
+var _next_disabled_dig_sound_time_sec := 0.0
 
 # Set true by SkillCardPick when it consumes a `controls.use` press to confirm a card.
 # Causes the dig logic in _process to skip just this frame so a single tap doesn't
@@ -211,7 +213,7 @@ func _process(_delta: float) -> void:
 
 func _try_dig() -> void:
 	if not can_dig:
-		AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
+		_play_disabled_dig_sound_throttled()
 		return
 	# debuffni hrača automaticky keď mu dojde durability
 	# obnovenie je v levelup-e
@@ -239,6 +241,14 @@ func _try_dig() -> void:
 	var dig_result: int = tile_manager.damage_tile(self)
 	if dig_result == tile_manager.DigResult.BLOCKED_TOO_HARD:
 		HUD.pulse_level_blocked_shake(self)
+
+
+func _play_disabled_dig_sound_throttled() -> void:
+	var now_sec := Time.get_ticks_msec() / 1000.0
+	if now_sec < _next_disabled_dig_sound_time_sec:
+		return
+	_next_disabled_dig_sound_time_sec = now_sec + DISABLED_DIG_SOUND_COOLDOWN_SEC
+	AudioManager.play("res://assets/sounds/disabled.wav", "SFXLower", false)
 			
 func add_exp(amount: int):
 	game_manager.add_player_exp(self, amount)

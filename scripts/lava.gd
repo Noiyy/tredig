@@ -6,12 +6,12 @@ const LavaEdgeMath = preload("res://scripts/lava_edge_math.gd")
 const LAVA_BUBBLING_SOUND := preload("res://assets/sounds/bubbling-lava.wav")
 const LAVA_SOUND_UPDATE_INTERVAL := 0.05
 const LAVA_SOUND_SILENT_DB := -80.0
-const CATCHUP_DISTANCE_START_TILES := 10.0
-const CATCHUP_DISTANCE_FIRST_THIRD_TILES := 8.0
-const CATCHUP_DISTANCE_HALF_TILES := 6.0
-const CATCHUP_DISTANCE_SECOND_THIRD_TILES := 5.0
-const CATCHUP_SPEED_MULTIPLIER := 3.0
 const CATCHUP_GRACE_SEC := 5.0
+const CATCHUP_ACTIVATION_DISTANCE_TILES := 8.0
+const CATCHUP_DISTANCE_MIN_TILES := 6.0
+const CATCHUP_DISTANCE_MAX_TILES := 20.0
+const CATCHUP_INTERVAL_MIN_SEC := 0.35
+const CATCHUP_INTERVAL_MAX_SEC := 1.0
 
 @export var tile_size := 16
 ## Koľko buniek shadera pripadá na jeden hrubý tile (16 px). 8 = bunka ~2 px, 4 = ~4 px.
@@ -445,7 +445,7 @@ func _set_next_grow_interval() -> void:
 
 func _get_effective_grow_interval(base_interval: float) -> float:
 	if _catchup_boost_active:
-		return base_interval / CATCHUP_SPEED_MULTIPLIER
+		return _get_catchup_grow_interval_from_distance()
 	return base_interval
 
 
@@ -475,22 +475,41 @@ func _get_lava_map_progress_ratio() -> float:
 	return clampf(covered_distance / total_distance, 0.0, 1.0)
 
 
-func _get_current_catchup_distance_tiles() -> float:
-	var progress := _get_lava_map_progress_ratio()
-	if progress >= 2.0 / 3.0:
-		return CATCHUP_DISTANCE_SECOND_THIRD_TILES
-	if progress >= 0.5:
-		return CATCHUP_DISTANCE_HALF_TILES
-	if progress >= 1.0 / 3.0:
-		return CATCHUP_DISTANCE_FIRST_THIRD_TILES
-	return CATCHUP_DISTANCE_START_TILES
+func _get_catchup_grow_interval_from_distance() -> float:
+	var nearest_distance_tiles := _get_nearest_alive_player_distance_tiles()
+	if nearest_distance_tiles < 0.0:
+		return _last_base_grow_interval
+	var t := inverse_lerp(CATCHUP_DISTANCE_MIN_TILES, CATCHUP_DISTANCE_MAX_TILES, nearest_distance_tiles)
+	t = clampf(t, 0.0, 1.0)
+	## Larger distance => shorter interval (more aggressive catchup).
+	return lerpf(CATCHUP_INTERVAL_MAX_SEC, CATCHUP_INTERVAL_MIN_SEC, t)
+
+
+func _get_nearest_alive_player_distance_tiles() -> float:
+	if game_manager == null or game_manager.players.size() == 0:
+		return -1.0
+	var surface_y := get_lava_bottom_y()
+	var nearest_distance_px := INF
+	var alive_count := 0
+	for player_data in game_manager.players.values():
+		if not player_data.has("ref"):
+			continue
+		var player_ref = player_data.ref as CharacterBody2D
+		if player_ref == null or not is_instance_valid(player_ref) or player_ref.is_dead:
+			continue
+		alive_count += 1
+		var vertical_distance := maxf(player_ref.global_position.y - surface_y, 0.0)
+		nearest_distance_px = minf(nearest_distance_px, vertical_distance)
+	if alive_count == 0 or nearest_distance_px == INF:
+		return -1.0
+	return nearest_distance_px / maxf(float(tile_size), 1.0)
 
 
 func _update_catchup_boost(delta: float) -> void:
-	var all_players_far := _are_all_alive_players_far_from_lava()
+	var nearest_is_far := _is_nearest_alive_player_far_from_lava()
 	var was_active := _catchup_boost_active
 
-	if all_players_far:
+	if nearest_is_far:
 		_catchup_boost_active = true
 		_catchup_grace_left = CATCHUP_GRACE_SEC
 	elif _catchup_boost_active:
@@ -503,23 +522,11 @@ func _update_catchup_boost(delta: float) -> void:
 		_resync_grow_timer_speed()
 
 
-func _are_all_alive_players_far_from_lava() -> bool:
-	if game_manager == null or game_manager.players.size() == 0:
+func _is_nearest_alive_player_far_from_lava() -> bool:
+	var nearest_distance_tiles := _get_nearest_alive_player_distance_tiles()
+	if nearest_distance_tiles < 0.0:
 		return false
-	var surface_y := get_lava_bottom_y()
-	var threshold_px := _get_current_catchup_distance_tiles() * float(tile_size)
-	var alive_count := 0
-	for player_data in game_manager.players.values():
-		if not player_data.has("ref"):
-			continue
-		var player_ref = player_data.ref
-		if player_ref == null or not is_instance_valid(player_ref) or player_ref.is_dead:
-			continue
-		alive_count += 1
-		var vertical_distance := maxf(player_ref.global_position.y - surface_y, 0.0)
-		if vertical_distance <= threshold_px:
-			return false
-	return alive_count >= 2
+	return nearest_distance_tiles > CATCHUP_ACTIVATION_DISTANCE_TILES
 
 
 func _resync_grow_timer_speed() -> void:

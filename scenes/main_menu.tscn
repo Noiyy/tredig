@@ -6,12 +6,27 @@
 [ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="4_8ln24"]
 [ext_resource type="PackedScene" uid="uid://3rutvgci8l17" path="res://scenes/settings_menu.tscn" id="4_wu84c"]
 [ext_resource type="Script" uid="uid://cyq7b4uh17vtt" path="res://scripts/noiyyLabel.gd" id="6_rtw2f"]
+[ext_resource type="Texture2D" uid="uid://d2jlbc2i1awq5" path="res://assets/images/lava-splat.png" id="7_oa1go"]
+[ext_resource type="Texture2D" uid="uid://dai7bg0bldlgo" path="res://assets/images/tile-highlight_tut.png" id="8_jk1qb"]
+[ext_resource type="Texture2D" uid="uid://diceqcfsuyvpa" path="res://assets/images/chevron.png" id="9_5dd4i"]
+[ext_resource type="Texture2D" uid="uid://cp2mjodb2s8be" path="res://assets/images/shovel_lvl.png" id="9_flqon"]
+[ext_resource type="Texture2D" uid="uid://clbljrd3tytel" path="res://assets/images/durability-0.png" id="10_rcqid"]
+[ext_resource type="Texture2D" uid="uid://bnhitbdh27224" path="res://assets/images/iron_gold.png" id="11_1ajci"]
+[ext_resource type="Texture2D" uid="uid://skflg6q3xlxa" path="res://assets/images/bonus.png" id="12_1ajci"]
+[ext_resource type="Texture2D" uid="uid://cbk114b861unw" path="res://assets/images/skill.png" id="13_7b55j"]
+[ext_resource type="Texture2D" uid="uid://iedto63srols" path="res://assets/images/treasure.png" id="14_7b55j"]
 
 [sub_resource type="FontVariation" id="FontVariation_rtw2f"]
 base_font = ExtResource("4_8ln24")
 variation_opentype = {
 1869640570: 14,
 2003265652: 600
+}
+
+[sub_resource type="FontVariation" id="FontVariation_tbmy8"]
+variation_opentype = {
+1869640570: 14,
+2003265652: 800
 }
 
 [node name="MainMenu" type="Node2D" unique_id=1570356935]
@@ -88,12 +103,12 @@ offset_bottom = 238.0
 alignment = 1
 
 [node name="Label" type="RichTextLabel" parent="CreditsMenu" unique_id=1707092442]
-custom_minimum_size = Vector2(128, 0)
+custom_minimum_size = Vector2(274, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 bbcode_enabled = true
-text = "Game by [b][url=https://noiyy.eu]Noiyy[/url][/b]"
+text = "Game by [b][url=https://noiyy.eu]Benjamín Muľár (Noiyy)[/url][/b]"
 fit_content = true
 autowrap_mode = 2
 horizontal_alignment = 1
@@ -126,18 +141,200 @@ anchors_preset = 0
 offset_right = 640.0
 offset_bottom = 360.0
 
-[node name="Label" type="Label" parent="HowToMenu" unique_id=1380520300]
+[node name="HeadingTextureRect" type="TextureRect" parent="HowToMenu" unique_id=1518482876]
 layout_mode = 0
-offset_left = 58.0
-offset_top = 38.0
-offset_right = 608.0
-offset_bottom = 288.0
+offset_left = 18.0
+offset_top = 10.0
+offset_right = 197.62617
+offset_bottom = 72.0
+texture = ExtResource("7_oa1go")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="HowToMenu/HeadingTextureRect" unique_id=2012613708]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 18.0
+offset_right = 144.0
+offset_bottom = 38.0
+theme_override_fonts/font = SubResource("FontVariation_tbmy8")
+theme_override_font_sizes/font_size = 13
+text = "BASE CONTROLS"
+
+[node name="1" type="Control" parent="HowToMenu" unique_id=1586278485]
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="Label" type="Label" parent="HowToMenu/1" unique_id=1380520300]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 82.0
+offset_right = 618.0
+offset_bottom = 137.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-text = "Si 1 z 2 trpaslíkov utekajúci pred lávou. Pohybuj sa a vyber si bloky ktore chceš zničiť aby si sa dostal ďalej. 
+theme_override_font_sizes/font_size = 12
+text = "You play as one of the 2 dwarves on 1 half of the screen. The other half is reserverd for the second player. To move, use [WASD/arrows] / [controller D-pad or stick] - this also serves as a guide to which direction you're facing and can dig - to do so, press [Space/Enter] / [Y or Triangle]."
+autowrap_mode = 2
 
-Ale pozor, čím si hlbšie, tým je zem tvrdšia a preto si vylepšuj lopatu! To dokážeš zbieraním zlata alebo železa. Tvoja lopata je ale špeciálna a z týchto surovín vieš získať rôzne bonusy, ktoré ti môžu a aj nemusia pomôcť.
+[node name="TextureRect2" type="TextureRect" parent="HowToMenu/1" unique_id=534365086]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 139.0
+offset_right = 144.0
+offset_bottom = 212.53659
+texture = ExtResource("8_jk1qb")
+expand_mode = 1
 
- Okrem toho za každý párny level lopaty budeš odmenený výberom 1 schopnosti. Trpaslík s najrýchlejším časom pri dotknutí truhly na konci vyhráva."
+[node name="TextureRect3" type="TextureRect" parent="HowToMenu/1" unique_id=1386069517]
+layout_mode = 0
+offset_left = 382.0
+offset_top = 160.0
+offset_right = 583.15155
+offset_bottom = 203.0
+texture = ExtResource("9_flqon")
+expand_mode = 1
+
+[node name="Label2" type="Label" parent="HowToMenu/1" unique_id=601554334]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 218.0
+offset_right = 618.0
+offset_bottom = 287.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "But beware! Each block has its own hardness and the deeper you go, the harder they become so make sure your shovel is strong enough (number in golden shape) as to not to get stuck. This is also indicated by the color of tile highlight - white for the easiest and fastest dig, yellow for normal, orange for hard and those that are red, you cannot even dent!"
+autowrap_mode = 2
+
+[node name="2" type="Control" parent="HowToMenu" unique_id=135668640]
+visible = false
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="Label" type="Label" parent="HowToMenu/2" unique_id=9825721]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 82.0
+offset_right = 618.0
+offset_bottom = 118.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "Another thing to look out for is your shovel's durability. Once it reaches 0, the bar will turn red and you'll get slower and quite weaker. "
+autowrap_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="HowToMenu/2" unique_id=308655538]
+layout_mode = 0
+offset_left = 238.0
+offset_top = 99.0
+offset_right = 347.4375
+offset_bottom = 116.0
+texture = ExtResource("10_rcqid")
+expand_mode = 1
+
+[node name="Label2" type="Label" parent="HowToMenu/2" unique_id=124912022]
+layout_mode = 0
+offset_left = 29.0
+offset_top = 135.0
+offset_right = 512.0
+offset_bottom = 190.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "To repair your shovel and get stronger, you need to level up you shovel - to do this, you need to dig iron & gold blocks, which give you experience. Iron is more common and gives less, while gold is more valuable.
+
+
+Other than experience, these blocks can give you random buffs or debuffs with a small chance for a limited time - such as a stronger & better shovel. You can have max 2 bonuses at once."
+autowrap_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="HowToMenu/2" unique_id=1184498123]
+layout_mode = 0
+offset_left = 512.0
+offset_top = 120.0
+offset_right = 577.0
+offset_bottom = 197.54387
+texture = ExtResource("11_1ajci")
+expand_mode = 1
+
+[node name="TextureRect4" type="TextureRect" parent="HowToMenu/2" unique_id=1275947004]
+layout_mode = 0
+offset_left = 498.0
+offset_top = 213.0
+offset_right = 568.53436
+offset_bottom = 279.0
+texture = ExtResource("12_1ajci")
+expand_mode = 1
+
+[node name="3" type="Control" parent="HowToMenu" unique_id=1211977500]
+visible = false
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="Label" type="Label" parent="HowToMenu/3" unique_id=523147417]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 82.0
+offset_right = 618.0
+offset_bottom = 118.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "Bonuses aren't the only thing you can get - for every even level you reach, you get to choose 1 skill to use from 3 options. There are numerous skills, some can help you and some can sabotage the other player. Some have multiple levels of strength from 1-3 and also multiple uses."
+autowrap_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="HowToMenu/3" unique_id=1730085782]
+layout_mode = 0
+offset_left = 307.0
+offset_top = 140.0
+offset_right = 366.0
+offset_bottom = 199.303
+texture = ExtResource("13_7b55j")
+expand_mode = 1
+
+[node name="Label2" type="Label" parent="HowToMenu/3" unique_id=759476034]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 207.0
+offset_right = 618.0
+offset_bottom = 258.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "To use them, just press the corresponding key when you want to. You can have maximum 3 skills available at once."
+autowrap_mode = 2
+
+[node name="4" type="Control" parent="HowToMenu" unique_id=1044731646]
+visible = false
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 360.0
+
+[node name="Label" type="Label" parent="HowToMenu/4" unique_id=2090116790]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 82.0
+offset_right = 618.0
+offset_bottom = 118.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "Your goal is to get deeper and deeper to find the hidden treasure sooner than the other player."
+autowrap_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="HowToMenu/4" unique_id=193484792]
+layout_mode = 0
+offset_left = 307.0
+offset_top = 107.0
+offset_right = 363.0
+offset_bottom = 155.0
+texture = ExtResource("14_7b55j")
+expand_mode = 1
+
+[node name="Label2" type="Label" parent="HowToMenu/4" unique_id=1680026395]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 172.0
+offset_right = 619.0
+offset_bottom = 223.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "But multiple dangers await, if not the sabotage from the other player with dynamites, then it is the ever closing lava thats flowing downwards from above. Each second in it damages you, so be careful not to get burnt to crisp!"
 autowrap_mode = 2
 
 [node name="BackButton" type="Button" parent="HowToMenu" unique_id=173575944]
@@ -149,6 +346,35 @@ offset_bottom = 331.0
 theme_override_fonts/font = SubResource("FontVariation_rtw2f")
 text = "  Back  "
 alignment = 0
+
+[node name="ChevronLeft" type="TextureRect" parent="HowToMenu" unique_id=851959985]
+layout_mode = 0
+offset_left = 587.0
+offset_top = 317.0
+offset_right = 593.0
+offset_bottom = 325.88
+texture = ExtResource("9_5dd4i")
+expand_mode = 1
+flip_h = true
+
+[node name="ChevronRight" type="TextureRect" parent="HowToMenu" unique_id=1202984974]
+layout_mode = 0
+offset_left = 604.0
+offset_top = 317.0
+offset_right = 610.0
+offset_bottom = 325.88
+texture = ExtResource("9_5dd4i")
+expand_mode = 1
+
+[node name="PageNum" type="Label" parent="HowToMenu" unique_id=1888470113]
+layout_mode = 0
+offset_left = 578.0
+offset_top = 333.0
+offset_right = 618.0
+offset_bottom = 353.0
+theme_override_font_sizes/font_size = 10
+text = "1/4"
+horizontal_alignment = 1
 
 [connection signal="pressed" from="MainButtons/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MainButtons/SettingsButton" to="." method="_on_settings_button_pressed"]

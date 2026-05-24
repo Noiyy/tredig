@@ -4,10 +4,14 @@ const MENU_NAV_DEADZONE := 0.55
 const MENU_NAV_REPEAT_DELAY := 0.32
 const MENU_NAV_REPEAT_INTERVAL := 0.08
 
+const _PAGE_COUNT := 4
+const _PAGE_HEADINGS := ["BASE CONTROLS", "PROGRESS", "PROGRESS", "GAME LOOP"]
+
 var _last_main_buttons_focus: Control
 var _held_menu_nav_action: StringName = &""
 var _menu_nav_repeat_timer := 0.0
 var _menu_nav_repeat_wait := MENU_NAV_REPEAT_DELAY
+var _current_how_to_page := 1
 
 func _ready() -> void:
 	Music.set_gameplay_music(false)
@@ -15,6 +19,8 @@ func _ready() -> void:
 		$MainButtons/QuitButton.visible = false
 		$MainButtons/QuitButton.focus_mode = Control.FOCUS_NONE
 	$MainButtons/PlayButton.grab_focus()
+	$HowToMenu/ChevronLeft.gui_input.connect(_on_chevron_left_input)
+	$HowToMenu/ChevronRight.gui_input.connect(_on_chevron_right_input)
 
 
 func _process(delta: float) -> void:
@@ -22,6 +28,16 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if $HowToMenu.visible:
+		if event.is_action_pressed("ui_left"):
+			_navigate_how_to_page(-1)
+			get_viewport().set_input_as_handled()
+			return
+		elif event.is_action_pressed("ui_right"):
+			_navigate_how_to_page(1)
+			get_viewport().set_input_as_handled()
+			return
+
 	if not event.is_action_pressed("ui_cancel"):
 		return
 	if not $SettingsMenu.visible and not $CreditsMenu.visible and not $HowToMenu.visible:
@@ -53,6 +69,8 @@ func _on_how_to_button_pressed() -> void:
 	$MainButtons.visible = false
 	$HowToMenu.visible = true
 	$BlackOverlay.visible = true
+	_current_how_to_page = 1
+	_update_how_to_page()
 
 
 func _on_quit_button_pressed() -> void:
@@ -177,6 +195,33 @@ func _emit_menu_navigation_action(action: StringName) -> void:
 	release.action = action
 	release.pressed = false
 	Input.parse_input_event(release)
+
+
+func _navigate_how_to_page(direction: int) -> void:
+	var new_page := _current_how_to_page + direction
+	if new_page < 1 or new_page > _PAGE_COUNT:
+		return
+	_current_how_to_page = new_page
+	_update_how_to_page()
+
+
+func _update_how_to_page() -> void:
+	for i in range(1, _PAGE_COUNT + 1):
+		$HowToMenu.get_node(str(i)).visible = (i == _current_how_to_page)
+	$HowToMenu/PageNum.text = "%d/%d" % [_current_how_to_page, _PAGE_COUNT]
+	$HowToMenu/HeadingTextureRect/Label.text = _PAGE_HEADINGS[_current_how_to_page - 1]
+	$HowToMenu/ChevronLeft.modulate = Color(1, 1, 1, 0.5 if _current_how_to_page == 1 else 1.0)
+	$HowToMenu/ChevronRight.modulate = Color(1, 1, 1, 0.5 if _current_how_to_page == _PAGE_COUNT else 1.0)
+
+
+func _on_chevron_left_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_navigate_how_to_page(-1)
+
+
+func _on_chevron_right_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_navigate_how_to_page(1)
 
 
 func _on_fullscreen_check_box_toggled(toggled_on: bool) -> void:

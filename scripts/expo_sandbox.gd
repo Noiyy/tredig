@@ -2,8 +2,8 @@ extends CanvasLayer
 
 const FEATURE_NAME := "expo_sandbox"
 const TRAILER_PATH := "res://assets/images/short_trailer.ogv"
-const MENU_IDLE_TIMEOUT_SEC := 60.0
-const GAME_IDLE_TIMEOUT_SEC := 90.0
+const MENU_IDLE_TIMEOUT_SEC := 25.0
+const GAME_IDLE_TIMEOUT_SEC := 45.0
 const FULLSCREEN_CHECK_INTERVAL_SEC := 1.0
 
 @onready var blocker: ColorRect = $Blocker
@@ -164,9 +164,6 @@ func _reset_controls_for_expo_video() -> void:
 
 
 func _is_activity_event(event: InputEvent) -> bool:
-	if event is InputEventMouseMotion:
-		return true
-
 	var mouse_button_event := event as InputEventMouseButton
 	if mouse_button_event != null:
 		return mouse_button_event.pressed
@@ -182,17 +179,6 @@ func _is_activity_event(event: InputEvent) -> bool:
 	var joy_motion_event := event as InputEventJoypadMotion
 	if joy_motion_event != null:
 		return absf(joy_motion_event.axis_value) >= 0.5
-
-	var touch_event := event as InputEventScreenTouch
-	if touch_event != null:
-		return touch_event.pressed
-
-	if event is InputEventScreenDrag:
-		return true
-
-	var action_event := event as InputEventAction
-	if action_event != null:
-		return action_event.pressed
 
 	return false
 

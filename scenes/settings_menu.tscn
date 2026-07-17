@@ -1,15 +1,14 @@
 [gd_scene format=3 uid="uid://3rutvgci8l17"]
 
 [ext_resource type="Script" uid="uid://b56okk561i2le" path="res://scripts/settings_menu.gd" id="1_05p07"]
-[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="2_cr101"]
+[ext_resource type="FontFile" uid="uid://bit581a6i33fo" path="res://assets/fonts/PressStart2P-Regular.ttf" id="2_cr101"]
 [ext_resource type="Texture2D" uid="uid://b6rss7hkni1vf" path="res://assets/images/controller-ps.png" id="3_nh0vc"]
 
-[sub_resource type="FontVariation" id="FontVariation_subtab"]
-base_font = ExtResource("2_cr101")
-variation_opentype = {
-1869640570: 11,
-2003265652: 600
-}
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wswnh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_labj1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwwgp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtab_normal"]
 content_margin_left = 4.0
@@ -22,10 +21,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.4)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtab_press"]
 content_margin_left = 4.0
@@ -38,10 +33,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.9)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtab_hover"]
 content_margin_left = 4.0
@@ -54,81 +45,16 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_subtabs"]
 
-[sub_resource type="FontVariation" id="FontVariation_wswnh"]
-base_font = ExtResource("2_cr101")
-variation_opentype = {
-1869640570: 14,
-2003265652: 600
-}
-
-[sub_resource type="FontVariation" id="FontVariation_labj1"]
-base_font = SubResource("FontVariation_wswnh")
-variation_opentype = {
-1869640570: 14,
-2003265652: 600
-}
-
-[sub_resource type="FontVariation" id="FontVariation_lwwgp"]
-base_font = ExtResource("2_cr101")
-variation_opentype = {
-1869640570: 14,
-2003265652: 600
-}
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wswnh"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_labj1"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lwwgp"]
-
-[sub_resource type="FontVariation" id="FontVariation_rtw2f"]
-base_font = ExtResource("2_cr101")
-variation_opentype = {
-1869640570: 14,
-2003265652: 600
-}
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bgjg7"]
-
-[sub_resource type="FontVariation" id="FontVariation_bgjg7"]
-variation_opentype = {
-1869640570: 14,
-2003265652: 700
-}
-
-[sub_resource type="FontVariation" id="FontVariation_48ojb"]
-base_font = ExtResource("2_cr101")
-variation_opentype = {
-1869640570: 14,
-2003265652: 600
-}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n35ux"]
 bg_color = Color(0, 0.72, 0.21599998, 0.09803922)
 
-[sub_resource type="FontVariation" id="FontVariation_fb6cq"]
-base_font = ExtResource("2_cr101")
-variation_opentype = {
-1869640570: 14,
-2003265652: 600
-}
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ctot"]
 bg_color = Color(0.99, 0.21780004, 0.21780004, 0.09803922)
-
-[sub_resource type="FontVariation" id="FontVariation_jrqig"]
-base_font = ExtResource("2_cr101")
-variation_opentype = {
-1869640570: 14,
-2003265652: 600
-}
 
 [node name="SettingsMenu" type="Control" unique_id=1208449152]
 layout_mode = 3
@@ -268,23 +194,23 @@ offset_bottom = 322.0
 
 [node name="TabsContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=178384294]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 2
 alignment = 1
 
 [node name="GeneralTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=940258797]
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_labj1")
-text = "  General  "
+theme_override_font_sizes/font_size = 7
+text = "General"
 
 [node name="ControlsTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=835048227]
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_wswnh")
-text = "  Controls  "
+theme_override_font_sizes/font_size = 7
+text = "Controls"
 
 [node name="ControllerTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=210398771]
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_lwwgp")
-text = "  Controller  "
+theme_override_font_sizes/font_size = 7
+text = "Controller"
 
 [node name="Sections" type="VBoxContainer" parent="VBoxContainer" unique_id=792550640]
 layout_mode = 2
@@ -340,7 +266,16 @@ offset_right = 101.0
 offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
 text = "Main volume"
-horizontal_alignment = 1
+
+[node name="PercentLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/MainVolHSlider" unique_id=327653481]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 2.0
+offset_right = 198.0
+offset_bottom = 18.0
+theme_override_font_sizes/font_size = 10
+text = "100%"
+vertical_alignment = 1
 
 [node name="MusicVolHSlider" type="HSlider" parent="VBoxContainer/Sections/GeneralSection" unique_id=802619179]
 custom_minimum_size = Vector2(150, 20)
@@ -356,7 +291,16 @@ offset_right = 101.0
 offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
 text = "Music volume"
-horizontal_alignment = 1
+
+[node name="PercentLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/MusicVolHSlider" unique_id=1752152204]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 2.0
+offset_right = 198.0
+offset_bottom = 18.0
+theme_override_font_sizes/font_size = 10
+text = "100%"
+vertical_alignment = 1
 
 [node name="SFXVolHSlider" type="HSlider" parent="VBoxContainer/Sections/GeneralSection" unique_id=2042670362]
 custom_minimum_size = Vector2(150, 20)
@@ -374,6 +318,16 @@ theme_override_font_sizes/font_size = 10
 text = "Primary SFX volume"
 horizontal_alignment = 1
 
+[node name="PercentLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/SFXVolHSlider" unique_id=829865776]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 2.0
+offset_right = 198.0
+offset_bottom = 18.0
+theme_override_font_sizes/font_size = 10
+text = "100%"
+vertical_alignment = 1
+
 [node name="SFXLowerVolHSlider" type="HSlider" parent="VBoxContainer/Sections/GeneralSection" unique_id=2042670363]
 custom_minimum_size = Vector2(150, 20)
 layout_mode = 2
@@ -389,6 +343,16 @@ offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
 text = "Secondary SFX volume"
 horizontal_alignment = 1
+
+[node name="PercentLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/SFXLowerVolHSlider" unique_id=829865777]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 2.0
+offset_right = 198.0
+offset_bottom = 18.0
+theme_override_font_sizes/font_size = 10
+text = "100%"
+vertical_alignment = 1
 
 [node name="ControlsSection" type="VBoxContainer" parent="VBoxContainer/Sections" unique_id=1767122476]
 visible = false
@@ -524,7 +488,6 @@ text = "●"
 [node name="ControllerP1Subtab" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP1SubtabRow" unique_id=199990002]
 custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_subtab")
 theme_override_font_sizes/font_size = 9
 theme_override_styles/normal = SubResource("StyleBoxFlat_subtab_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_subtab_press")
@@ -547,7 +510,6 @@ text = "●"
 [node name="ControllerP2Subtab" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow/ControllerP2SubtabRow" unique_id=199990003]
 custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_subtab")
 theme_override_font_sizes/font_size = 9
 theme_override_styles/normal = SubResource("StyleBoxFlat_subtab_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_subtab_press")
@@ -560,7 +522,6 @@ text = "  Player 2  "
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 10
-theme_override_fonts/font = SubResource("FontVariation_rtw2f")
 text = "  Back  "
 alignment = 0
 
@@ -599,8 +560,8 @@ theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220006]
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_bgjg7")
-theme_override_font_sizes/font_size = 15
+theme_override_fonts/font = ExtResource("2_cr101")
+theme_override_font_sizes/font_size = 10
 text = "Controller Bindings"
 horizontal_alignment = 1
 
@@ -949,7 +910,6 @@ alignment = 1
 [node name="ConfirmButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow" unique_id=198220046]
 custom_minimum_size = Vector2(96, 30)
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_48ojb")
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_n35ux")
 text = "Confirm"
@@ -957,7 +917,6 @@ text = "Confirm"
 [node name="CancelButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow" unique_id=198220047]
 custom_minimum_size = Vector2(96, 30)
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_fb6cq")
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_2ctot")
 text = "Cancel"
@@ -965,6 +924,5 @@ text = "Cancel"
 [node name="ResetButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow" unique_id=198220048]
 custom_minimum_size = Vector2(96, 30)
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_jrqig")
 theme_override_font_sizes/font_size = 10
 text = "Reset"

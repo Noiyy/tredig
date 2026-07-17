@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://clw1l5r8g1ktp" path="res://assets/images/player-shovel.png" id="4_efew1"]
 [ext_resource type="Texture2D" uid="uid://dal5yw8nrupan" path="res://assets/images/player-shovel-under.png" id="4_m54p7"]
 [ext_resource type="Texture2D" uid="uid://bqkbro88x458t" path="res://assets/images/player-shovel-bar.png" id="4_web7g"]
-[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="5_ktj33"]
+[ext_resource type="FontFile" uid="uid://bit581a6i33fo" path="res://assets/fonts/PressStart2P-Regular.ttf" id="5_ktj33"]
 [ext_resource type="Texture2D" uid="uid://cjd22cid4x56r" path="res://assets/images/player-durability-bar.png" id="6_05v3i"]
 [ext_resource type="Texture2D" uid="uid://cvwygdwapbpoq" path="res://assets/images/player-durability.png" id="6_dpdg1"]
 [ext_resource type="Texture2D" uid="uid://bvyidcwy4b7yq" path="res://assets/images/durability-icon.png" id="6_yhkk5"]
@@ -26,7 +26,7 @@ variation_opentype = {
 }
 
 [sub_resource type="LabelSettings" id="LabelSettings_3divr"]
-font_size = 20
+font_size = 14
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
@@ -49,8 +49,8 @@ variation_opentype = {
 }
 
 [sub_resource type="LabelSettings" id="LabelSettings_r1vqg"]
-font_size = 12
-outline_size = 4
+font_size = 8
+outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
 [node name="PlayerHUDPanel" type="Control" unique_id=1414023953]
@@ -110,10 +110,10 @@ texture = ExtResource("7_web7g")
 
 [node name="LevelLabel" type="Label" parent="." unique_id=103761948]
 layout_mode = 0
-offset_left = -3.0
-offset_top = 10.0
-offset_right = 28.0
-offset_bottom = 38.0
+offset_left = -2.0
+offset_top = 16.0
+offset_right = 29.0
+offset_bottom = 30.0
 theme_override_fonts/font = SubResource("FontVariation_dpdg1")
 text = "1"
 label_settings = SubResource("LabelSettings_3divr")
@@ -148,8 +148,9 @@ mouse_filter = 2
 
 [node name="HPLabel" type="Label" parent="HPLabelPulse" unique_id=984776373]
 layout_mode = 0
+offset_top = 5.0
 offset_right = 26.0
-offset_bottom = 17.0
+offset_bottom = 14.0
 theme_override_fonts/font = SubResource("FontVariation_le0by")
 text = "100"
 label_settings = SubResource("LabelSettings_r1vqg")

@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://dc0rt0qy6mtxm"]
 
-[ext_resource type="Script" path="res://scripts/skill_card_pick.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bj70676cgruf4" path="res://scripts/skill_card_pick.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="2_font"]
+[ext_resource type="FontFile" uid="uid://bit581a6i33fo" path="res://assets/fonts/PressStart2P-Regular.ttf" id="3_pixel"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panelbg"]
 bg_color = Color(0, 0, 0, 0.65)
@@ -17,8 +18,7 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[node name="SkillCardPick" type="Control"]
-visible = false
+[node name="SkillCardPick" type="Control" unique_id=400473049]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,39 +28,39 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_script")
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Dim" type="ColorRect" parent="." unique_id=1245360688]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.45)
 mouse_filter = 1
+color = Color(0, 0, 0, 0.45)
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="Label" parent="." unique_id=60538184]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 60.0
 offset_right = 300.0
 offset_bottom = 90.0
-theme_override_font_sizes/font_size = 14
-theme_override_fonts/font = ExtResource("2_font")
+theme_override_fonts/font = ExtResource("3_pixel")
+theme_override_font_sizes/font_size = 11
 text = "CHOOSE A SKILL"
 horizontal_alignment = 1
 
-[node name="HintLabel" type="Label" parent="."]
+[node name="HintLabel" type="Label" parent="." unique_id=2018364810]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 84.0
 offset_right = 300.0
 offset_bottom = 98.0
-theme_override_font_sizes/font_size = 9
 theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 9
 text = "Press USE to confirm"
 horizontal_alignment = 1
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Panel" type="Panel" parent="." unique_id=569378675]
 layout_mode = 0
 offset_left = 8.0
 offset_top = 100.0
@@ -68,25 +68,25 @@ offset_right = 312.0
 offset_bottom = 240.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_panelbg")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel" unique_id=1742578650]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 offset_left = 6.0
 offset_top = 6.0
 offset_right = -6.0
 offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 6
 
-[node name="Card1" type="Control" parent="Panel/HBoxContainer"]
+[node name="Card1" type="Control" parent="Panel/HBoxContainer" unique_id=796160148]
 custom_minimum_size = Vector2(94, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card1"]
+[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card1" unique_id=1838999835]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -95,7 +95,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
-[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card1"]
+[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card1" unique_id=130318375]
 layout_mode = 0
 offset_left = 30.0
 offset_top = 8.0
@@ -104,52 +104,52 @@ offset_bottom = 40.0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card1"]
+[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card1" unique_id=243077238]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 42.0
 offset_right = 90.0
 offset_bottom = 56.0
-theme_override_font_sizes/font_size = 9
-theme_override_fonts/font = ExtResource("2_font")
+theme_override_fonts/font = ExtResource("3_pixel")
+theme_override_font_sizes/font_size = 8
 text = "NAME"
 horizontal_alignment = 1
 
-[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card1"]
+[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card1" unique_id=1621076588]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 56.0
 offset_right = 90.0
 offset_bottom = 70.0
+theme_override_fonts/font = ExtResource("3_pixel")
 theme_override_font_sizes/font_size = 8
-theme_override_fonts/font = ExtResource("2_font")
 text = "I"
 horizontal_alignment = 1
 
-[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card1"]
+[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card1" unique_id=1076175371]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 72.0
 offset_right = 90.0
 offset_bottom = 112.0
-theme_override_font_sizes/font_size = 7
 theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 7
 text = "Description"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card1"]
+[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card1" unique_id=1474896969]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 114.0
 offset_right = 90.0
 offset_bottom = 128.0
-theme_override_font_sizes/font_size = 8
-theme_override_fonts/font = ExtResource("2_font")
-text = "Uses: 1x"
+theme_override_fonts/font = ExtResource("3_pixel")
+theme_override_font_sizes/font_size = 7
+text = "Uses - 1x"
 horizontal_alignment = 1
 
-[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card1"]
+[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card1" unique_id=898219643]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -158,12 +158,12 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Card2" type="Control" parent="Panel/HBoxContainer"]
+[node name="Card2" type="Control" parent="Panel/HBoxContainer" unique_id=874412684]
 custom_minimum_size = Vector2(94, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card2"]
+[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card2" unique_id=282077825]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -172,7 +172,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
-[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card2"]
+[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card2" unique_id=1658797846]
 layout_mode = 0
 offset_left = 30.0
 offset_top = 8.0
@@ -181,52 +181,52 @@ offset_bottom = 40.0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card2"]
+[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card2" unique_id=934696253]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 42.0
 offset_right = 90.0
 offset_bottom = 56.0
-theme_override_font_sizes/font_size = 9
-theme_override_fonts/font = ExtResource("2_font")
+theme_override_fonts/font = ExtResource("3_pixel")
+theme_override_font_sizes/font_size = 8
 text = "NAME"
 horizontal_alignment = 1
 
-[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card2"]
+[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card2" unique_id=1794059578]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 56.0
 offset_right = 90.0
 offset_bottom = 70.0
+theme_override_fonts/font = ExtResource("3_pixel")
 theme_override_font_sizes/font_size = 8
-theme_override_fonts/font = ExtResource("2_font")
 text = "I"
 horizontal_alignment = 1
 
-[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card2"]
+[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card2" unique_id=627835507]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 72.0
 offset_right = 90.0
 offset_bottom = 112.0
-theme_override_font_sizes/font_size = 7
 theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 7
 text = "Description"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card2"]
+[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card2" unique_id=552464195]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 114.0
 offset_right = 90.0
 offset_bottom = 128.0
-theme_override_font_sizes/font_size = 8
-theme_override_fonts/font = ExtResource("2_font")
-text = "Uses: 1x"
+theme_override_fonts/font = ExtResource("3_pixel")
+theme_override_font_sizes/font_size = 7
+text = "Uses - 1x"
 horizontal_alignment = 1
 
-[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card2"]
+[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card2" unique_id=2133877943]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -235,12 +235,12 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
-[node name="Card3" type="Control" parent="Panel/HBoxContainer"]
+[node name="Card3" type="Control" parent="Panel/HBoxContainer" unique_id=1670945547]
 custom_minimum_size = Vector2(94, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card3"]
+[node name="Bg" type="Panel" parent="Panel/HBoxContainer/Card3" unique_id=1635016237]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -249,7 +249,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
-[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card3"]
+[node name="Icon" type="TextureRect" parent="Panel/HBoxContainer/Card3" unique_id=1060509666]
 layout_mode = 0
 offset_left = 30.0
 offset_top = 8.0
@@ -258,52 +258,52 @@ offset_bottom = 40.0
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card3"]
+[node name="NameLabel" type="Label" parent="Panel/HBoxContainer/Card3" unique_id=753109652]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 42.0
 offset_right = 90.0
 offset_bottom = 56.0
-theme_override_font_sizes/font_size = 9
-theme_override_fonts/font = ExtResource("2_font")
+theme_override_fonts/font = ExtResource("3_pixel")
+theme_override_font_sizes/font_size = 8
 text = "NAME"
 horizontal_alignment = 1
 
-[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card3"]
+[node name="LevelLabel" type="Label" parent="Panel/HBoxContainer/Card3" unique_id=1955599923]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 56.0
 offset_right = 90.0
 offset_bottom = 70.0
+theme_override_fonts/font = ExtResource("3_pixel")
 theme_override_font_sizes/font_size = 8
-theme_override_fonts/font = ExtResource("2_font")
 text = "I"
 horizontal_alignment = 1
 
-[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card3"]
+[node name="DescriptionLabel" type="Label" parent="Panel/HBoxContainer/Card3" unique_id=1209681958]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 72.0
 offset_right = 90.0
 offset_bottom = 112.0
-theme_override_font_sizes/font_size = 7
 theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 7
 text = "Description"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card3"]
+[node name="UseCountLabel" type="Label" parent="Panel/HBoxContainer/Card3" unique_id=1521038217]
 layout_mode = 0
 offset_left = 4.0
 offset_top = 114.0
 offset_right = 90.0
 offset_bottom = 128.0
-theme_override_font_sizes/font_size = 8
-theme_override_fonts/font = ExtResource("2_font")
-text = "Uses: 1x"
+theme_override_fonts/font = ExtResource("3_pixel")
+theme_override_font_sizes/font_size = 7
+text = "Uses - 1x"
 horizontal_alignment = 1
 
-[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card3"]
+[node name="ClickButton" type="Button" parent="Panel/HBoxContainer/Card3" unique_id=1598271987]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

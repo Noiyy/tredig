@@ -63,6 +63,10 @@ const CONTROL_ACTIONS := [
 @onready var music_volume_slider: HSlider = $VBoxContainer/Sections/GeneralSection/MusicVolHSlider
 @onready var sfx_volume_slider: HSlider = $VBoxContainer/Sections/GeneralSection/SFXVolHSlider
 @onready var sfx_lower_volume_slider: HSlider = $VBoxContainer/Sections/GeneralSection/SFXLowerVolHSlider
+@onready var main_volume_percent: Label = $VBoxContainer/Sections/GeneralSection/MainVolHSlider/PercentLabel
+@onready var music_volume_percent: Label = $VBoxContainer/Sections/GeneralSection/MusicVolHSlider/PercentLabel
+@onready var sfx_volume_percent: Label = $VBoxContainer/Sections/GeneralSection/SFXVolHSlider/PercentLabel
+@onready var sfx_lower_volume_percent: Label = $VBoxContainer/Sections/GeneralSection/SFXLowerVolHSlider/PercentLabel
 @onready var reset_general_button: Button = $VBoxContainer/Sections/GeneralSection/GeneralHintRow/ResetGeneralButton
 
 @onready var p1_column: VBoxContainer = $VBoxContainer/Sections/ControlsSection/ScrollContainer/ControlsActions/P1Column
@@ -177,6 +181,9 @@ func _ready() -> void:
 	_build_controls_ui()
 	_init_controller_connector_layer()
 	_build_controller_ui()
+	UI.decorate_buttons($VBoxContainer/TabsContainer, "tab")
+	_setup_tab_navbar()
+	UI.decorate_all(self)
 	_set_controller_subtab(1, false)
 	_select_tab("general")
 	_apply_expo_sandbox_menu_lockdown()
@@ -246,6 +253,20 @@ func _sync_from_system() -> void:
 	sfx_lower_volume_slider.value = db_to_linear(
 		AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFXLower"))
 	)
+	_refresh_volume_percent_labels()
+
+
+func _refresh_volume_percent_labels() -> void:
+	_update_percent_label(main_volume_percent, main_volume_slider.value)
+	_update_percent_label(music_volume_percent, music_volume_slider.value)
+	_update_percent_label(sfx_volume_percent, sfx_volume_slider.value)
+	_update_percent_label(sfx_lower_volume_percent, sfx_lower_volume_slider.value)
+
+
+func _update_percent_label(label: Label, value: float) -> void:
+	if label == null:
+		return
+	label.text = "%d%%" % roundi(value * 100.0)
 
 
 func _on_back_button_pressed() -> void:
@@ -404,21 +425,25 @@ func _on_lava_sound_check_box_toggled(toggled_on: bool) -> void:
 
 func _on_main_vol_h_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Master"), value)
+	_update_percent_label(main_volume_percent, value)
 	UserSettings.save()
 
 
 func _on_music_vol_h_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Music"), value)
+	_update_percent_label(music_volume_percent, value)
 	UserSettings.save()
 
 
 func _on_sfx_vol_h_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("SFX"), value)
+	_update_percent_label(sfx_volume_percent, value)
 	UserSettings.save()
 
 
 func _on_sfx_lower_vol_h_slider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("SFXLower"), value)
+	_update_percent_label(sfx_lower_volume_percent, value)
 	UserSettings.save()
 
 
@@ -444,6 +469,7 @@ func _on_reset_general_pressed() -> void:
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("Music"), default_music_linear)
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("SFX"), default_sfx_linear)
 	AudioServer.set_bus_volume_linear(AudioServer.get_bus_index("SFXLower"), default_sfx_lower_linear)
+	_refresh_volume_percent_labels()
 	UserSettings.save()
 
 
@@ -513,23 +539,33 @@ func _select_tab(tab: String) -> void:
 
 
 func _set_tab_selected(btn: Button, selected: bool) -> void:
+	# Active tab = solid orange fill + dark text; inactive = transparent (navbar shows through).
+	UI.set_tab_active(btn, selected)
 	if selected:
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color(1.0, 1.0, 1.0, 0.18)
-		style.border_color = Color(1.0, 1.0, 1.0, 1.0)
-		style.border_width_left = 2
-		style.border_width_top = 2
-		style.border_width_right = 2
-		style.border_width_bottom = 2
-		style.corner_radius_top_left = 4
-		style.corner_radius_top_right = 4
-		style.corner_radius_bottom_left = 4
-		style.corner_radius_bottom_right = 4
-		btn.add_theme_stylebox_override("disabled", style)
-		btn.add_theme_color_override("font_disabled_color", Color(1.0, 1.0, 1.0, 1.0))
+		btn.add_theme_color_override("font_disabled_color", Color(0.102, 0.059, 0.031, 1.0))
 	else:
-		btn.remove_theme_stylebox_override("disabled")
 		btn.remove_theme_color_override("font_disabled_color")
+
+
+# Dark diagonal-cornered bar behind the tab row so the tabs read as a navbar.
+func _setup_tab_navbar() -> void:
+	var bar := ColorRect.new()
+	bar.name = "_TabNavbarBg"
+	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.material = UI.make_bevel_material(Color(0.082, 0.067, 0.11, 1.0), Color(0.196, 0.169, 0.239, 1.0), 6.0, 1.0)
+	add_child(bar)
+	move_child(bar, 0)
+	var pad := Vector2(0.0, 0.0)
+	var sync := func() -> void:
+		var l: float = general_tab_button.global_position.x
+		var r: float = controller_tab_button.global_position.x + controller_tab_button.size.x
+		bar.global_position = Vector2(l - pad.x, general_tab_button.global_position.y - pad.y)
+		bar.size = Vector2((r - l) + pad.x * 2.0, general_tab_button.size.y + pad.y * 2.0)
+		(bar.material as ShaderMaterial).set_shader_parameter("rect_px", bar.size)
+	var tabs: HBoxContainer = $VBoxContainer/TabsContainer
+	tabs.sort_children.connect(sync)
+	tabs.resized.connect(sync)
+	sync.call_deferred()
 
 
 func _on_reset_controls_pressed() -> void:

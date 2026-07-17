@@ -14,6 +14,7 @@ func _focus_resume_button() -> void:
 func _ready() -> void:
 	visible = false
 	get_tree().paused = false
+	UI.decorate_buttons($CenterContainer/PauseOptions, "menu")
 	if _is_expo_sandbox_enabled():
 		$CenterContainer/PauseOptions/QuitButton.visible = false
 		$CenterContainer/PauseOptions/QuitButton.focus_mode = Control.FOCUS_NONE

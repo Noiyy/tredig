@@ -2,44 +2,29 @@
 
 [ext_resource type="Script" uid="uid://b6473f5u4wjlb" path="res://scripts/skill_hud.gd" id="0_skhud"]
 [ext_resource type="Texture2D" uid="uid://m3xgj7o7rpd5" path="res://assets/images/heal.png" id="1_hps0a"]
-[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="2_hps0a"]
+[ext_resource type="FontFile" uid="uid://bit581a6i33fo" path="res://assets/fonts/PressStart2P-Regular.ttf" id="2_hps0a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3xp7n"]
-bg_color = Color(0, 0, 0, 0.5294118)
+bg_color = Color(0.106, 0.082, 0.145, 0.85)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.8, 0.8, 0.8, 0.25882354)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+border_color = Color(0.196, 0.169, 0.239, 1)
 
 [sub_resource type="FontVariation" id="FontVariation_hu6yu"]
 base_font = ExtResource("2_hps0a")
-variation_opentype = {
-2003265652: 700
-}
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61n55"]
-bg_color = Color(0, 0, 0, 1)
+bg_color = Color(0.173, 0.141, 0.212, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0, 0.97, 0.16166651, 0.05490196)
-border_blend = true
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
+border_color = Color(0.259, 0.227, 0.306, 1)
 
 [sub_resource type="FontVariation" id="FontVariation_xo4k5"]
-variation_opentype = {
-1869640570: 14,
-2003265652: 700
-}
+base_font = ExtResource("2_hps0a")
 
 [node name="Skill" type="Control" unique_id=113994824]
 custom_minimum_size = Vector2(40, 0)
@@ -84,11 +69,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="SkillLevelLabel" type="Label" parent="." unique_id=931140671]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 1.0
-offset_right = 26.0
-offset_bottom = 15.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -6.0
+offset_right = 6.0
+offset_bottom = 14.0
+grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = -5
 theme_override_constants/shadow_offset_y = 1
@@ -100,7 +88,7 @@ vertical_alignment = 1
 
 [node name="KeyRect" type="Panel" parent="." unique_id=170272819]
 layout_mode = 0
-offset_left = 14.0
+offset_left = 13.0
 offset_top = 34.0
 offset_right = 26.0
 offset_bottom = 46.0
@@ -109,9 +97,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_61n55")
 [node name="Label" type="Label" parent="KeyRect" unique_id=209379038]
 layout_mode = 0
 offset_left = 3.0
-offset_top = 1.0
+offset_top = 2.0
 offset_right = 11.0
-offset_bottom = 11.0
+offset_bottom = 10.0
 theme_override_fonts/font = SubResource("FontVariation_xo4k5")
 theme_override_font_sizes/font_size = 8
 text = "X"

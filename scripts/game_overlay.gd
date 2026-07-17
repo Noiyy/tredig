@@ -35,6 +35,7 @@ func _ready() -> void:
 		# (fill_progress, lava_time...) prepíšu aj v druhom overlayi.
 		lava_rect.material = lava_rect.material.duplicate()
 	_lava_mat = lava_rect.material as ShaderMaterial
+	UI.decorate_button(btn, "primary")
 	_apply_lava_shader_grid()
 	call_deferred("_apply_lava_shader_grid")
 	_reset_overlay_visuals()

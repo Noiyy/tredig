@@ -17,8 +17,8 @@ var _active: bool = false
 var _confirm_unlock_time_ms: int = 0
 var _wait_for_use_release: bool = false
 
-const FOCUS_BG := Color(1.0, 0.85, 0.3, 0.35)
-const NORMAL_BG := Color(0.0, 0.0, 0.0, 0.55)
+const FOCUS_BG := Color(1.0, 0.353, 0.122, 0.35)
+const NORMAL_BG := Color(0.129, 0.106, 0.169, 0.88)
 const CONFIRM_LOCK_MS := 300
 
 
@@ -78,10 +78,11 @@ func _apply_focus_visual() -> void:
 			continue
 		var sb := StyleBoxFlat.new()
 		sb.bg_color = FOCUS_BG if i == _focused_idx else NORMAL_BG
-		sb.corner_radius_top_left = 6
-		sb.corner_radius_top_right = 6
-		sb.corner_radius_bottom_left = 6
-		sb.corner_radius_bottom_right = 6
+		sb.border_width_left = 1
+		sb.border_width_top = 1
+		sb.border_width_right = 1
+		sb.border_width_bottom = 1
+		sb.border_color = Color(1.0, 0.353, 0.122, 1.0) if i == _focused_idx else Color(0.196, 0.169, 0.239, 1.0)
 		bg.add_theme_stylebox_override("panel", sb)
 
 

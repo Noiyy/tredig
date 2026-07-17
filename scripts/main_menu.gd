@@ -18,6 +18,9 @@ func _ready() -> void:
 	if _is_expo_sandbox_enabled():
 		$MainButtons/QuitButton.visible = false
 		$MainButtons/QuitButton.focus_mode = Control.FOCUS_NONE
+	UI.decorate_buttons($MainButtons, "menu")
+	UI.decorate_button($CreditsMenu/MarginContainer/BackButton)
+	UI.decorate_button($HowToMenu/BackButton)
 	$MainButtons/PlayButton.grab_focus()
 	$HowToMenu/ChevronLeft.gui_input.connect(_on_chevron_left_input)
 	$HowToMenu/ChevronRight.gui_input.connect(_on_chevron_right_input)

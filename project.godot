@@ -27,6 +27,7 @@ UserSettings="*res://scripts/user_settings.gd"
 Music="*res://scenes/music.tscn"
 AudioManager="*res://scenes/audio_manager.tscn"
 ExpoSandbox="*res://scenes/expo_sandbox.tscn"
+UI="*res://scripts/ui.gd"
 
 [display]
 
@@ -47,7 +48,7 @@ enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
 [gui]
 
-theme/custom_font="uid://dblpljlc31cts"
+theme/custom="res://ui_theme.tres"
 
 [input]
 

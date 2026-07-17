@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://b0gqgtnrdjxx" path="res://scenes/game_overlay.tscn" id="3_5ysmq"]
 [ext_resource type="Script" uid="uid://cvvrqse1kgolb" path="res://scripts/minimap.gd" id="4_0minimap"]
 [ext_resource type="Texture2D" uid="uid://bvngq2cg8mr7r" path="res://assets/images/hourglass.png" id="4_047uy"]
-[ext_resource type="FontFile" uid="uid://dblpljlc31cts" path="res://assets/fonts/Inter-VariableFont_opsz,wght.ttf" id="5_uo2fv"]
+[ext_resource type="FontFile" uid="uid://bit581a6i33fo" path="res://assets/fonts/PressStart2P-Regular.ttf" id="5_uo2fv"]
 
 [sub_resource type="FontVariation" id="FontVariation_uo2fv"]
 base_font = ExtResource("5_uo2fv")
@@ -15,6 +15,7 @@ variation_opentype = {
 }
 
 [sub_resource type="LabelSettings" id="LabelSettings_5ysmq"]
+font_size = 10
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
@@ -68,10 +69,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.5
-offset_top = -166.5
-offset_right = 20.5
-offset_bottom = -143.5
+offset_left = -25.0
+offset_top = -161.0
+offset_right = 25.0
+offset_bottom = -148.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = SubResource("FontVariation_uo2fv")

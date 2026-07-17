@@ -95,7 +95,8 @@ var _player_right_ref: Node2D
 var _lava_ref: Node2D
 var _tilemap_ref: TileMapLayer
 
-func _ready():	
+func _ready():
+	UI.decorate_button(main_menu_button, "primary")
 	game_manager = get_tree().root.get_node("Main/GameManager")
 	SHOVEL_LEVEL_EXPS = game_manager.get_shovel_level_exps()
 	

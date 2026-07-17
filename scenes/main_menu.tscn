@@ -44,27 +44,27 @@ offset_bottom = 294.0
 
 [node name="PlayButton" type="Button" parent="MainButtons" unique_id=408702157]
 layout_mode = 2
-text = "Play"
+text = "MenuPlay"
 alignment = 0
 
 [node name="SettingsButton" type="Button" parent="MainButtons" unique_id=1244898700]
 layout_mode = 2
-text = "Settings"
+text = "MenuSettings"
 alignment = 0
 
 [node name="CreditsButton" type="Button" parent="MainButtons" unique_id=888570790]
 layout_mode = 2
-text = "Credits"
+text = "MenuCredits"
 alignment = 0
 
 [node name="HowToButton" type="Button" parent="MainButtons" unique_id=640276244]
 layout_mode = 2
-text = "How to play"
+text = "MenuHowToPlay"
 alignment = 0
 
 [node name="QuitButton" type="Button" parent="MainButtons" unique_id=1411422763]
 layout_mode = 2
-text = "Quit"
+text = "MenuQuit"
 alignment = 0
 
 [node name="BlackOverlay" type="ColorRect" parent="." unique_id=468658225]
@@ -90,7 +90,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 bbcode_enabled = true
-text = "Game by [b][url=https://noiyy.eu]Benjamín Muľár (Noiyy)[/url][/b]"
+text = "CreditsAuthor"
 fit_content = true
 autowrap_mode = 2
 horizontal_alignment = 1
@@ -101,7 +101,7 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = -5
-text = "Background music \"Mining Town (Loop)\" by Chris Logsdon"
+text = "CreditsMusic"
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -112,7 +112,7 @@ theme_override_constants/margin_top = 24
 [node name="BackButton" type="Button" parent="CreditsMenu/MarginContainer" unique_id=8367701]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "  Back  "
+text = "CommonBackPadded"
 alignment = 0
 
 [node name="HowToMenu" type="Control" parent="." unique_id=2013143708]
@@ -139,7 +139,7 @@ offset_right = 144.0
 offset_bottom = 38.0
 theme_override_fonts/font = ExtResource("4_8ln24")
 theme_override_font_sizes/font_size = 8
-text = "BASE CONTROLS"
+text = "HowToHeadingBaseControls"
 
 [node name="1" type="Control" parent="HowToMenu" unique_id=1586278485]
 anchors_preset = 0
@@ -154,7 +154,7 @@ offset_right = 618.0
 offset_bottom = 137.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "You play as one of the 2 dwarves on 1 half of the screen. The other half is reserverd for the second player. To move, use [WASD/arrows] / [controller D-pad or stick] - this also serves as a guide to which direction you're facing and can dig - to do so, press [Space/Enter] / [Y or Triangle]."
+text = "HowToPage1Intro"
 autowrap_mode = 2
 
 [node name="TextureRect2" type="TextureRect" parent="HowToMenu/1" unique_id=534365086]
@@ -183,7 +183,7 @@ offset_right = 618.0
 offset_bottom = 287.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "But beware! Each block has its own hardness and the deeper you go, the harder they become so make sure your shovel is strong enough (number in golden shape) as to not to get stuck. This is also indicated by the color of tile highlight - white for the easiest and fastest dig, yellow for normal, orange for hard and those that are red, you cannot even dent!"
+text = "HowToPage1Hardness"
 autowrap_mode = 2
 
 [node name="2" type="Control" parent="HowToMenu" unique_id=135668640]
@@ -200,7 +200,7 @@ offset_right = 618.0
 offset_bottom = 118.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "Another thing to look out for is your shovel's durability. Once it reaches 0, the bar will turn red and you'll get slower and quite weaker. "
+text = "HowToPage2Durability"
 autowrap_mode = 2
 
 [node name="TextureRect2" type="TextureRect" parent="HowToMenu/2" unique_id=308655538]
@@ -220,10 +220,7 @@ offset_right = 512.0
 offset_bottom = 190.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "To repair your shovel and get stronger, you need to level up you shovel - to do this, you need to dig iron & gold blocks, which give you experience. Iron is more common and gives less, while gold is more valuable.
-
-
-Other than experience, these blocks can give you random buffs or debuffs with a small chance for a limited time - such as a stronger & better shovel. You can have max 2 bonuses at once."
+text = "HowToPage2Leveling"
 autowrap_mode = 2
 
 [node name="TextureRect3" type="TextureRect" parent="HowToMenu/2" unique_id=1184498123]
@@ -258,7 +255,7 @@ offset_right = 618.0
 offset_bottom = 118.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "Bonuses aren't the only thing you can get - for every even level you reach, you get to choose 1 skill to use from 3 options. There are numerous skills, some can help you and some can sabotage the other player. Some have multiple levels of strength from 1-3 and also multiple uses."
+text = "HowToPage3Skills"
 autowrap_mode = 2
 
 [node name="TextureRect2" type="TextureRect" parent="HowToMenu/3" unique_id=1730085782]
@@ -278,7 +275,7 @@ offset_right = 618.0
 offset_bottom = 258.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "To use them, just press the corresponding key when you want to. You can have maximum 3 skills available at once."
+text = "HowToPage3SkillsUse"
 autowrap_mode = 2
 
 [node name="4" type="Control" parent="HowToMenu" unique_id=1044731646]
@@ -295,7 +292,7 @@ offset_right = 618.0
 offset_bottom = 118.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "Your goal is to get deeper and deeper to find the hidden treasure sooner than the other player."
+text = "HowToPage4Goal"
 autowrap_mode = 2
 
 [node name="TextureRect2" type="TextureRect" parent="HowToMenu/4" unique_id=193484792]
@@ -315,7 +312,7 @@ offset_right = 619.0
 offset_bottom = 223.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "But multiple dangers await, if not the sabotage from the other player with dynamites, then it is the ever closing lava thats flowing downwards from above. Each second in it damages you, so be careful not to get burnt to crisp!"
+text = "HowToPage4Dangers"
 autowrap_mode = 2
 
 [node name="BackButton" type="Button" parent="HowToMenu" unique_id=173575944]
@@ -324,7 +321,7 @@ offset_left = 58.0
 offset_top = 300.0
 offset_right = 146.0
 offset_bottom = 331.0
-text = "  Back  "
+text = "CommonBackPadded"
 alignment = 0
 
 [node name="ChevronLeft" type="TextureRect" parent="HowToMenu" unique_id=851959985]

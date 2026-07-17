@@ -1,0 +1,308 @@
+# Tredig - Slovak translation
+# Copyright (C) 2026 Benjamín Muľár (Noiyy)
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Tredig\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+# ==== Main menu ====
+msgid "MenuPlay"
+msgstr "Hrať"
+
+msgid "MenuSettings"
+msgstr "Nastavenia"
+
+msgid "MenuCredits"
+msgstr "Autori"
+
+msgid "MenuHowToPlay"
+msgstr "Ako hrať"
+
+msgid "MenuQuit"
+msgstr "Ukončiť"
+
+msgid "CommonBackPadded"
+msgstr "  Späť  "
+
+# ==== Credits ====
+msgid "CreditsAuthor"
+msgstr "Hru vytvoril [b][url=https://noiyy.eu]Benjamín Muľár (Noiyy)[/url][/b]"
+
+msgid "CreditsMusic"
+msgstr "Hudba v pozadí „Mining Town (Loop)“ od Chris Logsdon"
+
+# ==== How to play ====
+msgid "HowToHeadingBaseControls"
+msgstr "ZÁKLADNÉ OVLÁDANIE"
+
+msgid "HowToHeadingProgress"
+msgstr "POSTUP"
+
+msgid "HowToHeadingGameLoop"
+msgstr "PRIEBEH HRY"
+
+msgid "HowToPage1Intro"
+msgstr "Hráš za jedného z 2 trpaslíkov na 1 polovici obrazovky. Druhá polovica patrí druhému hráčovi. Na pohyb použi [WASD/šípky] / [D-pad alebo páčku ovládača] – zároveň to určuje, ktorým smerom si otočený a môžeš kopať – na kopanie stlač [Medzerník/Enter] / [Y alebo Trojuholník]."
+
+msgid "HowToPage1Hardness"
+msgstr "Ale pozor! Každý blok má vlastnú tvrdosť a čím hlbšie ideš, tým sú tvrdšie, takže dbaj na to, aby bola tvoja lopata dosť silná (číslo v zlatom tvare), aby si sa nezasekol. Naznačuje to aj farba zvýraznenia bloku – biela pre najľahšie a najrýchlejšie kopanie, žltá pre normálne, oranžová pre tvrdé a do červených ani neťukneš!"
+
+msgid "HowToPage2Durability"
+msgstr "Ďalšia vec, na ktorú si daj pozor, je odolnosť lopaty. Keď klesne na 0, ukazovateľ sa sfarbí načerveno a budeš pomalší a dosť slabší. "
+
+msgid "HowToPage2Leveling"
+msgstr "Ak chceš lopatu opraviť a zosilnieť, musíš ju vylepšiť (level up) – na to potrebuješ kopať železné a zlaté bloky, ktoré ti dávajú skúsenosti. Železo je bežnejšie a dáva menej, kým zlato je cennejšie.\n\n\nOkrem skúseností ti tieto bloky môžu s malou šancou dať na obmedzený čas náhodné vylepšenia alebo oslabenia – napríklad silnejšiu a lepšiu lopatu. Tieto bonusy môžeš naraz mať najviac 2."
+
+msgid "HowToPage3Skills"
+msgstr "Bonusy nie sú jediné, čo môžeš získať – za každý párny dosiahnutý level si vyberáš 1 schopnosť z 3 možností. Schopností je viacero, niektoré ti pomôžu a niektoré sabotujú druhého hráča. Niektoré majú viacero úrovní sily od 1 do 3 a tiež viac použití."
+
+msgid "HowToPage3SkillsUse"
+msgstr "Použiješ ich jednoducho stlačením príslušnej klávesy kedy chceš. Naraz môžeš mať najviac 3 schopnosti."
+
+msgid "HowToPage4Goal"
+msgstr "Tvojím cieľom je dostať sa hlbšie a hlbšie a nájsť skrytý poklad skôr ako druhý hráč."
+
+msgid "HowToPage4Dangers"
+msgstr "Čaká však viacero nebezpečenstiev – ak nie sabotáž druhého hráča dynamitmi, tak stále sa blížiaca láva, ktorá steká zhora nadol. Každá sekunda v nej ti ubližuje, tak pozor, aby si nezhorel na uhoľ!"
+
+# ==== Settings: tabs & general ====
+msgid "SettingsTabGeneral"
+msgstr "Všeobecné"
+
+msgid "SettingsTabControls"
+msgstr "Ovládanie"
+
+msgid "SettingsTabController"
+msgstr "Ovládač"
+
+msgid "CommonReset"
+msgstr "Obnoviť"
+
+msgid "SettingsFullscreen"
+msgstr "Celá obrazovka"
+
+msgid "SettingsLavaSound"
+msgstr "Zvuk lávy"
+
+msgid "SettingsLanguage"
+msgstr "Jazyk"
+
+msgid "SettingsVolumeMain"
+msgstr "Hlavná hlasitosť"
+
+msgid "SettingsVolumeMusic"
+msgstr "Hlasitosť hudby"
+
+msgid "SettingsVolumeSfxPrimary"
+msgstr "Hlavná hlasitosť efektov"
+
+msgid "SettingsVolumeSfxSecondary"
+msgstr "Vedľajšia hlasitosť efektov"
+
+# ==== Settings: controls / controller ====
+msgid "ControlsRebindHint"
+msgstr "Klikni na akciu a stlač novú klávesu (Esc zruší)"
+
+msgid "ControllerPreviewHint"
+msgstr "Náhľad aktuálneho priradenia ovládača"
+
+msgid "CommonEdit"
+msgstr "Upraviť"
+
+msgid "CommonConfirm"
+msgstr "Potvrdiť"
+
+msgid "CommonCancel"
+msgstr "Zrušiť"
+
+msgid "PlayerOnePadded"
+msgstr "  Hráč 1  "
+
+msgid "PlayerTwoPadded"
+msgstr "  Hráč 2  "
+
+msgid "PlayerOne"
+msgstr "Hráč 1"
+
+msgid "PlayerTwo"
+msgstr "Hráč 2"
+
+msgid "ControllerBindingsTitle"
+msgstr "Priradenie ovládača"
+
+msgid "ControllerRebindHint"
+msgstr "Vyber akciu a stlač tlačidlo/os ovládača (Esc zruší aktuálne priradenie)"
+
+msgid "ActionJump"
+msgstr "Skok"
+
+msgid "ActionWalkLeft"
+msgstr "Doľava"
+
+msgid "ActionWalkRight"
+msgstr "Doprava"
+
+msgid "ActionWalkDown"
+msgstr "Dole"
+
+msgid "ActionDig"
+msgstr "Kopať"
+
+msgid "ActionMove"
+msgstr "Pohyb"
+
+msgid "ActionPause"
+msgstr "Pauza"
+
+msgid "ActionSkill1"
+msgstr "Schopnosť 1"
+
+msgid "ActionSkill2"
+msgstr "Schopnosť 2"
+
+msgid "ActionSkill3"
+msgstr "Schopnosť 3"
+
+msgid "ActionLeft"
+msgstr "Doľava"
+
+msgid "ActionRight"
+msgstr "Doprava"
+
+msgid "ActionUp"
+msgstr "Hore"
+
+msgid "ActionDown"
+msgstr "Dole"
+
+msgid "ActionDigUse"
+msgstr "Kopať/Použiť"
+
+msgid "RebindPressKey"
+msgstr "Stlač ľubovoľnú klávesu..."
+
+msgid "RebindPressGamepadNamed"
+msgstr "%s: Stlač ovládač..."
+
+msgid "RebindPressGamepad"
+msgstr "Stlač ovládač..."
+
+msgid "BindingBothPlayers"
+msgstr "H1 %s | H2 %s"
+
+msgid "BindingUnassigned"
+msgstr "Nepriradené"
+
+msgid "DpadUp"
+msgstr "D-pad hore"
+
+msgid "DpadDown"
+msgstr "D-pad dole"
+
+msgid "DpadLeft"
+msgstr "D-pad doľava"
+
+msgid "DpadRight"
+msgstr "D-pad doprava"
+
+# ==== Pause menu ====
+msgid "PauseResume"
+msgstr "Pokračovať"
+
+msgid "PauseMainMenu"
+msgstr "Hlavné menu"
+
+# ==== Gameplay HUD ====
+msgid "HudMainMenu"
+msgstr "HLAVNÉ MENU"
+
+# ==== Game over / victory overlay ====
+msgid "GameOverDied"
+msgstr "ZOMREL SI!"
+
+msgid "GameOverSurvived"
+msgstr "prežil si:"
+
+msgid "GameOverRestartPadded"
+msgstr "  ZNOVA  "
+
+msgid "GameOverLose"
+msgstr "Prehral si!"
+
+msgid "GameOverRestart"
+msgstr "ZNOVA"
+
+msgid "GameOverWin"
+msgstr "Vyhral si!"
+
+msgid "GameOverTreasure"
+msgstr "a našiel poklad za:"
+
+msgid "GameOverPlayAgain"
+msgstr "HRAŤ ZNOVA"
+
+# ==== Skill card pick ====
+msgid "SkillPickTitle"
+msgstr "VYBER SCHOPNOSŤ"
+
+msgid "SkillPickConfirm"
+msgstr "Stlač POUŽIŤ na potvrdenie"
+
+msgid "SkillUsesCount"
+msgstr "Použitia - %dx"
+
+# ==== Skill names ====
+msgid "SkillNameHeal"
+msgstr "LIEČENIE"
+
+msgid "SkillNameDurUp"
+msgstr "ODOLNOSŤ+"
+
+msgid "SkillNameSwap"
+msgstr "VÝMENA"
+
+msgid "SkillNameSabotage"
+msgstr "SABOTÁŽ"
+
+msgid "SkillNameDynamite"
+msgstr "DYNAMIT"
+
+msgid "SkillNameFreeze"
+msgstr "ZMRAZENIE"
+
+# ==== Skill descriptions ====
+msgid "SkillDescHeal"
+msgstr "Obnoví %d HP"
+
+msgid "SkillDescDurUp"
+msgstr "Obnoví %d%% odolnosti"
+
+msgid "SkillDescSwap"
+msgstr "Výmena so súperom na 10s"
+
+msgid "SkillDescSabotage"
+msgstr "Sabotuj bloky v okruhu %d"
+
+msgid "SkillDescDynamite"
+msgstr "Hoď %d dynamitov"
+
+msgid "SkillDescFreeze"
+msgstr "Zmraz súpera na %ds"
+
+# ==== Bonus names (shown on HUD) ====
+msgid "BonusSharpness"
+msgstr "OSTROSŤ"
+
+msgid "BonusSshovel"
+msgstr "LLOPATA"
+
+msgid "BonusDullness"
+msgstr "TUPOSŤ"
+
+msgid "BonusOverload"
+msgstr "PREŤAŽENIE"

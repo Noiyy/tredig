@@ -14,39 +14,42 @@ const DEFAULT_SFXLOWER_DB := -12.461078
 const MENU_NAV_DEADZONE := 0.55
 const MENU_NAV_REPEAT_DELAY := 0.32
 const MENU_NAV_REPEAT_INTERVAL := 0.08
+## `label` values are localization keys (see res://locale/*.po).
 const CONTROLLER_BIND_ACTIONS := [
-	{"id": &"up", "label": "Jump", "side": -1},
-	{"id": &"left", "label": "Walk Left", "side": -1},
-	{"id": &"right", "label": "Walk Right", "side": -1},
-	{"id": &"down", "label": "Walk Down", "side": -1},
-	{"id": &"ui_cancel", "label": "Pause", "side": 1},
-	{"id": &"use", "label": "Dig", "side": 1},
-	{"id": &"skill1", "label": "Skill 1", "side": 1},
-	{"id": &"skill2", "label": "Skill 2", "side": 1},
-	{"id": &"skill3", "label": "Skill 3", "side": 1}
+	{"id": &"up", "label": "ActionJump", "side": -1},
+	{"id": &"left", "label": "ActionWalkLeft", "side": -1},
+	{"id": &"right", "label": "ActionWalkRight", "side": -1},
+	{"id": &"down", "label": "ActionWalkDown", "side": -1},
+	{"id": &"ui_cancel", "label": "ActionPause", "side": 1},
+	{"id": &"use", "label": "ActionDig", "side": 1},
+	{"id": &"skill1", "label": "ActionSkill1", "side": 1},
+	{"id": &"skill2", "label": "ActionSkill2", "side": 1},
+	{"id": &"skill3", "label": "ActionSkill3", "side": 1}
 ]
 const CONTROLLER_STATIC_LABELS := [
-	{"id": &"move_left", "label": "Move", "side": 1, "anchor": "LStick"},
-	{"id": &"move_right", "label": "Move", "side": 1, "anchor": "LStick"}
+	{"id": &"move_left", "label": "ActionMove", "side": 1, "anchor": "LStick"},
+	{"id": &"move_right", "label": "ActionMove", "side": 1, "anchor": "LStick"}
 ]
+## `label` = localization key. p1_*/p2_* share the same key (the "Player N "
+## prefix trim in _build_controls_ui is a harmless no-op on keys).
 const CONTROL_ACTIONS := [
-	{"action": "p1_left", "label": "Player 1 Left"},
-	{"action": "p1_right", "label": "Player 1 Right"},
-	{"action": "p1_up", "label": "Player 1 Up"},
-	{"action": "p1_down", "label": "Player 1 Down"},
-	{"action": "p1_use", "label": "Player 1 Dig/Use"},
-	{"action": "p1_skill1", "label": "Player 1 Skill 1"},
-	{"action": "p1_skill2", "label": "Player 1 Skill 2"},
-	{"action": "p1_skill3", "label": "Player 1 Skill 3"},
-	{"action": "p2_left", "label": "Player 2 Left"},
-	{"action": "p2_right", "label": "Player 2 Right"},
-	{"action": "p2_up", "label": "Player 2 Up"},
-	{"action": "p2_down", "label": "Player 2 Down"},
-	{"action": "p2_use", "label": "Player 2 Dig/Use"},
-	{"action": "p2_skill1", "label": "Player 2 Skill 1"},
-	{"action": "p2_skill2", "label": "Player 2 Skill 2"},
-	{"action": "p2_skill3", "label": "Player 2 Skill 3"},
-	{"action": "ui_cancel", "label": "Pause"},
+	{"action": "p1_left", "label": "ActionLeft"},
+	{"action": "p1_right", "label": "ActionRight"},
+	{"action": "p1_up", "label": "ActionUp"},
+	{"action": "p1_down", "label": "ActionDown"},
+	{"action": "p1_use", "label": "ActionDigUse"},
+	{"action": "p1_skill1", "label": "ActionSkill1"},
+	{"action": "p1_skill2", "label": "ActionSkill2"},
+	{"action": "p1_skill3", "label": "ActionSkill3"},
+	{"action": "p2_left", "label": "ActionLeft"},
+	{"action": "p2_right", "label": "ActionRight"},
+	{"action": "p2_up", "label": "ActionUp"},
+	{"action": "p2_down", "label": "ActionDown"},
+	{"action": "p2_use", "label": "ActionDigUse"},
+	{"action": "p2_skill1", "label": "ActionSkill1"},
+	{"action": "p2_skill2", "label": "ActionSkill2"},
+	{"action": "p2_skill3", "label": "ActionSkill3"},
+	{"action": "ui_cancel", "label": "ActionPause"},
 ]
 
 @onready var general_tab_button: Button = $VBoxContainer/TabsContainer/GeneralTabButton
@@ -57,6 +60,7 @@ const CONTROL_ACTIONS := [
 @onready var controls_section: VBoxContainer = $VBoxContainer/Sections/ControlsSection
 @onready var controller_section: VBoxContainer = $VBoxContainer/Sections/ControllerSection
 
+@onready var language_option: OptionButton = $VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer/LanguageOptionButton
 @onready var fullscreen_checkbox: CheckBox = $VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer/FullscreenCheckBox
 @onready var lava_sound_checkbox: CheckBox = $VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer/LavaSoundCheckBox
 @onready var main_volume_slider: HSlider = $VBoxContainer/Sections/GeneralSection/MainVolHSlider
@@ -138,6 +142,8 @@ func _ready() -> void:
 	controller_tab_button.pressed.connect(_on_controller_tab_button_pressed)
 	controller_p1_subtab.toggled.connect(_on_controller_p1_subtab_toggled)
 	controller_p2_subtab.toggled.connect(_on_controller_p2_subtab_toggled)
+	_populate_language_options()
+	language_option.item_selected.connect(_on_language_selected)
 	fullscreen_checkbox.toggled.connect(_on_fullscreen_check_box_toggled)
 	lava_sound_checkbox.toggled.connect(_on_lava_sound_check_box_toggled)
 	main_volume_slider.value_changed.connect(_on_main_vol_h_slider_value_changed)
@@ -175,7 +181,7 @@ func _ready() -> void:
 		bind_button.pressed.connect(_on_overlay_action_button_pressed.bind(String(action_name), bind_button))
 		bind_button.focus_entered.connect(_on_focusable_control_focused.bind(bind_button))
 	_setup_controller_overlay_focus_neighbors()
-	controller_hint_label.text = "Current controller bindings preview"
+	controller_hint_label.text = "ControllerPreviewHint"
 	reset_controller_button.visible = false
 	controller_overlay.visible = false
 	_build_controls_ui()
@@ -234,6 +240,7 @@ func _enforce_expo_sandbox_fullscreen() -> void:
 
 
 func _sync_from_system() -> void:
+	_select_current_language_option()
 	var window_mode := DisplayServer.window_get_mode()
 	fullscreen_checkbox.button_pressed = (
 		window_mode == DisplayServer.WINDOW_MODE_FULLSCREEN
@@ -404,6 +411,79 @@ func close_settings() -> void:
 		parent.get_node("CenterContainer/PauseOptions/SettingsButton").call_deferred("grab_focus")
 
 
+func _populate_language_options() -> void:
+	language_option.clear()
+	_style_language_popup()
+	for locale_entry in UserSettings.SUPPORTED_LOCALES:
+		language_option.add_item(str(locale_entry["name"]))
+
+
+## Restyle the OptionButton's dropdown popup to match the game's slate/lava UI
+## (the default PopupMenu look — grey panel, big radio circles — clashes with it).
+func _style_language_popup() -> void:
+	var popup := language_option.get_popup()
+	popup.add_theme_font_size_override("font_size", 8)
+
+	# Dark slate panel with a 1px pixel-style border (no rounded corners).
+	var panel := StyleBoxFlat.new()
+	panel.bg_color = UI.C_PANEL
+	panel.border_color = UI.C_PANEL_BORDER
+	panel.set_border_width_all(1)
+	panel.content_margin_left = 6.0
+	panel.content_margin_right = 6.0
+	panel.content_margin_top = 6.0
+	panel.content_margin_bottom = 6.0
+	popup.add_theme_stylebox_override("panel", panel)
+
+	# Lava-orange fill on the hovered/focused item, matching active tabs/buttons.
+	var hover := StyleBoxFlat.new()
+	hover.bg_color = UI.C_LAVA_A
+	hover.content_margin_left = 4.0
+	hover.content_margin_right = 4.0
+	hover.content_margin_top = 2.0
+	hover.content_margin_bottom = 2.0
+	popup.add_theme_stylebox_override("hover", hover)
+
+	popup.add_theme_color_override("font_color", UI.C_INK)
+	popup.add_theme_color_override("font_hover_color", UI.C_ON_ACCENT)
+	popup.add_theme_color_override("font_disabled_color", UI.C_MUTED)
+	popup.add_theme_constant_override("v_separation", 5)
+
+	# Drop the default grey radio circles for a clean text list; the current
+	# language is already shown on the button and highlighted on hover.
+	var blank_img := Image.create(1, 1, false, Image.FORMAT_RGBA8)
+	blank_img.fill(Color(0, 0, 0, 0))
+	var blank := ImageTexture.create_from_image(blank_img)
+	popup.add_theme_icon_override("radio_checked", blank)
+	popup.add_theme_icon_override("radio_unchecked", blank)
+
+
+func _on_language_selected(index: int) -> void:
+	var locales: Array = UserSettings.SUPPORTED_LOCALES
+	if index < 0 or index >= locales.size():
+		return
+	TranslationServer.set_locale(str(locales[index]["code"]))
+	UserSettings.save()
+	# Dynamic/formatted bind texts don't auto-retranslate; rebuild them now.
+	_refresh_controls_ui()
+	_refresh_controller_ui()
+
+
+func _select_current_language_option() -> void:
+	var current := TranslationServer.get_locale()
+	var locales: Array = UserSettings.SUPPORTED_LOCALES
+	for i in locales.size():
+		var code := str(locales[i]["code"])
+		if current == code or current.begins_with(code + "_"):
+			language_option.select(i)
+			return
+	# Current locale not in the list: fall back to the default entry.
+	for i in locales.size():
+		if str(locales[i]["code"]) == UserSettings.DEFAULT_LOCALE:
+			language_option.select(i)
+			return
+
+
 func _on_fullscreen_check_box_toggled(toggled_on: bool) -> void:
 	if _is_expo_sandbox_enabled():
 		fullscreen_checkbox.set_pressed_no_signal(true)
@@ -448,6 +528,8 @@ func _on_sfx_lower_vol_h_slider_value_changed(value: float) -> void:
 
 
 func _on_reset_general_pressed() -> void:
+	TranslationServer.set_locale(UserSettings.DEFAULT_LOCALE)
+	_select_current_language_option()
 	var default_master_linear := db_to_linear(DEFAULT_MASTER_DB)
 	var default_music_linear := db_to_linear(DEFAULT_MUSIC_DB)
 	var default_sfx_linear := db_to_linear(DEFAULT_SFX_DB)
@@ -590,8 +672,8 @@ func _build_controls_ui() -> void:
 	_action_buttons.clear()
 	_first_controls_focus_button = null
 
-	_add_column_header(p1_column, "Player 1", Color("#ff6f6f"))
-	_add_column_header(p2_column, "Player 2", Color("#64b5ff"))
+	_add_column_header(p1_column, "PlayerOne", Color("#ff6f6f"))
+	_add_column_header(p2_column, "PlayerTwo", Color("#64b5ff"))
 
 	for action_entry in CONTROL_ACTIONS:
 		var action_name := str(action_entry["action"])
@@ -775,7 +857,7 @@ func _on_rebind_button_pressed(action_name: String, bind_button: Button) -> void
 	_rebind_action = action_name
 	_rebind_button = bind_button
 	_rebind_mode = "keyboard"
-	_rebind_button.text = "Press any key..."
+	_rebind_button.text = tr("RebindPressKey")
 
 
 func _on_controller_rebind_button_pressed(action_id: StringName, bind_button: Button) -> void:
@@ -783,7 +865,7 @@ func _on_controller_rebind_button_pressed(action_id: StringName, bind_button: Bu
 	_rebind_action = String(action_id)
 	_rebind_button = bind_button
 	_rebind_mode = "controller"
-	_rebind_button.text = "%s: Press gamepad..." % _get_controller_action_label(action_id)
+	_rebind_button.text = tr("RebindPressGamepadNamed") % tr(_get_controller_action_label(action_id))
 
 
 func _on_controller_edit_pressed() -> void:
@@ -803,7 +885,7 @@ func _on_overlay_action_button_pressed(action_name: String, bind_button: Button)
 	_cancel_overlay_rebind()
 	_overlay_rebind_action = action_name
 	_overlay_rebind_button = bind_button
-	_overlay_rebind_button.text = "Press gamepad..."
+	_overlay_rebind_button.text = tr("RebindPressGamepad")
 
 
 func _on_controller_overlay_confirm_pressed() -> void:
@@ -1087,7 +1169,7 @@ func _get_keyboard_action_text(action_name: String) -> String:
 			return _friendly_key_name(_key_label_string_from_key_event(key_event))
 
 	if action_events.is_empty():
-		return "Unassigned"
+		return "BindingUnassigned"
 	return action_events[0].as_text()
 
 
@@ -1101,7 +1183,7 @@ func _get_controller_action_text(action_id: StringName) -> String:
 	var p2_text := _get_controller_action_text_for_action(p2_action)
 	if p1_text == p2_text:
 		return p1_text
-	return "P1 %s | P2 %s" % [p1_text, p2_text]
+	return tr("BindingBothPlayers") % [tr(p1_text), tr(p2_text)]
 
 
 func _get_controller_preview_text_for_action_id(action_id: StringName) -> String:
@@ -1151,7 +1233,7 @@ func _target_device_for_action(action_name: String) -> int:
 
 func _get_display_binding_text_for_action(action_name: String, event: InputEvent) -> String:
 	if event == null:
-		return "Unassigned"
+		return "BindingUnassigned"
 	var dpad_caption := _get_dpad_caption_if_movement_action(action_name, event)
 	if not dpad_caption.is_empty():
 		return dpad_caption
@@ -1165,38 +1247,38 @@ func _get_dpad_caption_if_movement_action(action_name: String, event: InputEvent
 		match as_btn.button_index:
 			JOY_BUTTON_DPAD_UP:
 				if action_name.ends_with("_up"):
-					return "DPad Up"
+					return "DpadUp"
 			JOY_BUTTON_DPAD_DOWN:
 				if action_name.ends_with("_down"):
-					return "DPad Down"
+					return "DpadDown"
 			JOY_BUTTON_DPAD_LEFT:
 				if action_name.ends_with("_left"):
-					return "DPad Left"
+					return "DpadLeft"
 			JOY_BUTTON_DPAD_RIGHT:
 				if action_name.ends_with("_right"):
-					return "DPad Right"
+					return "DpadRight"
 		return ""
 	var m := event as InputEventJoypadMotion
 	if m == null:
 		return ""
 	if m.axis == JOY_AXIS_LEFT_X and m.axis_value < 0.0:
 		if action_name.ends_with("_left"):
-			return "DPad Left"
+			return "DpadLeft"
 	elif m.axis == JOY_AXIS_LEFT_X and m.axis_value > 0.0:
 		if action_name.ends_with("_right"):
-			return "DPad Right"
+			return "DpadRight"
 	elif m.axis == JOY_AXIS_LEFT_Y and m.axis_value < 0.0:
 		if action_name.ends_with("_up"):
-			return "DPad Up"
+			return "DpadUp"
 	elif m.axis == JOY_AXIS_LEFT_Y and m.axis_value > 0.0:
 		if action_name.ends_with("_down"):
-			return "DPad Down"
+			return "DpadDown"
 	return ""
 
 
 func _get_binding_text_from_event(event: InputEvent) -> String:
 	if event == null:
-		return "Unassigned"
+		return "BindingUnassigned"
 	var joy_button_event := event as InputEventJoypadButton
 	if joy_button_event != null:
 		return _get_joy_button_label(joy_button_event.button_index)
@@ -1204,7 +1286,7 @@ func _get_binding_text_from_event(event: InputEvent) -> String:
 	if joy_axis_event != null:
 		var direction := "+" if joy_axis_event.axis_value >= 0.0 else "-"
 		return "%s %s" % [_get_joy_axis_label(joy_axis_event.axis), direction]
-	return "Unassigned"
+	return "BindingUnassigned"
 
 
 func _get_action_label(action_name: String) -> String:
@@ -1289,13 +1371,13 @@ func _get_joy_button_label(button_index: int) -> String:
 		JOY_BUTTON_RIGHT_SHOULDER:
 			return "R1"
 		JOY_BUTTON_DPAD_UP:
-			return "DPad Up"
+			return "DpadUp"
 		JOY_BUTTON_DPAD_DOWN:
-			return "DPad Down"
+			return "DpadDown"
 		JOY_BUTTON_DPAD_LEFT:
-			return "DPad Left"
+			return "DpadLeft"
 		JOY_BUTTON_DPAD_RIGHT:
-			return "DPad Right"
+			return "DpadRight"
 		_:
 			return "Button %d" % button_index
 

@@ -5,7 +5,7 @@ const MENU_NAV_REPEAT_DELAY := 0.32
 const MENU_NAV_REPEAT_INTERVAL := 0.08
 
 const _PAGE_COUNT := 4
-const _PAGE_HEADINGS := ["BASE CONTROLS", "PROGRESS", "PROGRESS", "GAME LOOP"]
+const _PAGE_HEADINGS := ["HowToHeadingBaseControls", "HowToHeadingProgress", "HowToHeadingProgress", "HowToHeadingGameLoop"]
 
 var _last_main_buttons_focus: Control
 var _held_menu_nav_action: StringName = &""

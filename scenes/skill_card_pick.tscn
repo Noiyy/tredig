@@ -19,6 +19,7 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [node name="SkillCardPick" type="Control" unique_id=400473049]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,7 +47,7 @@ offset_right = 300.0
 offset_bottom = 90.0
 theme_override_fonts/font = ExtResource("3_pixel")
 theme_override_font_sizes/font_size = 11
-text = "CHOOSE A SKILL"
+text = "SkillPickTitle"
 horizontal_alignment = 1
 
 [node name="HintLabel" type="Label" parent="." unique_id=2018364810]
@@ -57,7 +58,7 @@ offset_right = 300.0
 offset_bottom = 98.0
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 9
-text = "Press USE to confirm"
+text = "SkillPickConfirm"
 horizontal_alignment = 1
 
 [node name="Panel" type="Panel" parent="." unique_id=569378675]

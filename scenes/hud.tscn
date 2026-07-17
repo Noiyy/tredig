@@ -122,6 +122,6 @@ offset_bottom = -37.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = SubResource("FontVariation_047uy")
-text = "MAIN MENU"
+text = "HudMainMenu"
 
 [connection signal="pressed" from="MainMenuButton" to="." method="_on_main_menu_button_pressed"]

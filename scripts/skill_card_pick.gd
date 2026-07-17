@@ -66,7 +66,7 @@ func _render_cards() -> void:
 		var desc_label: Label = card.get_node("DescriptionLabel")
 		desc_label.text = SkillRegistry.format_description(entry.type, entry.level)
 		var uses_label: Label = card.get_node("UseCountLabel")
-		uses_label.text = "Uses: %dx" % int(def.use_count)
+		uses_label.text = tr("SkillUsesCount") % int(def.use_count)
 	_apply_focus_visual()
 
 

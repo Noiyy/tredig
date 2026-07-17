@@ -37,19 +37,19 @@ layout_mode = 2
 
 [node name="ContinueButton" type="Button" parent="CenterContainer/PauseOptions" unique_id=1274726263]
 layout_mode = 2
-text = "Resume"
+text = "PauseResume"
 
 [node name="SettingsButton" type="Button" parent="CenterContainer/PauseOptions" unique_id=1844184805]
 layout_mode = 2
-text = "Settings"
+text = "MenuSettings"
 
 [node name="MenuButton" type="Button" parent="CenterContainer/PauseOptions" unique_id=965965335]
 layout_mode = 2
-text = "Main menu"
+text = "PauseMainMenu"
 
 [node name="QuitButton" type="Button" parent="CenterContainer/PauseOptions" unique_id=352959479]
 layout_mode = 2
-text = "Quit"
+text = "MenuQuit"
 
 [connection signal="pressed" from="CenterContainer/PauseOptions/ContinueButton" to="." method="_on_continue_button_pressed"]
 [connection signal="pressed" from="CenterContainer/PauseOptions/SettingsButton" to="." method="_on_settings_button_pressed"]

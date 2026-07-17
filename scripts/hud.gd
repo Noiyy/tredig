@@ -312,6 +312,13 @@ func update_player_hp(player: CharacterBody2D, current: int, _max_hp: int, from_
 	else:
 		label.modulate = Color.WHITE
 
+## Bonus HUD labels are localization keys derived from the BonusType enum name
+## (e.g. SHARPNESS -> "BonusSharpness"). See res://locale/*.po.
+func _bonus_label_key(bonus_type: int) -> String:
+	var n: String = game_manager.BonusType.keys()[bonus_type]
+	return "Bonus" + n.substr(0, 1) + n.substr(1).to_lower()
+
+
 func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 	if player.name == "PlayerLeft":
 		var bonus1: Control = left_bonus1
@@ -331,7 +338,7 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 			
 			icon1.texture = bonus_icons.get(left_bonus1_type, null)
 			timer_bar1.tint_progress = tint_color1
-			label1.text = game_manager.BonusType.keys()[left_bonus1_type]
+			label1.text = _bonus_label_key(left_bonus1_type)
 			bonus1.visible = true
 		else:
 			bonus1.visible = false
@@ -347,14 +354,14 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 			
 			icon2.texture = bonus_icons.get(left_bonus2_type, null)
 			timer_bar2.tint_progress = tint_color2
-			label2.text = game_manager.BonusType.keys()[left_bonus2_type]
+			label2.text = _bonus_label_key(left_bonus2_type)
 			bonus2.visible = true
 		else:
 			bonus2.visible = false
 			icon2.texture = null
 			label2.text = ""
 			timer_bar2.tint_progress = Color("#31e312be")
-	
+
 	else:  # Right player
 		var bonus1: Control = right_bonus1
 		var icon1: TextureRect = right_bonus_icon1
@@ -373,7 +380,7 @@ func update_player_bonuses(player: CharacterBody2D, bonuses: Array) -> void:
 			
 			icon1.texture = bonus_icons.get(right_bonus1_type, null)
 			timer_bar1.tint_progress = tint_color1
-			label1.text = game_manager.BonusType.keys()[right_bonus1_type]
+			label1.text = _bonus_label_key(right_bonus1_type)
 			bonus1.visible = true
 		else:
 			bonus1.visible = false

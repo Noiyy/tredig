@@ -6,6 +6,17 @@ const EXPO_SANDBOX_FEATURE := "expo_sandbox"
 const SETTINGS_VERSION := 1
 const SAVE_PATH := "user://user_settings.cfg"
 
+## Default language. English is the source language; other locales fall back to it.
+const DEFAULT_LOCALE := "en"
+
+## Languages offered in the settings menu. To add a language: create a
+## `res://locale/<code>.po`, register it in project.godot's locale/translations,
+## and add an entry here. `name` is shown in the picker (in its own language).
+const SUPPORTED_LOCALES: Array[Dictionary] = [
+	{"code": "en", "name": "English"},
+	{"code": "sk", "name": "Slovenčina"},
+]
+
 ## Rovnaké `action` ako v settings_menu.gd (CONTROL_ACTIONS)
 const PERSISTED_ACTIONS: Array[String] = [
 	"p1_left", "p1_right", "p1_up", "p1_down", "p1_use",
@@ -15,6 +26,9 @@ const PERSISTED_ACTIONS: Array[String] = [
 ]
 
 func _ready() -> void:
+	# English is the default until a saved preference overrides it below.
+	# (Godot otherwise defaults to the OS locale, which would auto-pick e.g. Slovak.)
+	TranslationServer.set_locale(DEFAULT_LOCALE)
 	load_and_apply()
 	_ensure_enter_pairs_for_all_actions()
 
@@ -95,6 +109,8 @@ func _ensure_enter_pairs_for_all_actions() -> void:
 func _apply_general_from_config(config: ConfigFile) -> void:
 	if not config.has_section("general"):
 		return
+	if config.has_section_key("general", "language"):
+		TranslationServer.set_locale(str(config.get_value("general", "language")))
 	if OS.has_feature(EXPO_SANDBOX_FEATURE):
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	elif config.has_section_key("general", "fullscreen"):
@@ -151,6 +167,7 @@ func save() -> void:
 	_ensure_enter_pairs_for_all_actions()
 	var config := ConfigFile.new()
 	config.set_value("general", "version", SETTINGS_VERSION)
+	config.set_value("general", "language", TranslationServer.get_locale())
 	var wmode: DisplayServer.WindowMode = DisplayServer.window_get_mode()
 	var fs: bool = (
 		wmode == DisplayServer.WINDOW_MODE_FULLSCREEN

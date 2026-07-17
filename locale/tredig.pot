@@ -1,0 +1,407 @@
+# Tredig - translation template (POT)
+# Copyright (C) 2026 Benjamín Muľár (Noiyy)
+# This file is distributed under the same license as the Tredig game.
+#
+# Keys are symbolic IDs (not the English text). The English source is shown in
+# the "#." comment above each entry. To add a language, copy this file to
+# <locale>.po (e.g. de.po) and fill in the msgstr entries. English lives in en.po.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Tredig\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+# ==== Main menu ====
+#. Play
+msgid "MenuPlay"
+msgstr ""
+
+#. Settings
+msgid "MenuSettings"
+msgstr ""
+
+#. Credits
+msgid "MenuCredits"
+msgstr ""
+
+#. How to play
+msgid "MenuHowToPlay"
+msgstr ""
+
+#. Quit
+msgid "MenuQuit"
+msgstr ""
+
+#. "  Back  " (padded)
+msgid "CommonBackPadded"
+msgstr ""
+
+# ==== Credits ====
+#. Game by [b][url=https://noiyy.eu]Benjamín Muľár (Noiyy)[/url][/b]
+msgid "CreditsAuthor"
+msgstr ""
+
+#. Background music "Mining Town (Loop)" by Chris Logsdon
+msgid "CreditsMusic"
+msgstr ""
+
+# ==== How to play ====
+#. BASE CONTROLS
+msgid "HowToHeadingBaseControls"
+msgstr ""
+
+#. PROGRESS
+msgid "HowToHeadingProgress"
+msgstr ""
+
+#. GAME LOOP
+msgid "HowToHeadingGameLoop"
+msgstr ""
+
+#. Page 1 - controls intro
+msgid "HowToPage1Intro"
+msgstr ""
+
+#. Page 1 - block hardness
+msgid "HowToPage1Hardness"
+msgstr ""
+
+#. Page 2 - durability
+msgid "HowToPage2Durability"
+msgstr ""
+
+#. Page 2 - leveling & bonuses
+msgid "HowToPage2Leveling"
+msgstr ""
+
+#. Page 3 - skills
+msgid "HowToPage3Skills"
+msgstr ""
+
+#. Page 3 - using skills
+msgid "HowToPage3SkillsUse"
+msgstr ""
+
+#. Page 4 - goal
+msgid "HowToPage4Goal"
+msgstr ""
+
+#. Page 4 - dangers
+msgid "HowToPage4Dangers"
+msgstr ""
+
+# ==== Settings: tabs & general ====
+#. General
+msgid "SettingsTabGeneral"
+msgstr ""
+
+#. Controls
+msgid "SettingsTabControls"
+msgstr ""
+
+#. Controller
+msgid "SettingsTabController"
+msgstr ""
+
+#. Reset
+msgid "CommonReset"
+msgstr ""
+
+#. Fullscreen
+msgid "SettingsFullscreen"
+msgstr ""
+
+#. Lava sound
+msgid "SettingsLavaSound"
+msgstr ""
+
+#. Language
+msgid "SettingsLanguage"
+msgstr ""
+
+#. Main volume
+msgid "SettingsVolumeMain"
+msgstr ""
+
+#. Music volume
+msgid "SettingsVolumeMusic"
+msgstr ""
+
+#. Primary SFX volume
+msgid "SettingsVolumeSfxPrimary"
+msgstr ""
+
+#. Secondary SFX volume
+msgid "SettingsVolumeSfxSecondary"
+msgstr ""
+
+# ==== Settings: controls / controller ====
+#. Click action and press new key (Esc cancels)
+msgid "ControlsRebindHint"
+msgstr ""
+
+#. Current controller bindings preview
+msgid "ControllerPreviewHint"
+msgstr ""
+
+#. Edit
+msgid "CommonEdit"
+msgstr ""
+
+#. Confirm
+msgid "CommonConfirm"
+msgstr ""
+
+#. Cancel
+msgid "CommonCancel"
+msgstr ""
+
+#. "  Player 1  " (padded)
+msgid "PlayerOnePadded"
+msgstr ""
+
+#. "  Player 2  " (padded)
+msgid "PlayerTwoPadded"
+msgstr ""
+
+#. Player 1
+msgid "PlayerOne"
+msgstr ""
+
+#. Player 2
+msgid "PlayerTwo"
+msgstr ""
+
+#. Controller Bindings
+msgid "ControllerBindingsTitle"
+msgstr ""
+
+#. Select action and press gamepad button/axis (Esc cancels current bind)
+msgid "ControllerRebindHint"
+msgstr ""
+
+#. Jump
+msgid "ActionJump"
+msgstr ""
+
+#. Walk Left
+msgid "ActionWalkLeft"
+msgstr ""
+
+#. Walk Right
+msgid "ActionWalkRight"
+msgstr ""
+
+#. Walk Down
+msgid "ActionWalkDown"
+msgstr ""
+
+#. Dig
+msgid "ActionDig"
+msgstr ""
+
+#. Move
+msgid "ActionMove"
+msgstr ""
+
+#. Pause
+msgid "ActionPause"
+msgstr ""
+
+#. Skill 1
+msgid "ActionSkill1"
+msgstr ""
+
+#. Skill 2
+msgid "ActionSkill2"
+msgstr ""
+
+#. Skill 3
+msgid "ActionSkill3"
+msgstr ""
+
+#. Left
+msgid "ActionLeft"
+msgstr ""
+
+#. Right
+msgid "ActionRight"
+msgstr ""
+
+#. Up
+msgid "ActionUp"
+msgstr ""
+
+#. Down
+msgid "ActionDown"
+msgstr ""
+
+#. Dig/Use
+msgid "ActionDigUse"
+msgstr ""
+
+#. Press any key...
+msgid "RebindPressKey"
+msgstr ""
+
+#. "%s: Press gamepad..." (%s = action name)
+msgid "RebindPressGamepadNamed"
+msgstr ""
+
+#. Press gamepad...
+msgid "RebindPressGamepad"
+msgstr ""
+
+#. "P1 %s | P2 %s" (per-player binding)
+msgid "BindingBothPlayers"
+msgstr ""
+
+#. Unassigned
+msgid "BindingUnassigned"
+msgstr ""
+
+#. DPad Up
+msgid "DpadUp"
+msgstr ""
+
+#. DPad Down
+msgid "DpadDown"
+msgstr ""
+
+#. DPad Left
+msgid "DpadLeft"
+msgstr ""
+
+#. DPad Right
+msgid "DpadRight"
+msgstr ""
+
+# ==== Pause menu ====
+#. Resume
+msgid "PauseResume"
+msgstr ""
+
+#. Main menu
+msgid "PauseMainMenu"
+msgstr ""
+
+# ==== Gameplay HUD ====
+#. MAIN MENU
+msgid "HudMainMenu"
+msgstr ""
+
+# ==== Game over / victory overlay ====
+#. YOU DIED!
+msgid "GameOverDied"
+msgstr ""
+
+#. you survived:
+msgid "GameOverSurvived"
+msgstr ""
+
+#. "  RESTART  " (padded)
+msgid "GameOverRestartPadded"
+msgstr ""
+
+#. You lose!
+msgid "GameOverLose"
+msgstr ""
+
+#. RESTART
+msgid "GameOverRestart"
+msgstr ""
+
+#. You won!
+msgid "GameOverWin"
+msgstr ""
+
+#. & reached treasure in:
+msgid "GameOverTreasure"
+msgstr ""
+
+#. PLAY AGAIN
+msgid "GameOverPlayAgain"
+msgstr ""
+
+# ==== Skill card pick ====
+#. CHOOSE A SKILL
+msgid "SkillPickTitle"
+msgstr ""
+
+#. Press USE to confirm
+msgid "SkillPickConfirm"
+msgstr ""
+
+#. "Uses - %dx"
+msgid "SkillUsesCount"
+msgstr ""
+
+# ==== Skill names ====
+#. HEAL
+msgid "SkillNameHeal"
+msgstr ""
+
+#. DUR UP
+msgid "SkillNameDurUp"
+msgstr ""
+
+#. SWAP
+msgid "SkillNameSwap"
+msgstr ""
+
+#. SABOTAGE
+msgid "SkillNameSabotage"
+msgstr ""
+
+#. DYNAMITE
+msgid "SkillNameDynamite"
+msgstr ""
+
+#. FREEZE
+msgid "SkillNameFreeze"
+msgstr ""
+
+# ==== Skill descriptions ====
+#. Restore %d HP
+msgid "SkillDescHeal"
+msgstr ""
+
+#. Restore %d%% durability
+msgid "SkillDescDurUp"
+msgstr ""
+
+#. Swap with opponent for 10s
+msgid "SkillDescSwap"
+msgstr ""
+
+#. Sabotage tiles in radius %d
+msgid "SkillDescSabotage"
+msgstr ""
+
+#. Throw %d dynamites
+msgid "SkillDescDynamite"
+msgstr ""
+
+#. Freeze opponent for %ds
+msgid "SkillDescFreeze"
+msgstr ""
+
+# ==== Bonus names (shown on HUD) ====
+#. SHARPNESS
+msgid "BonusSharpness"
+msgstr ""
+
+#. SSHOVEL
+msgid "BonusSshovel"
+msgstr ""
+
+#. DULLNESS
+msgid "BonusDullness"
+msgstr ""
+
+#. OVERLOAD
+msgid "BonusOverload"
+msgstr ""

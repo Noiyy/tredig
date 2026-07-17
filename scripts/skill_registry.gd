@@ -12,51 +12,51 @@ enum SkillType {
 
 const SKILLS := {
 	SkillType.HEAL: {
-		"name": "HEAL",
+		"name": "SkillNameHeal",
 		"icon": preload("res://assets/images/heal.png"),
 		"use_count": 2,
 		"max_level": 3,
-		"description": "Restore %d HP",
+		"description": "SkillDescHeal",
 		"modifiers": [10, 15, 20],
 	},
 	SkillType.DURABILITY_UP: {
-		"name": "DUR UP",
+		"name": "SkillNameDurUp",
 		"icon": preload("res://assets/images/durability_up.png"),
 		"use_count": 2,
 		"max_level": 3,
-		"description": "Restore %d%% durability",
+		"description": "SkillDescDurUp",
 		"modifiers": [25, 35, 50],
 	},
 	SkillType.SWAP: {
-		"name": "SWAP",
+		"name": "SkillNameSwap",
 		"icon": preload("res://assets/images/swap.png"),
 		"use_count": 1,
 		"max_level": 1,
-		"description": "Swap with opponent for 10s",
+		"description": "SkillDescSwap",
 		"modifiers": [10],
 	},
 	SkillType.SABOTAGE_TILE: {
-		"name": "SABOTAGE",
+		"name": "SkillNameSabotage",
 		"icon": preload("res://assets/images/sabotage.png"),
 		"use_count": 1,
 		"max_level": 3,
-		"description": "Sabotage tiles in radius %d",
+		"description": "SkillDescSabotage",
 		"modifiers": [5, 6, 7],
 	},
 	SkillType.DYNAMITE: {
-		"name": "DYNAMITE",
+		"name": "SkillNameDynamite",
 		"icon": preload("res://assets/images/dynamite.png"),
 		"use_count": 1,
 		"max_level": 3,
-		"description": "Throw %d dynamites",
+		"description": "SkillDescDynamite",
 		"modifiers": [3, 4, 5],
 	},
 	SkillType.FREEZE: {
-		"name": "FREEZE",
+		"name": "SkillNameFreeze",
 		"icon": preload("res://assets/images/freeze.png"),
 		"use_count": 1,
 		"max_level": 3,
-		"description": "Freeze opponent for %ds",
+		"description": "SkillDescFreeze",
 		"modifiers": [4, 5, 7],
 	},
 }
@@ -75,10 +75,12 @@ static func get_modifier(type: int, level: int) -> int:
 
 static func format_description(type: int, level: int) -> String:
 	var def: Dictionary = SKILLS[type]
-	var template: String = def.description
-	if template.find("%d") < 0:
-		return template
-	return template % get_modifier(type, level)
+	# def.description is a localization key; translate it, then fill in the number.
+	# Static context: tr() is unavailable, so translate via the singleton.
+	var translated: String = TranslationServer.translate(def.description)
+	if translated.find("%d") < 0:
+		return translated
+	return translated % get_modifier(type, level)
 
 ## Always returns exactly 3 {type, level} cards with no two identical pairs.
 ## Types are preferred to be distinct, but the same type at a different level

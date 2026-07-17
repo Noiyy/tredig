@@ -1,0 +1,307 @@
+# Tredig - English (source) translation
+# Copyright (C) 2026 Benjamín Muľár (Noiyy)
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Tredig\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+# ==== Main menu ====
+msgid "MenuPlay"
+msgstr "Play"
+
+msgid "MenuSettings"
+msgstr "Settings"
+
+msgid "MenuCredits"
+msgstr "Credits"
+
+msgid "MenuHowToPlay"
+msgstr "How to play"
+
+msgid "MenuQuit"
+msgstr "Quit"
+
+msgid "CommonBackPadded"
+msgstr "  Back  "
+
+# ==== Credits ====
+msgid "CreditsAuthor"
+msgstr "Game by [b][url=https://noiyy.eu]Benjamín Muľár (Noiyy)[/url][/b]"
+
+msgid "CreditsMusic"
+msgstr "Background music \"Mining Town (Loop)\" by Chris Logsdon"
+
+# ==== How to play ====
+msgid "HowToHeadingBaseControls"
+msgstr "BASE CONTROLS"
+
+msgid "HowToHeadingProgress"
+msgstr "PROGRESS"
+
+msgid "HowToHeadingGameLoop"
+msgstr "GAME LOOP"
+
+msgid "HowToPage1Intro"
+msgstr "You play as one of the 2 dwarves on 1 half of the screen. The other half is reserverd for the second player. To move, use [WASD/arrows] / [controller D-pad or stick] - this also serves as a guide to which direction you're facing and can dig - to do so, press [Space/Enter] / [Y or Triangle]."
+
+msgid "HowToPage1Hardness"
+msgstr "But beware! Each block has its own hardness and the deeper you go, the harder they become so make sure your shovel is strong enough (number in golden shape) as to not to get stuck. This is also indicated by the color of tile highlight - white for the easiest and fastest dig, yellow for normal, orange for hard and those that are red, you cannot even dent!"
+
+msgid "HowToPage2Durability"
+msgstr "Another thing to look out for is your shovel's durability. Once it reaches 0, the bar will turn red and you'll get slower and quite weaker. "
+
+msgid "HowToPage2Leveling"
+msgstr "To repair your shovel and get stronger, you need to level up you shovel - to do this, you need to dig iron & gold blocks, which give you experience. Iron is more common and gives less, while gold is more valuable.\n\n\nOther than experience, these blocks can give you random buffs or debuffs with a small chance for a limited time - such as a stronger & better shovel. You can have max 2 of these bonuses at once."
+
+msgid "HowToPage3Skills"
+msgstr "Bonuses aren't the only thing you can get - for every even level you reach, you get to choose 1 skill to use from 3 options. There are numerous skills, some can help you and some can sabotage the other player. Some have multiple levels of strength from 1-3 and also multiple uses."
+
+msgid "HowToPage3SkillsUse"
+msgstr "To use them, just press the corresponding key when you want to. You can have maximum 3 skills available at once."
+
+msgid "HowToPage4Goal"
+msgstr "Your goal is to get deeper and deeper to find the hidden treasure sooner than the other player."
+
+msgid "HowToPage4Dangers"
+msgstr "But multiple dangers await, if not the sabotage from the other player with dynamites, then it is the ever closing lava thats flowing downwards from above. Each second in it damages you, so be careful not to get burnt to crisp!"
+
+# ==== Settings: tabs & general ====
+msgid "SettingsTabGeneral"
+msgstr "General"
+
+msgid "SettingsTabControls"
+msgstr "Controls"
+
+msgid "SettingsTabController"
+msgstr "Controller"
+
+msgid "CommonReset"
+msgstr "Reset"
+
+msgid "SettingsFullscreen"
+msgstr "Fullscreen"
+
+msgid "SettingsLavaSound"
+msgstr "Lava sound"
+
+msgid "SettingsLanguage"
+msgstr "Language"
+
+msgid "SettingsVolumeMain"
+msgstr "Main volume"
+
+msgid "SettingsVolumeMusic"
+msgstr "Music volume"
+
+msgid "SettingsVolumeSfxPrimary"
+msgstr "Primary SFX volume"
+
+msgid "SettingsVolumeSfxSecondary"
+msgstr "Secondary SFX volume"
+
+# ==== Settings: controls / controller ====
+msgid "ControlsRebindHint"
+msgstr "Click action and press new key (Esc cancels)"
+
+msgid "ControllerPreviewHint"
+msgstr "Current controller bindings preview"
+
+msgid "CommonEdit"
+msgstr "Edit"
+
+msgid "CommonConfirm"
+msgstr "Confirm"
+
+msgid "CommonCancel"
+msgstr "Cancel"
+
+msgid "PlayerOnePadded"
+msgstr "  Player 1  "
+
+msgid "PlayerTwoPadded"
+msgstr "  Player 2  "
+
+msgid "PlayerOne"
+msgstr "Player 1"
+
+msgid "PlayerTwo"
+msgstr "Player 2"
+
+msgid "ControllerBindingsTitle"
+msgstr "Controller Bindings"
+
+msgid "ControllerRebindHint"
+msgstr "Select action and press gamepad button/axis (Esc cancels current bind)"
+
+msgid "ActionJump"
+msgstr "Jump"
+
+msgid "ActionWalkLeft"
+msgstr "Walk Left"
+
+msgid "ActionWalkRight"
+msgstr "Walk Right"
+
+msgid "ActionWalkDown"
+msgstr "Walk Down"
+
+msgid "ActionDig"
+msgstr "Dig"
+
+msgid "ActionMove"
+msgstr "Move"
+
+msgid "ActionPause"
+msgstr "Pause"
+
+msgid "ActionSkill1"
+msgstr "Skill 1"
+
+msgid "ActionSkill2"
+msgstr "Skill 2"
+
+msgid "ActionSkill3"
+msgstr "Skill 3"
+
+msgid "ActionLeft"
+msgstr "Left"
+
+msgid "ActionRight"
+msgstr "Right"
+
+msgid "ActionUp"
+msgstr "Up"
+
+msgid "ActionDown"
+msgstr "Down"
+
+msgid "ActionDigUse"
+msgstr "Dig/Use"
+
+msgid "RebindPressKey"
+msgstr "Press any key..."
+
+msgid "RebindPressGamepadNamed"
+msgstr "%s: Press gamepad..."
+
+msgid "RebindPressGamepad"
+msgstr "Press gamepad..."
+
+msgid "BindingBothPlayers"
+msgstr "P1 %s | P2 %s"
+
+msgid "BindingUnassigned"
+msgstr "Unassigned"
+
+msgid "DpadUp"
+msgstr "DPad Up"
+
+msgid "DpadDown"
+msgstr "DPad Down"
+
+msgid "DpadLeft"
+msgstr "DPad Left"
+
+msgid "DpadRight"
+msgstr "DPad Right"
+
+# ==== Pause menu ====
+msgid "PauseResume"
+msgstr "Resume"
+
+msgid "PauseMainMenu"
+msgstr "Main menu"
+
+# ==== Gameplay HUD ====
+msgid "HudMainMenu"
+msgstr "MAIN MENU"
+
+# ==== Game over / victory overlay ====
+msgid "GameOverDied"
+msgstr "YOU DIED!"
+
+msgid "GameOverSurvived"
+msgstr "you survived:"
+
+msgid "GameOverRestartPadded"
+msgstr "  RESTART  "
+
+msgid "GameOverLose"
+msgstr "You lose!"
+
+msgid "GameOverRestart"
+msgstr "RESTART"
+
+msgid "GameOverWin"
+msgstr "You won!"
+
+msgid "GameOverTreasure"
+msgstr "& reached treasure in:"
+
+msgid "GameOverPlayAgain"
+msgstr "PLAY AGAIN"
+
+# ==== Skill card pick ====
+msgid "SkillPickTitle"
+msgstr "CHOOSE A SKILL"
+
+msgid "SkillPickConfirm"
+msgstr "Press USE to confirm"
+
+msgid "SkillUsesCount"
+msgstr "Uses - %dx"
+
+# ==== Skill names ====
+msgid "SkillNameHeal"
+msgstr "HEAL"
+
+msgid "SkillNameDurUp"
+msgstr "DUR UP"
+
+msgid "SkillNameSwap"
+msgstr "SWAP"
+
+msgid "SkillNameSabotage"
+msgstr "SABOTAGE"
+
+msgid "SkillNameDynamite"
+msgstr "DYNAMITE"
+
+msgid "SkillNameFreeze"
+msgstr "FREEZE"
+
+# ==== Skill descriptions ====
+msgid "SkillDescHeal"
+msgstr "Restore %d HP"
+
+msgid "SkillDescDurUp"
+msgstr "Restore %d%% durability"
+
+msgid "SkillDescSwap"
+msgstr "Swap with opponent for 10s"
+
+msgid "SkillDescSabotage"
+msgstr "Sabotage tiles in radius %d"
+
+msgid "SkillDescDynamite"
+msgstr "Throw %d dynamites"
+
+msgid "SkillDescFreeze"
+msgstr "Freeze opponent for %ds"
+
+# ==== Bonus names (shown on HUD) ====
+msgid "BonusSharpness"
+msgstr "SHARPNESS"
+
+msgid "BonusSshovel"
+msgstr "SSHOVEL"
+
+msgid "BonusDullness"
+msgstr "DULLNESS"
+
+msgid "BonusOverload"
+msgstr "OVERLOAD"

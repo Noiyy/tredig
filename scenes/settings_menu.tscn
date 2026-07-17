@@ -200,17 +200,17 @@ alignment = 1
 [node name="GeneralTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=940258797]
 layout_mode = 2
 theme_override_font_sizes/font_size = 7
-text = "General"
+text = "SettingsTabGeneral"
 
 [node name="ControlsTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=835048227]
 layout_mode = 2
 theme_override_font_sizes/font_size = 7
-text = "Controls"
+text = "SettingsTabControls"
 
 [node name="ControllerTabButton" type="Button" parent="VBoxContainer/TabsContainer" unique_id=210398771]
 layout_mode = 2
 theme_override_font_sizes/font_size = 7
-text = "Controller"
+text = "SettingsTabController"
 
 [node name="Sections" type="VBoxContainer" parent="VBoxContainer" unique_id=792550640]
 layout_mode = 2
@@ -230,7 +230,7 @@ size_flags_horizontal = 3
 [node name="ResetGeneralButton" type="Button" parent="VBoxContainer/Sections/GeneralSection/GeneralHintRow" unique_id=888888888]
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
-text = "Reset"
+text = "CommonReset"
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Sections/GeneralSection" unique_id=71933772]
 layout_mode = 2
@@ -240,17 +240,29 @@ theme_override_constants/margin_bottom = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Sections/GeneralSection/MarginContainer" unique_id=1028729090]
 layout_mode = 2
 
+[node name="LanguageLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.612, 0.561, 0.651, 1)
+theme_override_font_sizes/font_size = 8
+text = "SettingsLanguage"
+
+[node name="LanguageOptionButton" type="OptionButton" parent="VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+auto_translate_mode = 2
+theme_override_font_sizes/font_size = 8
+
 [node name="FullscreenCheckBox" type="CheckBox" parent="VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer" unique_id=107665556]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 12
-text = "Fullscreen"
+text = "SettingsFullscreen"
 
 [node name="LavaSoundCheckBox" type="CheckBox" parent="VBoxContainer/Sections/GeneralSection/MarginContainer/VBoxContainer" unique_id=179201337]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 12
-text = "Lava sound"
+text = "SettingsLavaSound"
 
 [node name="MainVolHSlider" type="HSlider" parent="VBoxContainer/Sections/GeneralSection" unique_id=734571181]
 custom_minimum_size = Vector2(150, 20)
@@ -265,7 +277,7 @@ offset_top = -9.0
 offset_right = 101.0
 offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
-text = "Main volume"
+text = "SettingsVolumeMain"
 
 [node name="PercentLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/MainVolHSlider" unique_id=327653481]
 layout_mode = 0
@@ -290,7 +302,7 @@ offset_top = -9.0
 offset_right = 101.0
 offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
-text = "Music volume"
+text = "SettingsVolumeMusic"
 
 [node name="PercentLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/MusicVolHSlider" unique_id=1752152204]
 layout_mode = 0
@@ -315,7 +327,7 @@ offset_top = -9.0
 offset_right = 101.0
 offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
-text = "Primary SFX volume"
+text = "SettingsVolumeSfxPrimary"
 horizontal_alignment = 1
 
 [node name="PercentLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/SFXVolHSlider" unique_id=829865776]
@@ -341,7 +353,7 @@ offset_top = -9.0
 offset_right = 101.0
 offset_bottom = 7.0
 theme_override_font_sizes/font_size = 10
-text = "Secondary SFX volume"
+text = "SettingsVolumeSfxSecondary"
 horizontal_alignment = 1
 
 [node name="PercentLabel" type="Label" parent="VBoxContainer/Sections/GeneralSection/SFXLowerVolHSlider" unique_id=829865777]
@@ -366,12 +378,12 @@ theme_override_constants/separation = 8
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 10
-text = "Click action and press new key (Esc cancels)"
+text = "ControlsRebindHint"
 
 [node name="ResetControlsButton" type="Button" parent="VBoxContainer/Sections/ControlsSection/ControlsHintRow" unique_id=555555555]
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
-text = "Reset"
+text = "CommonReset"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Sections/ControlsSection" unique_id=318345453]
 custom_minimum_size = Vector2(0, 140)
@@ -457,18 +469,18 @@ theme_override_constants/separation = 8
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 10
-text = "Current controller bindings preview"
+text = "ControllerPreviewHint"
 
 [node name="ResetControllerButton" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerHintRow" unique_id=880822901]
 visible = false
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
-text = "Reset"
+text = "CommonReset"
 
 [node name="EditControllerButton" type="Button" parent="VBoxContainer/Sections/ControllerSection/ControllerHintRow" unique_id=198220001]
 layout_mode = 2
 theme_override_font_sizes/font_size = 9
-text = "Edit"
+text = "CommonEdit"
 
 [node name="ControllerSubTabsRow" type="HBoxContainer" parent="VBoxContainer/Sections/ControllerSection" unique_id=199990001]
 layout_mode = 2
@@ -495,7 +507,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_subtab_hover")
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_subtabs")
-text = "  Player 1  "
+text = "PlayerOnePadded"
 
 [node name="ControllerP2SubtabRow" type="HBoxContainer" parent="VBoxContainer/Sections/ControllerSection/ControllerSubTabsRow" unique_id=199990012]
 layout_mode = 2
@@ -516,13 +528,13 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_subtab_press")
 theme_override_styles/hover = SubResource("StyleBoxFlat_subtab_hover")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_subtabs")
-text = "  Player 2  "
+text = "PlayerTwoPadded"
 
 [node name="BackButton" type="Button" parent="VBoxContainer" unique_id=605325413]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 10
-text = "  Back  "
+text = "CommonBackPadded"
 alignment = 0
 
 [node name="ControllerEditOverlay" type="ColorRect" parent="." unique_id=198220002]
@@ -562,13 +574,13 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_cr101")
 theme_override_font_sizes/font_size = 10
-text = "Controller Bindings"
+text = "ControllerBindingsTitle"
 horizontal_alignment = 1
 
 [node name="Hint" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220049]
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
-text = "Select action and press gamepad button/axis (Esc cancels current bind)"
+text = "ControllerRebindHint"
 horizontal_alignment = 1
 
 [node name="ControllerScrollContainer" type="ScrollContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer" unique_id=198220120]
@@ -607,7 +619,7 @@ text = "●"
 [node name="P1HeaderLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Header" unique_id=198220051]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Player 1"
+text = "PlayerOne"
 
 [node name="P1UpRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column" unique_id=198220010]
 layout_mode = 2
@@ -617,7 +629,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Jump"
+text = "ActionJump"
 
 [node name="P1UpButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1UpRow" unique_id=198220012]
 custom_minimum_size = Vector2(0, 26)
@@ -633,7 +645,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Walk Left"
+text = "ActionWalkLeft"
 
 [node name="P1LeftButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1LeftRow" unique_id=198220015]
 custom_minimum_size = Vector2(0, 26)
@@ -649,7 +661,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Walk Right"
+text = "ActionWalkRight"
 
 [node name="P1RightButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1RightRow" unique_id=198220018]
 custom_minimum_size = Vector2(0, 26)
@@ -665,7 +677,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Walk Down"
+text = "ActionWalkDown"
 
 [node name="P1DownButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1DownRow" unique_id=198220021]
 custom_minimum_size = Vector2(0, 26)
@@ -681,7 +693,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Dig"
+text = "ActionDig"
 
 [node name="P1UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1UseRow" unique_id=198220024]
 custom_minimum_size = Vector2(0, 26)
@@ -697,7 +709,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Skill 1"
+text = "ActionSkill1"
 
 [node name="P1Skill1Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill1Row" unique_id=198220103]
 custom_minimum_size = Vector2(0, 26)
@@ -713,7 +725,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Skill 2"
+text = "ActionSkill2"
 
 [node name="P1Skill2Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill2Row" unique_id=198220106]
 custom_minimum_size = Vector2(0, 26)
@@ -729,7 +741,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Skill 3"
+text = "ActionSkill3"
 
 [node name="P1Skill3Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P1Column/P1Skill3Row" unique_id=198220109]
 custom_minimum_size = Vector2(0, 26)
@@ -756,7 +768,7 @@ text = "●"
 [node name="P2HeaderLabel" type="Label" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Header" unique_id=198220053]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Player 2"
+text = "PlayerTwo"
 
 [node name="P2UpRow" type="HBoxContainer" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column" unique_id=198220027]
 layout_mode = 2
@@ -766,7 +778,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Jump"
+text = "ActionJump"
 
 [node name="P2UpButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2UpRow" unique_id=198220029]
 custom_minimum_size = Vector2(0, 26)
@@ -782,7 +794,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Walk Left"
+text = "ActionWalkLeft"
 
 [node name="P2LeftButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2LeftRow" unique_id=198220032]
 custom_minimum_size = Vector2(0, 26)
@@ -798,7 +810,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Walk Right"
+text = "ActionWalkRight"
 
 [node name="P2RightButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2RightRow" unique_id=198220035]
 custom_minimum_size = Vector2(0, 26)
@@ -814,7 +826,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Walk Down"
+text = "ActionWalkDown"
 
 [node name="P2DownButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2DownRow" unique_id=198220038]
 custom_minimum_size = Vector2(0, 26)
@@ -830,7 +842,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Dig"
+text = "ActionDig"
 
 [node name="P2UseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2UseRow" unique_id=198220041]
 custom_minimum_size = Vector2(0, 26)
@@ -846,7 +858,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Skill 1"
+text = "ActionSkill1"
 
 [node name="P2Skill1Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill1Row" unique_id=198220113]
 custom_minimum_size = Vector2(0, 26)
@@ -862,7 +874,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Skill 2"
+text = "ActionSkill2"
 
 [node name="P2Skill2Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill2Row" unique_id=198220116]
 custom_minimum_size = Vector2(0, 26)
@@ -878,7 +890,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Skill 3"
+text = "ActionSkill3"
 
 [node name="P2Skill3Button" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/Columns/P2Column/P2Skill3Row" unique_id=198220119]
 custom_minimum_size = Vector2(0, 26)
@@ -894,7 +906,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(96, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Pause"
+text = "ActionPause"
 
 [node name="PauseButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ControllerScrollContainer/ControllerScrollContent/PauseRow" unique_id=198220044]
 custom_minimum_size = Vector2(0, 26)
@@ -912,17 +924,17 @@ custom_minimum_size = Vector2(96, 30)
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_n35ux")
-text = "Confirm"
+text = "CommonConfirm"
 
 [node name="CancelButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow" unique_id=198220047]
 custom_minimum_size = Vector2(96, 30)
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 theme_override_styles/normal = SubResource("StyleBoxFlat_2ctot")
-text = "Cancel"
+text = "CommonCancel"
 
 [node name="ResetButton" type="Button" parent="ControllerEditOverlay/CenterContainer/PanelContainer/VBoxContainer/ButtonsRow" unique_id=198220048]
 custom_minimum_size = Vector2(96, 30)
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
-text = "Reset"
+text = "CommonReset"

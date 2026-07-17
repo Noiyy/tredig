@@ -50,16 +50,16 @@ func update_type(type: String) -> void:
 	overlay_type = type
 	
 	if overlay_type == "gameover": 
-		title_label.text = "You lose!"
+		title_label.text = "GameOverLose"
 		title_label.modulate = Color("#ff0000")
-		sub_title_label.text = "you survived:"
-		btn.text = "RESTART"
-		
+		sub_title_label.text = "GameOverSurvived"
+		btn.text = "GameOverRestart"
+
 	if overlay_type == "win":
-		title_label.text = "You won!"
+		title_label.text = "GameOverWin"
 		title_label.modulate = Color("#00ff00")
-		sub_title_label.text = "& reached treasure in:"
-		btn.text = "PLAY AGAIN"
+		sub_title_label.text = "GameOverTreasure"
+		btn.text = "GameOverPlayAgain"
 
 func show_game_over(time_sec: float, type: String) -> void:
 	update_type(type)

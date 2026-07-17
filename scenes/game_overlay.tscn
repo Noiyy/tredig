@@ -81,13 +81,13 @@ alignment = 1
 modulate = Color(1, 0, 0, 1)
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_e8nmk")
-text = "YOU DIED!"
+text = "GameOverDied"
 label_settings = SubResource("LabelSettings_otpf7")
 horizontal_alignment = 1
 
 [node name="SubTitleLabel" type="Label" parent="VBoxContainer" unique_id=913936665]
 layout_mode = 2
-text = "you survived:"
+text = "GameOverSurvived"
 label_settings = SubResource("LabelSettings_l7nfm")
 horizontal_alignment = 1
 
@@ -105,6 +105,6 @@ theme_override_constants/margin_top = 26
 [node name="Button" type="Button" parent="VBoxContainer/MarginContainer" unique_id=110035208]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "  RESTART  "
+text = "GameOverRestartPadded"
 
 [connection signal="pressed" from="VBoxContainer/MarginContainer/Button" to="." method="_on_restart_button_pressed"]
